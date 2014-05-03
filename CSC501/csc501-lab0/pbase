@@ -1,0 +1,9 @@
+Binary file ./compile/xinu.elf matches
+Binary file ./compile/stacktrace.o matches
+Binary file ./compile/printtos.o matches
+./sys/printtos.c:17:	kprintf("\n\n sp: 0x%08X fp: 0x%08X proc->pbase: 0x%08X proc->plimit: 0x%08X \n", sp, fp, proc->pbase,proc->plimit);
+./sys/create.c:113:		if ( (pid=nextproc--) <= 0)
+./sys/stacktrace.c:30:		sp = (unsigned long *)proc->pesp;
+./sys/stacktrace.c:33:	kprintf("sp %X fp %X proc->pbase %X\n", sp, fp, proc->pbase);
+./sys/stacktrace.c:35:	while (sp < (unsigned long *)proc->pbase) {
+./sys/stacktrace.c:50:	if (sp != (unsigned long *)proc->pbase) {

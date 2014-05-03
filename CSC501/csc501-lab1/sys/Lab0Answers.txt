@@ -1,0 +1,54 @@
+1. Assuming the XINU text begins at address 0x0, draw a rough diagram of XINU's memory layout with addresses derived from your experimental measurements. Include the information you uncovered from running your version of printsegaddress() and printprocstks().
+		 _____________________
+A.  	0x0	|	.text	      |
+     0x925e	|_____________________|
+		|	.data	      |
+     0xb960	|_____________________|
+		|	.bss	      |
+    0x13ff8	|_____________________|
+
+2. What is the difference in stack top address before and after calling printtos() ? Draw a diagram to illustrate what are the contents of the items pushed into the stack between these two time points.
+
+A.    
+                 _______________________   
+  		|________Top of Stack___|
+  		|________Return Address_|
+  		|________Frame Pointer__|  <---ebp
+  		|________Var A__________|
+  		|________Var B__________|
+  		|________Var C__________|
+  		|________Var D__________|
+
+
+3. Which byte order is adopted in the host machine that we are using ? How did you find out ?
+
+A. I wrote a piece of code, which would assign value 1 to a integer{sizeof(int) =2 bytes). Then the address of the value is type casted to a char * and then the value of the pointer is checked. If the value is 1, then it's little endian other wise it is big endian. Code in the file byteorder.c.
+
+4. Briefly describe the mov, push, pusha, pop, and popa instructions in the x86.
+
+A. 
+mov A B: mov instruction copies the value from B to A. B can be a memory location,register or a constant value and A can memory or register. Register to Register copy can be done, but memory to memory is not possible.
+
+push num: push instruction puts the num into the stack in the memory. First the esp(stack pointer) is decremented by 4, then the num is put in esp. 
+
+pusha: Push all general purpose registers onto stack 
+
+pop num: The pop instruction removes the 4-byte data element from the top of the stack into num. num can be a register or a memory location.
+
+popa: Pop all general purpose registers from stack
+
+5. In a stack frame, local variables are stored below the top of the stack. In task 3, does your result show all the local variables declared in your printtos function? If not, can you explain that?
+
+A. 
+When I print the 6 elements from the top of my stack, I get these values. I have four local variables in my function and they are all present in the stack frame. Below is the values
+
+Before[0x00ffefc0]: 0x00000000
+After[0x00ffefb8]: 0x00ffefec
+	 element[0x00ffefb4]: 0x00010564
+	 element[0x00ffefb0]: 0x00ffefb8
+	 element[0x00ffefac]: 0x00000100
+	 element[0x00ffefa8]: 0x00000101
+	 element[0x00ffefa4]: 0x00000102
+	 element[0x00ffefa0]: 0x00000103
+
+I turned off the optimization and my stack looks the same.

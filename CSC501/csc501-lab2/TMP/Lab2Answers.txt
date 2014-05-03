@@ -1,0 +1,10 @@
+1.
+a. Priority Ceiling protocol is another way to solve the problem of priority inversion. In this approach each shared resource is associated with a priority ceiling. Priority ceiling can be defined as the priority of the highest priority task that case access a shared resource. The protocol can be defined in two steps
+a. Task runs at its orginal priority when it is not accessing the critical secti
+on.
+b. Task can use a shared resource only if its priority is strictly higher than t
+he priority ceilings of all shared resource currently locked by other tasks.
+
+b. Couldn't find the section 2. Code in sys
+
+2.Consuming a reader lock and then trying to write which mean it would lead to incosistency.

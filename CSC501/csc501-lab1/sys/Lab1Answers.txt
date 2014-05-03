@@ -1,0 +1,38 @@
+1.    What are the advantages and disadvantages of each of the two scheduling policies? Also, give the advantages and disadvantages of the round robin scheduling policy originally implemented in Xinu.
+
+A. 
+
+Random Scheduling: 
+Advantages: 
+1. In the default scheduling the higher priority process  keeps running unless and until it finishes execution. This leads to starvation. In random scheduling the order of execution is random and each process get a quantum for execution.
+2. Adding or killing jobs affect all jobs proportionately. 
+
+Disadvantage:
+1. If there are more number of processes in a particular range of priority than number of processes in another ranges, then the fairness of the processes is not achieved.
+
+Linux Scheduler:
+Advantages:
+1. The scheduler lets a process run for the entire quantum unless and it is suspended.
+2. Prior behaviour of the processes are taken into consideration using the goodness value.
+
+Disadvantages:
+1. Even if the process is suspended for few ticks, the process has to wait for a epoch to be scheduled again.
+
+Xinu Round Robin Scheduling:
+Advantage
+- Each process is put in the ready queue based on the priority of the process. So, the higher priority process is executed first.
+Disadvantage
+- Two process having the same priority is not treated equally and the past behaviour is not taken into consideration which make scheduling decisions.
+
+2. Describe the way each of the schedulers affects the NULL process.
+
+A. 
+
+Random Scheduler:
+NULL process is scheduled like any other process whose priority is less than 33. 
+
+Linux Scheduler:
+When there is no other process running in the system other than process 0, the process 0 is scheduled. 
+
+
+
