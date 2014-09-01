@@ -8,12 +8,14 @@ def say(x):
   sys.stdout.write(str(x)); sys.stdout.flush()
 
 def probFunction(old,new,t):
-#   print "probFunction : old : %f new : %f t: %f return : %f exp: %f" %(old,new, t,-1*(old-new)/t,math.exp(-1 *(old-new)/t))
-   return math.exp(-1 *(old-new)/t)
+#   print "probFunction : old : %f new : %f t: %f return : %f exp: %f" %(old,new, t,-1*(old-new)/t,math.exp(1 *(old-new)/t))
+   return math.exp(1 *(old-new)/t)
 
 def neighbour(s):
   if(s==9999):
     return s-1
+  elif(s==-9999):
+    return s+1
   else:
     if(random.randint(0,1) == 1):
       return s+1
@@ -91,7 +93,7 @@ def doSomethingCool():
 
 #class SimulatedAnnealing:
 def evaluate():
-    jump = False
+    jump = True
     base = BaseLine()
     base.findBaseLine()
     energy = FindEnergy(base.minVal,base.maxVal)
@@ -99,36 +101,42 @@ def evaluate():
     print "Base Line Values: Minimum: %f Maximum: %f Emax: %f" %(base.minVal,base.maxVal,emax)
     
     s = random.randint(-10000,10000) #Initial State
-    e = random.random()          #Initial Enenery
+    e = energy.evaluate(s)          #Initial Enenery
     sb = s                       #Initial Best Solution
     eb = e                       #Initial Best Energy
     k = 1
     kmax = 1000
-    while(k <= kmax):# and e > emax):
+    count=0
+    while(k <= kmax and e > emax):
       if(jump==False):
         sn = neighbour(s)
       else:
-        sn = random.randint(-10000,10000)
+        sn = random.randint(-10000,10000) 
+        #jump= False #change
       en = energy.evaluate(sn)
       if(en < eb):
         sb = sn
         eb = en
-        say("!(%f)"%en) #we get to somewhere better globally
+        say("!") #we get to somewhere better globally
+      tempProb = probFunction(e,en,k/kmax)
+      tempRand = random.random()
+#      print " tempProb: %f tempRand: %f " %(tempProb,tempRand)
       if(en < e):
         s = sn
         e = en
         say("+") #we get to somewhere better locally
-      elif(probFunction(e,en,k/kmax) > random.random()):
+      elif(tempProb <= tempRand):
         jump = True
         s = sn
         e = en
         say("?") #we are jumping to something sub-optimal;
-      else:
-        say(".")
+        count+=1
+      say(".")
       k += 1
       if(k % 50 == 0):
-          print "\n"
-          print sb,  
+         print "\n"
+         print "%f{%d}"%(sb,count),
+         count=0  
     return sb
     
 
