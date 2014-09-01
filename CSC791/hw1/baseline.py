@@ -12,9 +12,9 @@ def probFunction(old,new,t):
    return math.exp(1 *(old-new)/t)
 
 def neighbour(s):
-  if(s==9999):
+  if(s==99):
     return s-1
-  elif(s==-9999):
+  elif(s==-99):
     return s+1
   else:
     if(random.randint(0,1) == 1):
@@ -47,9 +47,11 @@ class BaseLine:
       return self.maxVal
 
   def findBaseLine(self):
+    low = -100
+    high = 100
     model = Model()
     for index in range(0,1000):
-      inputRand = random.randint(-10000,10000)
+      inputRand = low + (high-low)*random.random()
       temp = model.schaffer(inputRand)
       self.minVal=self.returnMin(temp)
       self.maxVal=self.returnMax(temp)
@@ -75,9 +77,11 @@ class FindEnergy:
     return energy
 
   def evaluateEmax(self):
+    low = -100
+    high = 100
     model = Model()
     for index in range(0,1000):
-      inputRand = random.randint(-100,100)
+      inputRand = low + (high-low)*random.random()
       temp = model.schaffer(inputRand)
       energy = (temp - self.minimum)/(self.maximum-self.minimum)
       self.returnMax(energy)
@@ -93,6 +97,8 @@ def doSomethingCool():
 
 #class SimulatedAnnealing:
 def evaluate():
+    low=-100
+    high=100
     jump = True
     base = BaseLine()
     base.findBaseLine()
@@ -100,18 +106,18 @@ def evaluate():
     emax = 0
     print "Base Line Values: Minimum: %f Maximum: %f Emax: %f" %(base.minVal,base.maxVal,emax)
     
-    s = random.randint(-10000,10000) #Initial State
+    s = low + (high-low)*random.random() #Initial State
     e = energy.evaluate(s)          #Initial Enenery
     sb = s                       #Initial Best Solution
     eb = e                       #Initial Best Energy
     k = 1
-    kmax = 1000
+    kmax = 2000
     count=0
     while(k <= kmax and e > emax):
       if(jump==False):
         sn = neighbour(s)
       else:
-        sn = random.randint(-10000,10000) 
+        sn = low + (high-low)*random.random() 
         #jump= False #change
       en = energy.evaluate(sn)
       if(en < eb):
@@ -142,5 +148,5 @@ def evaluate():
 
 if __name__ == '__main__': 
 #  doSomethingCool();
-   evaluate()
+   print "The global minima is : %f" %evaluate()
 #
