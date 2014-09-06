@@ -1,0 +1,65 @@
+'''
+Created on Sep 5, 2014
+
+@author: vivek
+'''
+from __future__ import division 
+import sys 
+import random
+import math 
+import pylab as pl
+sys.dont_write_bytecode = True
+
+def say(x): 
+  sys.stdout.write(str(x)); sys.stdout.flush()
+  
+class Seive:
+    @staticmethod
+    def slope(x1,y1,x2,y2):
+        print x1,y1,x2,y2
+        try:
+            return (y2-y1)/(x2-x1)
+        except ZeroDivisionError:
+            return 0    
+    def algorithm(self,data):
+       interval = int(len(data)/10)
+       arrSlope =[]
+       for i in range(0,interval):
+         arrSlope.append(Seive.slope(data[i*10][0],data[i*10][1],data[(i*10)-1][0],data[(i*10)-1][1]))
+       print arrSlope
+       
+       
+       
+         
+
+class Data:
+    xsort=[]
+    def plotting(self,data):
+        print 'itstarts'
+        pl.plot(data[0],data[1])
+        
+    def generation(self):
+        startx=starty=0
+        endx=100
+        endy=10
+        coordinates = []
+        for x in range(1,100):
+            a= 1+random.randint(startx,endx)
+            b= starty + (random.random()*(endy-starty))
+            coordinates.append([a,b])
+        xsort=sorted(coordinates,key=lambda l:l[0])
+        return xsort
+#         print len(xsort) 
+#         print "======================"
+#         for i in range(0,len(xsort)):
+#             print " %d %d,%f"%(i,xsort[i][0],xsort[i][1])   
+
+def doSomethingCool():
+    data = Data()
+    x=data.generation()
+    data.plotting(x)
+    s = Seive()
+    s.algorithm(x)
+
+if __name__ == '__main__': 
+  doSomethingCool();
