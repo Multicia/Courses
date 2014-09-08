@@ -1,3 +1,7 @@
+#
+#   Usage: python createPDF.py hw1/baseline.py csc710sbse:hw1:VivekNair:vnair2
+#
+
 from __future__ import division
 import sys,os
 sys.dont_write_bytecode = True
@@ -20,4 +24,5 @@ def doSomethingCool():
 
 if __name__ == '__main__':
   doSomethingCool();
+
 
