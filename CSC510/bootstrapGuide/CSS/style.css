@@ -1,0 +1,118 @@
+/*CSS Document*/
+
+/* Custom Styling to Navbar 
+-------------------------------- */
+.navbar-wrapper {
+    position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+    z-index: 20;
+}
+
+.navbar-wrapper > .container {
+   padding-right: 0;
+   padding-left: 0;
+}
+
+.navbar-wrapper .navbar .container {
+    width: 100%;   
+}
+
+.right-inner-addon {
+    position: relative;
+        top: 8px;
+        right: 1px; 
+    height: 3px;
+}
+
+.right-inner-addon input {
+     padding-right: 30px; 
+}
+
+.right-inner-addon i {
+    
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;  
+}
+
+/* Custom Styling to Carousel 
+-------------------------------- */
+
+.carousel {
+    height: 500px;
+    margin-bottom: 60px;
+}
+
+.carousel-caption {
+    z-index: 10;   
+}
+
+.carousel .item {
+    height: 500px; 
+    background-color: #777; 
+}
+
+.carousel-inner > .item > img {
+    position: absolute;
+        top: 0;
+        left: 0;
+    min-width: 100%;
+    height: 500px;
+}
+
+/* Custom Styling to Featurettes 
+-------------------------------- */
+
+.feature .col-lg-4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.feature h2 {
+    font-weight: normal;
+}
+
+.feature .col-lg-4 p {
+    margin-right: 10px;
+    margin-left: 10px; 
+}
+
+/* Responsive CSS 
+-------------------------------- */
+@media (min-width: 768px) {
+    
+    .navbar-wrapper {
+        margin-top: 20px;   
+    }
+    
+    .navbar-wrapper .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    
+    .navbar-wrapper .navbar {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    
+    .navbar-wrapper .navbar {
+       border-radius: 4px;    
+    }
+    
+    .carousel-caption p {
+        margin-bottom: 20px;
+        font-size: 21px;
+        line-height: 1.4;
+    }
+}
+
+
+/* Other 
+-------------------------------- */
+body {
+     padding-bottom: 40px;
+     color: #5a5a5a;
+}
