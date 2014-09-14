@@ -141,13 +141,13 @@ class MaxWalkSat():
     maxTries=50
     maxChanges=2000
     n=3
-    threshold=0.999999999999999
-    probLocalSearch=0
-    bestScore=-100
+    threshold=0.05
+    probLocalSearch=0.75
+    bestScore=100
     bestSolution=[]
+
+
     print "Value of p: %f"%probLocalSearch
-
-
    # model = Fonseca()
     model.baseline(minR,maxR)
     print model.maxVal,model.minVal
@@ -162,12 +162,12 @@ class MaxWalkSat():
          score = model.evaluate(solution)
          #print score
          # optional-start
-         if(score > bestScore):
+         if(score < bestScore):
            bestScore=score
            bestSolution=solution
            
          # optional-end
-         if(score >= threshold):
+         if(score < threshold):
            print "threshold reached|Tries: %d|Changes: %d"%(i,j)
            return solution,score
          
@@ -182,7 +182,7 @@ class MaxWalkSat():
              for itr in range(0,10):
                 solution[c] = minR + (itr*interval)*random.random()
                 tempScore = model.evaluate(solution)
-                if tempBestScore < tempScore:     # score is correlated to max?
+                if tempBestScore > tempScore:     # score is correlated to max?
                   tempBestScore=tempScore
                   tempBestSolution=solution
              solution=tempBestSolution
@@ -303,7 +303,7 @@ def step2():
    print score
 
 if __name__ == '__main__': 
-  step1();
+  step2();
 
 
 """
@@ -411,23 +411,23 @@ step4()
 Model used: Fonseca~
 Value of p: 0.250000
 2.0 0.982620191082
-threshold reached|Tries: 3|Changes: 58
-Solution:  [-3.656578603875711, -3.616467284152031, 3.7836887970063495]
-Score:  1.0
------------------------------------------------------------------------
+threshold reached|Tries: 0|Changes: 248
+Solution:  [0.5201622473716911, 0.5223643784465688, 0.7792144027578889]
+Score:  0.0482893972315
+-------------------------------------------------------------------------
 Model used: Fonseca~
 Value of p: 0.500000
 2.0 0.982620191082
-threshold reached|Tries: 2|Changes: 296
-Solution:  [3.8754119697256915, 3.675503724200465, -3.414275288842272]
-Score:  1.0
------------------------------------------------------------------------
+threshold reached|Tries: 0|Changes: 437
+Solution:  [0.6106730828042144, 0.5371817582767893, 0.7792144027578889]
+Score:  0.0479112210915
+-------------------------------------------------------------------------
 Model used: Fonseca~
 Value of p: 0.750000
 2.0 0.982620191082
-threshold reached|Tries: 1|Changes: 5
-Solution:  [-3.7702281514331792, 3.9444082792072264, 3.6855487018244473]
-Score:  1.0
+threshold reached|Tries: 5|Changes: 51
+Solution:  [-0.5600576523890011, -0.3713369731342202, -0.6001432899563435]
+Score:  0.0313031798438
 
-The results suggests that the algorithm finds the maximum score faster when value of p is 0.75. Though the efficiency of the algorithm seems correlated to value of p, I am not sure if this is the case with all the models or value ranges.
+The results suggests that the algorithm finds the maximum score faster when value of p is 0.25. Though the efficiency of the algorithm seems correlated to value of p (higher the value of p, slower the search is), I am not sure if this is the case with all the models or value ranges.
 """
