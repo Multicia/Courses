@@ -55,6 +55,47 @@ class Fonseca:
   def info(self):
     return "Fonseca~"
 
+class Schaffer:
+
+  def __init__(self,minR=-1e4,maxR=1e4):
+    self.minR=minR
+    self.maxR=maxR
+    self.minVal=10000000
+    self.maxVal=-1e6
+ 
+  def evaluate(self,listpoint):
+    assert(len(listpoint) == 1),"Something's Messed up"
+    var=listpoint[0]
+    rawEnergy = (var**2 +(var-2)**2)
+    energy = (rawEnergy -self.minVal)/(self.maxVal-self.minVal)
+    return energy
+
+  def returnMin(self,num):
+    if(num<self.minVal):
+      return num
+    else:
+      return self.minVal
+
+  def returnMax(self,num):
+    if(num>self.maxVal):
+      return num
+    else:
+      return self.maxVal
+
+  def info(self):
+    return "Schaffer~"
+
+  def baseline(self,minR,maxR):
+    low = self.minR
+    high = self.maxR
+    for index in range(0,1000000):
+      inputRand =(low + (high-low)*random.random())
+      #print "inputRand: %s"%inputRand
+      temp = (inputRand**2 +(inputRand-2)**2)
+      self.minVal=self.returnMin(temp)
+      self.maxVal=self.returnMax(temp)
+    print("Max: %d Min: %d"%(self.maxVal,self.minVal))
+#=================================================================#
 class Kursawe:
   maxVal=-10000
   minVal=10000
@@ -122,13 +163,20 @@ class MaxWalkSat():
       self.model = Fonseca()
       self.minR=-4
       self.maxR=4
+      self.n=3
       #print "here"
     elif modelName == "Kursawe":
       self.model = Kursawe()
       self.minR=-5
       self.maxR=5
+      self.n=3
       self.model.test()
       #print "there"
+    elif modelName == "Schaffer":
+      self.model = Schaffer()
+      self.minR=-1e4
+      self.maxR=1e4
+      self.n=1
     else:
       print "STOP MESSING AROUND"
 
@@ -140,7 +188,7 @@ class MaxWalkSat():
     maxR=self.maxR
     maxTries=50
     maxChanges=2000
-    n=3
+    n=self.n
     threshold=0.05
     probLocalSearch=0.75
     bestScore=100
@@ -172,13 +220,13 @@ class MaxWalkSat():
            return solution,score
          
          if random.random() > probLocalSearch:
-             c = int(0 + (2-0)*random.random())
+             c = int(0 + (self.n-0)*random.random())
              solution[c]=model.neighbour(minR,maxR)
          else:
              tempBestScore=score
              tempBestSolution=solution
              interval = (maxR-minR)/10
-             c = int(0 + (2-0)*random.random())
+             c = int(0 + (self.n-0)*random.random())
              for itr in range(0,10):
                 solution[c] = minR + (itr*interval)*random.random()
                 tempScore = model.evaluate(solution)
@@ -190,6 +238,7 @@ class MaxWalkSat():
     return bestSolution,bestScore       
 
 def probFunction(old,new,t):
+   print old,new,t
    return math.exp(1 *(old-new)/t)
 
 class SA():
@@ -203,13 +252,20 @@ class SA():
       self.model = Fonseca()
       self.minR=-4
       self.maxR=4
+      self.n=3
       #print "here"
     elif modelName == "Kursawe":
       self.model = Kursawe()
       self.minR=-5
       self.maxR=5
       self.model.test()
+      self.n=3
       #print "there"
+    elif modelName == "Schaffer":
+      self.model = Schaffer()
+      self.minR=-1e4
+      self.maxR=1e4
+      self.n=1
     else:
       print "STOP MESSING AROUND"
 
@@ -232,7 +288,7 @@ class SA():
     model.baseline(minR,maxR)
     print model.maxVal, model.minVal
 
-    s = [minR + (maxR - minR)*random.random() for z in range(0,3)]
+    s = [minR + (maxR - minR)*random.random() for z in range(0,self.n)]
     print s
     e = model.evaluate(s)
     emax = 0
@@ -268,8 +324,9 @@ class SA():
        #  print "%f{%d}"%(sb,count),
          count=0
     print  
-    print sb,eb   
-      
+    return sb,eb   
+       
+
 def doSomethingCool():
    """
    test = MaxWalkSat("Kursawe")
@@ -287,15 +344,22 @@ def doSomethingCool():
    print score
 
 def step1():
-   test = SA("Fonseca")
-   test.evaluate()
+#   test = SA("Fonseca")
+#   test.evaluate()
 
-   test = SA("Kursawe")
-   test.evaluate()
+#   test = SA("Kursawe")
+#   test.evaluate()
+
+   test = SA("Schaffer")
+   solution,score =test.evaluate()
+   print "Solution: ",
+   print solution
+   print "Score: ",
+   print score
 
 def step2():
    random.seed(24)
-   test = MaxWalkSat("Fonseca")
+   test = SA("Fonseca")
    solution,score = test.evaluate()
    print "Solution: ",
    print solution
@@ -303,7 +367,7 @@ def step2():
    print score
 
 if __name__ == '__main__': 
-  step2();
+  step1();
 
 
 """
@@ -402,9 +466,9 @@ step3()
 Model used: Fonseca~
 Value of p: 0.250000
 2.0 0.982620191082
-threshold reached|Tries: 3|Changes: 58
-Solution:  [-3.656578603875711, -3.616467284152031, 3.7836887970063495]
-Score:  1.0
+threshold reached|Tries: 0|Changes: 248
+Solution:  [0.5201622473716911, 0.5223643784465688, 0.7792144027578889]
+Score:  0.0482893972315
 ========================================================================
 step4()
 
