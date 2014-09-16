@@ -27,6 +27,7 @@ def step2():
 
 def display(searcher,runTimes,scores):
   assert(len(runTimes) == len(scores)),'Ouch! it hurts'
+  print "==============================================================="
   print "Searcher Name: %s"%searcher.__name__,
   print "Options Used: ",
   print myoptions[searcher.__name__]
@@ -34,7 +35,9 @@ def display(searcher,runTimes,scores):
   print (time.strftime("%d/%m/%Y"))
   for i in range(0,len(runTimes)):
     print "RunNo: %s RunTime: %s Score: %s"%(i+1,runTimes[i],scores[i])
-  print xtile(scores,lo=0,hi=1.0,width=25,show=" %1.3f")
+  print xtile(scores,width=25,show=" %1.3f")
+  print "==============================================================="
+
   
 
 def multipleRun():
@@ -45,6 +48,7 @@ def multipleRun():
      n = 0.0
      listTimeTaken = []
      listScores = []
+     random.seed(1)
      for _ in range(r):
        test = searcher(klass.__name__)
        import time
