@@ -16,42 +16,17 @@ class MaxWalkSat():
   maxR=0
   random.seed(40)
   def __init__(self,modelName):
-    #print "init"
-    if modelName == "Fonseca":
-      self.model = Fonseca()
-      self.minR=-4
-      self.maxR=4
-      self.n=3
-      #print "here"
-    elif modelName == "Kursawe":
-      self.model = Kursawe()
-      self.minR=-5
-      self.maxR=5
-      self.n=3
-      self.model.test()
-      #print "there"
-    elif modelName == "Schaffer":
-      self.model = Schaffer()
-      self.minR=-1e4
-      self.maxR=1e4
-      self.n=1
-    elif modelName == "ZDT1":
-      self.model = ZDT1()
-      self.minR=0
-      self.maxR=1
-      self.n=30
-    else:
-      print "STOP MESSING AROUND"
+    self.model=modelName
 
 
   def evaluate(self):
     model = self.model
     #print "Model used: %s"%model.info()
-    minR=self.minR
-    maxR=self.maxR
+    minR=model.minR
+    maxR=model.maxR
     maxTries=int(myoptions['MaxWalkSat']['maxTries'])
     maxChanges=int(myoptions['MaxWalkSat']['maxChanges'])
-    n=self.n
+    n=model.n
     threshold=float(myoptions['MaxWalkSat']['threshold'])
     probLocalSearch=float(myoptions['MaxWalkSat']['probLocalSearch'])
     bestScore=100
@@ -83,13 +58,13 @@ class MaxWalkSat():
            return solution,score
          
          if random.random() > probLocalSearch:
-             c = int(0 + (self.n-0)*random.random())
+             c = int(0 + (self.model.n-0)*random.random())
              solution[c]=model.neighbour(minR,maxR)
          else:
              tempBestScore=score
              tempBestSolution=solution
              interval = (maxR-minR)/10
-             c = int(0 + (self.n-0)*random.random())
+             c = int(0 + (self.model.n-0)*random.random())
              for itr in range(0,10):
                 solution[c] = minR + (itr*interval)*random.random()
                 tempScore = model.evaluate(solution)
@@ -101,7 +76,6 @@ class MaxWalkSat():
     return bestSolution,bestScore       
 
 def probFunction(old,new,t):
-   print old,new,t
    return math.exp(1 *(old-new)/t)
 
 class SA():
@@ -110,38 +84,14 @@ class SA():
   maxR=0
   random.seed(1)
   def __init__(self,modelName):
-    if modelName == "Fonseca":
-      self.model = Fonseca()
-      self.minR=-4
-      self.maxR=4
-      self.n=3
-      #print "here"
-    elif modelName == "Kursawe":
-      self.model = Kursawe()
-      self.minR=-5
-      self.maxR=5
-      self.model.test()
-      self.n=3
-      #print "there"
-    elif modelName == "Schaffer":
-      self.model = Schaffer()
-      self.minR=-1e4
-      self.maxR=1e4
-      self.n=1
-    elif modelName == "ZDT1":
-      self.model = ZDT1()
-      self.minR=0
-      self.maxR=1
-      self.n=30
-    else:
-      print "STOP MESSING AROUND"
+    self.model=modelName
 
   def neighbour(self,solution,minR,maxR):
     returnValue = []
     n=len(solution)
     for i in range(0,n):
       tempRand = random.random()
-      if tempRand <(1/self.n):
+      if tempRand <(1/self.model.n):
         returnValue.append(minR + (maxR - minR)*random.random())
       else:
         returnValue.append(solution[i])
@@ -150,19 +100,19 @@ class SA():
   def evaluate(self):
     model=self.model
     #print "Model used: %s"%(model.info())
-    minR = self.minR
-    maxR = self.maxR
+    minR = model.minR
+    maxR = model.maxR
     model.baseline(minR,maxR)
     print model.maxVal, model.minVal
 
-    s = [minR + (maxR - minR)*random.random() for z in range(0,self.n)]
+    s = [minR + (maxR - minR)*random.random() for z in range(0,model.n)]
     print s
     e = model.evaluate(s)
-    emax = myoptions['SA']['emax']
+    emax = int(myoptions['SA']['emax'])
     sb = s                       #Initial Best Solution
     eb = e                       #Initial Best Energy
     k = 1
-    kmax = myoptions['SA']['kmax']
+    kmax = int(myoptions['SA']['kmax'])
     count=0
     while(k <= kmax and e > emax):
       sn = self.neighbour(s,minR,maxR)
@@ -170,21 +120,21 @@ class SA():
       if(en < eb):
         sb = sn
         eb = en
-        say("!") #we get to somewhere better globally
+        print("!"),#we get to somewhere better globally
       tempProb = probFunction(e,en,k/kmax)
       tempRand = random.random()
 #      print " tempProb: %f tempRand: %f " %(tempProb,tempRand)
       if(en < e):
         s = sn
         e = en
-        say("+") #we get to somewhere better locally
+        print("+"), #we get to somewhere better locally
       elif(tempProb <= tempRand):
         jump = True
         s = sn
         e = en
-        say("?") #we are jumping to something sub-optimal;
+        print("?") #we are jumping to something sub-optimal;
         count+=1
-      say(".")
+      print("."),
       k += 1
       if(k % 50 == 0):
          print "\n"

@@ -1,0 +1,251 @@
+Box Number: 1,2  # of elements: 1
+Median of objective 0 : 0.190070,  IQR : 0.000000
+Median of objective 1 : 0.707823,  IQR : 0.000000
+Median of objective 2 : 0.364727,  IQR : 0.000000
+Median of objective 3 : 0.208080,  IQR : 0.000000
+
+Box Number: 1,3  # of elements: 1
+Median of objective 0 : 0.043247,  IQR : 0.000000
+Median of objective 1 : 0.695932,  IQR : 0.000000
+Median of objective 2 : 0.331923,  IQR : 0.000000
+Median of objective 3 : 0.182690,  IQR : 0.000000
+
+Box Number: 1,4  # of elements: 3
+Median of objective 0 : 0.110963,  IQR : 0.092445
+Median of objective 1 : 0.822125,  IQR : 0.095968
+Median of objective 2 : 0.575394,  IQR : 0.103394
+Median of objective 3 : 0.484674,  IQR : 0.180343
+
+Box Number: 1,6  # of elements: 1
+Median of objective 0 : 0.105502,  IQR : 0.000000
+Median of objective 1 : 0.965931,  IQR : 0.000000
+Median of objective 2 : 0.281659,  IQR : 0.000000
+Median of objective 3 : 0.566506,  IQR : 0.000000
+
+Box Number: 1,7  # of elements: 5
+Median of objective 0 : 0.046164,  IQR : 0.049529
+Median of objective 1 : 0.589670,  IQR : 0.259601
+Median of objective 2 : 0.261987,  IQR : 0.023889
+Median of objective 3 : 0.093273,  IQR : 0.117589
+
+Box Number: 2,1  # of elements: 1
+Median of objective 0 : 0.352724,  IQR : 0.000000
+Median of objective 1 : 0.866404,  IQR : 0.000000
+Median of objective 2 : 0.239855,  IQR : 0.000000
+Median of objective 3 : 0.375424,  IQR : 0.000000
+
+Box Number: 2,2  # of elements: 4
+Median of objective 0 : 0.167025,  IQR : 0.126506
+Median of objective 1 : 0.890428,  IQR : 0.086387
+Median of objective 2 : 0.300030,  IQR : 0.107561
+Median of objective 3 : 0.434253,  IQR : 0.139389
+
+Box Number: 2,4  # of elements: 3
+Median of objective 0 : 0.153936,  IQR : 0.074228
+Median of objective 1 : 0.962230,  IQR : 0.043723
+Median of objective 2 : 0.221324,  IQR : 0.153124
+Median of objective 3 : 0.585377,  IQR : 0.097046
+
+Box Number: 2,8  # of elements: 6
+Median of objective 0 : 0.071788,  IQR : 0.138025
+Median of objective 1 : 0.987983,  IQR : 0.029828
+Median of objective 2 : 0.161972,  IQR : 0.276052
+Median of objective 3 : 0.599938,  IQR : 0.065462
+
+Box Number: 3,3  # of elements: 1
+Median of objective 0 : 0.383532,  IQR : 0.000000
+Median of objective 1 : 0.697412,  IQR : 0.000000
+Median of objective 2 : 0.747467,  IQR : 0.000000
+Median of objective 3 : 0.355847,  IQR : 0.000000
+
+Box Number: 3,4  # of elements: 5
+Median of objective 0 : 0.217549,  IQR : 0.085203
+Median of objective 1 : 0.731127,  IQR : 0.316695
+Median of objective 2 : 0.535587,  IQR : 0.095481
+Median of objective 3 : 0.375755,  IQR : 0.306861
+
+Box Number: 3,5  # of elements: 3
+Median of objective 0 : 0.633524,  IQR : 0.240165
+Median of objective 1 : 0.906442,  IQR : 0.064195
+Median of objective 2 : 0.703048,  IQR : 0.191759
+Median of objective 3 : 0.636781,  IQR : 0.043536
+
+Box Number: 3,7  # of elements: 1
+Median of objective 0 : 0.026842,  IQR : 0.000000
+Median of objective 1 : 0.583602,  IQR : 0.000000
+Median of objective 2 : 0.790808,  IQR : 0.000000
+Median of objective 3 : 0.291230,  IQR : 0.000000
+
+Box Number: 3,8  # of elements: 3
+Median of objective 0 : 0.140370,  IQR : 0.052598
+Median of objective 1 : 0.967949,  IQR : 0.024896
+Median of objective 2 : 0.217519,  IQR : 0.269642
+Median of objective 3 : 0.698441,  IQR : 0.145120
+
+Box Number: 4,1  # of elements: 1
+Median of objective 0 : 0.647469,  IQR : 0.000000
+Median of objective 1 : 0.962480,  IQR : 0.000000
+Median of objective 2 : 0.212669,  IQR : 0.000000
+Median of objective 3 : 0.598896,  IQR : 0.000000
+
+Box Number: 4,2  # of elements: 1
+Median of objective 0 : 0.518189,  IQR : 0.000000
+Median of objective 1 : 0.928340,  IQR : 0.000000
+Median of objective 2 : 0.188556,  IQR : 0.000000
+Median of objective 3 : 0.557375,  IQR : 0.000000
+
+Box Number: 4,3  # of elements: 2
+Median of objective 0 : 0.489134,  IQR : 0.196636
+Median of objective 1 : 0.809627,  IQR : 0.062911
+Median of objective 2 : 0.509369,  IQR : 0.038868
+Median of objective 3 : 0.387409,  IQR : 0.063347
+
+Box Number: 4,4  # of elements: 1
+Median of objective 0 : 0.375093,  IQR : 0.000000
+Median of objective 1 : 0.549879,  IQR : 0.000000
+Median of objective 2 : 0.443673,  IQR : 0.000000
+Median of objective 3 : 0.091789,  IQR : 0.000000
+
+Box Number: 4,5  # of elements: 4
+Median of objective 0 : 0.605603,  IQR : 0.315495
+Median of objective 1 : 0.979571,  IQR : 0.042109
+Median of objective 2 : 0.366349,  IQR : 0.414575
+Median of objective 3 : 0.577965,  IQR : 0.068148
+
+Box Number: 4,7  # of elements: 1
+Median of objective 0 : 0.509557,  IQR : 0.000000
+Median of objective 1 : 0.993141,  IQR : 0.000000
+Median of objective 2 : 0.022300,  IQR : 0.000000
+Median of objective 3 : 0.347580,  IQR : 0.000000
+
+Box Number: 4,8  # of elements: 1
+Median of objective 0 : 0.168957,  IQR : 0.000000
+Median of objective 1 : 0.990557,  IQR : 0.000000
+Median of objective 2 : 0.085870,  IQR : 0.000000
+Median of objective 3 : 0.560775,  IQR : 0.000000
+
+Box Number: 5,2  # of elements: 2
+Median of objective 0 : 0.417827,  IQR : 0.122256
+Median of objective 1 : 0.740914,  IQR : 0.104224
+Median of objective 2 : 0.401786,  IQR : 0.081796
+Median of objective 3 : 0.403227,  IQR : 0.059672
+
+Box Number: 5,3  # of elements: 4
+Median of objective 0 : 0.484646,  IQR : 0.256194
+Median of objective 1 : 0.591062,  IQR : 0.360793
+Median of objective 2 : 0.651094,  IQR : 0.026140
+Median of objective 3 : 0.305337,  IQR : 0.324527
+
+Box Number: 5,5  # of elements: 1
+Median of objective 0 : 0.823796,  IQR : 0.000000
+Median of objective 1 : 0.413758,  IQR : 0.000000
+Median of objective 2 : 0.841000,  IQR : 0.000000
+Median of objective 3 : 0.221728,  IQR : 0.000000
+
+Box Number: 5,6  # of elements: 3
+Median of objective 0 : 0.214082,  IQR : 0.107572
+Median of objective 1 : 0.782147,  IQR : 0.053147
+Median of objective 2 : 0.739782,  IQR : 0.206890
+Median of objective 3 : 0.505615,  IQR : 0.052256
+
+Box Number: 5,8  # of elements: 2
+Median of objective 0 : 0.460493,  IQR : 0.403354
+Median of objective 1 : 0.517888,  IQR : 0.011953
+Median of objective 2 : 0.571850,  IQR : 0.099119
+Median of objective 3 : 0.251713,  IQR : 0.063534
+
+Box Number: 6,2  # of elements: 1
+Median of objective 0 : 0.499064,  IQR : 0.000000
+Median of objective 1 : 0.731298,  IQR : 0.000000
+Median of objective 2 : 0.425473,  IQR : 0.000000
+Median of objective 3 : 0.261655,  IQR : 0.000000
+
+Box Number: 6,3  # of elements: 3
+Median of objective 0 : 0.417880,  IQR : 0.142643
+Median of objective 1 : 0.413902,  IQR : 0.074527
+Median of objective 2 : 0.425371,  IQR : 0.186883
+Median of objective 3 : 0.207255,  IQR : 0.099455
+
+Box Number: 6,4  # of elements: 1
+Median of objective 0 : 0.379488,  IQR : 0.000000
+Median of objective 1 : 0.823018,  IQR : 0.000000
+Median of objective 2 : 0.241694,  IQR : 0.000000
+Median of objective 3 : 0.212619,  IQR : 0.000000
+
+Box Number: 6,5  # of elements: 1
+Median of objective 0 : 0.859591,  IQR : 0.000000
+Median of objective 1 : 0.638795,  IQR : 0.000000
+Median of objective 2 : 0.488426,  IQR : 0.000000
+Median of objective 3 : 0.224157,  IQR : 0.000000
+
+Box Number: 6,7  # of elements: 4
+Median of objective 0 : 0.424000,  IQR : 0.144795
+Median of objective 1 : 0.718265,  IQR : 0.177084
+Median of objective 2 : 0.275351,  IQR : 0.170610
+Median of objective 3 : 0.088110,  IQR : 0.086633
+
+Box Number: 6,8  # of elements: 2
+Median of objective 0 : 0.801316,  IQR : 0.004927
+Median of objective 1 : 0.378758,  IQR : 0.267619
+Median of objective 2 : 0.302462,  IQR : 0.233074
+Median of objective 3 : 0.210951,  IQR : 0.160153
+
+Box Number: 7,2  # of elements: 2
+Median of objective 0 : 0.103284,  IQR : 0.041401
+Median of objective 1 : 0.556692,  IQR : 0.166618
+Median of objective 2 : 0.599368,  IQR : 0.218119
+Median of objective 3 : 0.202764,  IQR : 0.034379
+
+Box Number: 7,6  # of elements: 7
+Median of objective 0 : 0.060746,  IQR : 0.048223
+Median of objective 1 : 0.736015,  IQR : 0.272465
+Median of objective 2 : 0.399116,  IQR : 0.161916
+Median of objective 3 : 0.363524,  IQR : 0.226650
+
+Box Number: 7,7  # of elements: 3
+Median of objective 0 : 0.150017,  IQR : 0.126644
+Median of objective 1 : 0.782956,  IQR : 0.055002
+Median of objective 2 : 0.104780,  IQR : 0.128554
+Median of objective 3 : 0.180430,  IQR : 0.022669
+
+Box Number: 7,8  # of elements: 2
+Median of objective 0 : 0.043732,  IQR : 0.027360
+Median of objective 1 : 0.417656,  IQR : 0.267406
+Median of objective 2 : 0.635571,  IQR : 0.158919
+Median of objective 3 : 0.108941,  IQR : 0.077736
+
+Box Number: 8,1  # of elements: 5
+Median of objective 0 : 0.043528,  IQR : 0.094735
+Median of objective 1 : 0.182566,  IQR : 0.243602
+Median of objective 2 : 0.730036,  IQR : 0.074396
+Median of objective 3 : 0.065359,  IQR : 0.081009
+
+Box Number: 8,2  # of elements: 1
+Median of objective 0 : 0.066650,  IQR : 0.000000
+Median of objective 1 : 0.674341,  IQR : 0.000000
+Median of objective 2 : 0.511836,  IQR : 0.000000
+Median of objective 3 : 0.390870,  IQR : 0.000000
+
+Box Number: 8,3  # of elements: 2
+Median of objective 0 : 0.075922,  IQR : 0.026164
+Median of objective 1 : 0.493995,  IQR : 0.105285
+Median of objective 2 : 0.482168,  IQR : 0.072645
+Median of objective 3 : 0.242627,  IQR : 0.133152
+
+Box Number: 8,4  # of elements: 2
+Median of objective 0 : 0.148869,  IQR : 0.100458
+Median of objective 1 : 0.443281,  IQR : 0.297202
+Median of objective 2 : 0.762557,  IQR : 0.116139
+Median of objective 3 : 0.274293,  IQR : 0.197341
+
+Box Number: 8,5  # of elements: 2
+Median of objective 0 : 0.015612,  IQR : 0.011544
+Median of objective 1 : 0.119259,  IQR : 0.011613
+Median of objective 2 : 0.375443,  IQR : 0.077716
+Median of objective 3 : 0.037544,  IQR : 0.014569
+
+Box Number: 8,7  # of elements: 1
+Median of objective 0 : 0.019765,  IQR : 0.000000
+Median of objective 1 : 0.168570,  IQR : 0.000000
+Median of objective 2 : 0.749171,  IQR : 0.000000
+Median of objective 3 : 0.064315,  IQR : 0.000000

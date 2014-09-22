@@ -46,7 +46,7 @@ class MaxWalkSat():
 
   def evaluate(self):
     model = self.model
-    print "Model used: %s"%model.info()
+    #print "Model used: %s"%model.info()
     minR=self.minR
     maxR=self.maxR
     maxTries=int(myoptions['MaxWalkSat']['maxTries'])
@@ -149,7 +149,7 @@ class SA():
 
   def evaluate(self):
     model=self.model
-    print "Model used: %s"%(model.info())
+    #print "Model used: %s"%(model.info())
     minR = self.minR
     maxR = self.maxR
     model.baseline(minR,maxR)
@@ -158,11 +158,11 @@ class SA():
     s = [minR + (maxR - minR)*random.random() for z in range(0,self.n)]
     print s
     e = model.evaluate(s)
-    emax = myoptions['SA']['emax']
+    emax = int(myoptions['SA']['emax'])
     sb = s                       #Initial Best Solution
     eb = e                       #Initial Best Energy
     k = 1
-    kmax = myoptions['SA']['kmax']
+    kmax = int(myoptions['SA']['kmax'])
     count=0
     while(k <= kmax and e > emax):
       sn = self.neighbour(s,minR,maxR)
@@ -170,21 +170,21 @@ class SA():
       if(en < eb):
         sb = sn
         eb = en
-        say("!") #we get to somewhere better globally
+        print("!"),#we get to somewhere better globally
       tempProb = probFunction(e,en,k/kmax)
       tempRand = random.random()
 #      print " tempProb: %f tempRand: %f " %(tempProb,tempRand)
       if(en < e):
         s = sn
         e = en
-        say("+") #we get to somewhere better locally
+        print("+"), #we get to somewhere better locally
       elif(tempProb <= tempRand):
         jump = True
         s = sn
         e = en
-        say("?") #we are jumping to something sub-optimal;
+        print("?") #we are jumping to something sub-optimal;
         count+=1
-      say(".")
+      print("."),
       k += 1
       if(k % 50 == 0):
          print "\n"

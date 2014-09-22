@@ -25,39 +25,41 @@ def step2():
 
    print myoptions
 
-def display(searcher,runTimes,scores):
+def display(modelName,searcher,runTimes,scores):
   assert(len(runTimes) == len(scores)),'Ouch! it hurts'
   print "==============================================================="
+  print "Model Name: %s"%modelName
   print "Searcher Name: %s"%searcher.__name__,
   print "Options Used: ",
   print myoptions[searcher.__name__]
   import time
-  print (time.strftime("%d/%m/%Y"))
+  print ("Data: %s"%time.strftime("%d/%m/%Y"))
   for i in range(0,len(runTimes)):
     print "RunNo: %s RunTime: %s Score: %s"%(i+1,runTimes[i],scores[i])
-  print xtile(scores,width=25,show=" %1.3f")
+  print scores
+  print xtile(scores,width=25,show=" %1.6f")
   print "==============================================================="
 
   
 
 def multipleRun():
- r = 5
+ r = 20
  for klass in [Schaffer, Fonseca, Kursawe, ZDT1]:
-   print "Model Name: %s"%klass.__name__
-   for searcher in [SA, MaxWalkSat]:
+   #print "Model Name: %s"%klass.__name__
+   for searcher in [ MaxWalkSat]:
      n = 0.0
      listTimeTaken = []
      listScores = []
      random.seed(1)
      for _ in range(r):
-       test = searcher(klass.__name__)
+       test = searcher(klass())
        import time
        t1 = time.time()
        solution,score = test.evaluate()
        timeTaken = (time.time() - t1) * 1000
        listTimeTaken.append(timeTaken)
        listScores.append(score)
-     display(searcher,listTimeTaken,listScores)
+     display(klass.__name__,searcher,listTimeTaken,listScores)
      
      
 

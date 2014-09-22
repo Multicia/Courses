@@ -7,10 +7,7 @@ sys.dont_write_bytecode = True
 
 sqrt=math.sqrt
 
-class Fonseca:
-  maxVal=-10000
-  minVal=10000
-  
+class ModelBasic():
   def returnMin(self,num):
     if(num<self.minVal):
       self.minVal=num
@@ -25,53 +22,61 @@ class Fonseca:
     else:
       return self.maxVal
 
-  def fx(self,listpoint,version):
+  def evaluate(self,listpoint):
+    energy = self.f1(listpoint)+ self.f2(listpoint)
+    return (energy-self.minVal)/(self.maxVal-self.minVal)
+
+
+
+  def  neighbour(self,minN,maxN):
+    return minN + (maxN-minN)*random.random()
+
+class Fonseca(ModelBasic):
+  maxVal=-10000
+  minVal=10000
+
+  def __init__(self,minR=-4,maxR=4,n=3):
+    self.minR=minR
+    self.maxR=maxR
+    self.n=n
+    self.minVal=10000000
+    self.maxVal=-1e6
+
+  def f1(self,listpoint):
     n=len(listpoint)
     rootn=(n**0.5)**-1
     sum=0
     for i in range(0,n):
-      if version == 1:
         sum+=(listpoint[i]-rootn)**2
-      elif version == 2:
-        sum+=(listpoint[i]+rootn)**2
-      else:
-        print "STOP MESSING AROUND"
     return (1 - math.exp(-sum))
- 
-  def evaluate(self,listpoint):
-    energy = self.fx(listpoint,1)+ self.fx(listpoint,2)
-    return (energy-self.minVal)/(self.maxVal-self.minVal)
-
-  def baseline(self,minR,maxR):
-    for x in range(0,50000):
-      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
-      self.returnMax(self.fx(solution,1)+ self.fx(solution,2))
-      self.returnMin(self.fx(solution,1)+ self.fx(solution,2))
-
-  def  neighbour(self,minN,maxN):
-    return minN + (maxN-minN)*random.random()
+  
+  def f2(self,listpoint):
+    n=len(listpoint)
+    rootn=(n**0.5)**-1
+    sum=0
+    for i in range(0,n):
+        sum+=(listpoint[i]+rootn)**2
+    return (1 - math.exp(-sum))
  
   def info(self):
     return "Fonseca~"
 
-class Kursawe:
-  maxVal=-10000
-  minVal=10000
-  
-  def returnMin(self,num):
-    if(num<self.minVal):
-      self.minVal=num
-      return num
-    else:
-      return self.minVal
+  def baseline(self,minR,maxR):
+    for x in range(0,50000):
+      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
+      self.returnMax(self.f1(solution)+ self.f2(solution))
+      self.returnMin(self.f1(solution)+ self.f2(solution))
 
-  def returnMax(self,num):
-    if(num>self.maxVal):
-      self.maxVal=num
-      return num
-    else:
-      return self.maxVal
 
+class Kursawe(ModelBasic):
+  def __init__(self,minR=-5,maxR=5,n=3):
+    self.minR=minR
+    self.maxR=maxR
+    self.n=n
+    self.minVal=10000000
+    self.maxVal=-1e6
+
+ 
   def f1(self,listpoint):
     n=len(listpoint)
     #inspired by 'theisencr'
@@ -84,49 +89,19 @@ class Kursawe:
     n=len(listpoint)
     #inspired by 'theisencr'
     return np.sum([math.fabs(listpoint[i])**a + 5*np.sin(listpoint[i])**b for i in range (0, n)])
-
-
-  def evaluate(self,listpoint):
-    energy = (self.f1(listpoint)+self.f2(listpoint))
-    return (energy-self.minVal)/(self.maxVal-self.minVal)
-
-  def baseline(self,minR,maxR):
-    for x in range(0,90000):
-      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
-      self.returnMax(self.f1(solution)+ self.f2(solution))
-      self.returnMin(self.f2(solution)+ self.f2(solution))
-
-  def  neighbour(self,minN,maxN):
-    return minN + (maxN-minN)*random.random()
     
   def info(self):
     return "Kursawe~"
-  def test(self):
-    file = open("Kursawe.txt","w")
-    for x in range(-5,6):
-      for y in range(-5,6):
-        for z in range(-5,6):
-          solution = [x,y,z]
-          file.write("%f\n"%self.evaluate(solution))
-    file.close()
 
-class ZDT1():
+  def baseline(self,minR,maxR):
+    for x in range(0,50000):
+      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
+      self.returnMax(self.f1(solution)+ self.f2(solution))
+      self.returnMin(self.f1(solution)+ self.f2(solution))
+
+class ZDT1(ModelBasic):
   maxVal=-10000
   minVal=10000
-  
-  def returnMin(self,num):
-    if(num<self.minVal):
-      self.minVal=num
-      return num
-    else:
-      return self.minVal
-
-  def returnMax(self,num):
-    if(num>self.maxVal):
-      self.maxVal=num
-      return num
-    else:
-      return self.maxVal
 
   def __init__(self,minR=0,maxR=1,n=30):
     self.minR=minR
@@ -149,8 +124,6 @@ class ZDT1():
     assert(gx!=0),"Ouch! it hurts"
     return gx * (1- sqrt(lst[0]/gx))
 
-  def evaluate(self,lst):
-    return self.f1(lst)+self.f2(lst)/(self.maxVal-self.minVal)
  
   def baseline(self,minR=0,maxR=1):
     for x in range(0,90000):
@@ -161,23 +134,13 @@ class ZDT1():
   def info(self):
     return "ZDT1~"
 
-  def  neighbour(self,minN,maxN):
-    return minN + (maxN-minN)*random.random()
 
-  def testgx(self):
-    lst = [i for i in range(0,30)]
-    print len(lst)
-    sum=0
-    for i in range(1,len(lst)):
-      sum+=lst[i]
-    temp=(1+(9*sum/29))
-    assert(self.gx(lst)==temp),"testgx failed"
+class Schaffer(ModelBasic):
 
-class Schaffer:
-
-  def __init__(self,minR=-1e4,maxR=1e4):
+  def __init__(self,minR=-1e4,maxR=1e4,n=1):
     self.minR=minR
     self.maxR=maxR
+    self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
  
@@ -188,17 +151,6 @@ class Schaffer:
     energy = (rawEnergy -self.minVal)/(self.maxVal-self.minVal)
     return energy
 
-  def returnMin(self,num):
-    if(num<self.minVal):
-      return num
-    else:
-      return self.minVal
-
-  def returnMax(self,num):
-    if(num>self.maxVal):
-      return num
-    else:
-      return self.maxVal
 
   def info(self):
     return "Schaffer~"
@@ -213,7 +165,3 @@ class Schaffer:
       self.minVal=self.returnMin(temp)
       self.maxVal=self.returnMax(temp)
     print("Max: %d Min: %d"%(self.maxVal,self.minVal))
-
-  def  neighbour(self,minN,maxN):
-    return minN + (maxN-minN)*random.random()
-
