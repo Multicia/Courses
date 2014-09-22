@@ -31,7 +31,11 @@ class Log(): #only 1 attribute can be stored here
     self.median=(temp[p]+temp[q])/2
     self.changed=False
     return self.median,self.iqr
-    
+  
+  def empty(self):
+    self.listing=[]
+    self.lo,self.hi,self.median,self.iqr=1e6,-1e6,0,0
+    self.changed=True  
 
   def report(self):
     if self.changed == False: return median,iqr
@@ -41,10 +45,14 @@ class Log(): #only 1 attribute can be stored here
 
 class ModelBasic(object):
  
+  #past =None #List of Logs
+  #present = None #List of Logs
   pastLogf1 = None
   pastLogf2 = None
   presentLogf1 = None
   presentLogf2 = None
+  pastLogf3=None    #I am sorry this is crude
+  presentf3=None    #I am sorry this is crude
   lives=None
 
   #From Dr. M's files: a12.py
@@ -109,6 +117,13 @@ class ModelBasic(object):
       return self.maxVal
 
   def evaluate(self,listpoint):
+
+    #for x in xrange(0,self.obj):
+    #   callName = "f"+str(x+1)
+    #   print callName
+    #   exec(callName +"="+getattr(self, callName)(listpoint))
+    #   present.add(callName)
+
     f1 = self.f1(listpoint)
     f2 = self.f2(listpoint)
     self.presentLogf1.add(f1)
@@ -316,16 +331,20 @@ class ZDT3(ModelBasic):
     return "ZDT3~"
 
 class Viennet(ModelBasic):
-  def __init__(self,minR=-3,maxR=3,n=2):
+  def __init__(self,minR=-3,maxR=3,n=2,objf=3):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
+    #self.past = [Log() for count in xrange(3)]
+    #self.present = [Log() from count in xrange(3)]
     self.pastLogf1 = Log()
     self.pastLogf2 = Log()
+    self.pastLogf3 = Log()     #I am sorry this is crude
     self.presentLogf1 = Log()
     self.presentLogf2 = Log()
+    self.presentLogf3 = Log()     #I am sorry this is crude
     self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
@@ -346,11 +365,42 @@ class Viennet(ModelBasic):
     temp1=(x**2+y**2+1)**-1 
     temp2=1.1*math.exp(-(x**2+y**2))
     return temp1+temp2
+  #@override
+  def evalBetter(self):
+    better1,same1=self.better(self.pastLogf1,self.presentLogf1)
+    better2,same2=self.better(self.pastLogf2,self.presentLogf2)
+    better3,same3=self.better(self.pastLogf3,self.presentLogf3)
+    #print better1,same1,better2,same2
+    
+    if(same1&same2&same3 == True): 
+      self.lives-=1
+    elif((better1 or better2 or better3) == True):
+      pass 
+    else:
+      self.lives-=1
+    
+    self.pastLogf1.empty()
+    self.pastLogf2.empty()
+    self.pastLogf3.empty()
+    import copy #http://stackoverflow.com/questions/184643/what-is-the-best-way-to-copy-a-list
+    self.pastLogf1.listing = copy.copy(self.presentLogf1.listing)
+    self.pastLogf2.listing = copy.copy(self.presentLogf2.listing)
+    self.pastLogf3.listing = copy.copy(self.presentLogf3.listing)
+    self.presentLogf1.empty()
+    self.presentLogf2.empty()
+    self.presentLogf3.empty()
 
   def evaluate(self,listpoint):
-    return f1(listpoint)+f2(listpoint)+f3(listpoint)
+    f1 = self.f1(listpoint)
+    f2 = self.f2(listpoint)
+    f3 = self.f3(listpoint)
+    self.presentLogf1.add(f1)
+    self.presentLogf2.add(f2)
+    self.presentLogf3.add(f3)
+    energy = f1+f2+f3
+    return (energy-self.minVal)/(self.maxVal-self.minVal)
 
-  def baseline(self):
+  def baseline(self,minR,maxR):
     for x in range(0,90000):
       solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]
       self.returnMax(self.f1(solution)+ self.f2(solution)+self.f3(solution))
