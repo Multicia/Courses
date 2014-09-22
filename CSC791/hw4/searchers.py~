@@ -71,7 +71,7 @@ class MaxWalkSat(SearchersBasic):
            #print "threshold reached|Tries: %d|Changes: %d"%(i,j)
            self.display(".",score),
            self.display2()
-           break
+           break 
          
          if random.random() > probLocalSearch:
              c = int(0 + (self.model.n-0)*random.random())
@@ -89,10 +89,16 @@ class MaxWalkSat(SearchersBasic):
                   tempBestScore=tempScore
                   tempBestSolution=solution
              solution=tempBestSolution
-             self.display("!",solution),
+             self.display("!",tempBestScore),
          self.display(".",score),
+         if(self.model.lives == 0):
+           bestScore=score
+           bestSolution=solution
+           self.display2()
+           return bestSolution,bestScore
          if(j%50==0):
             self.display2()
+            self.model.evalBetter()
 
     return bestSolution,bestScore       
 
@@ -129,7 +135,7 @@ class SA(SearchersBasic):
     print model.maxVal, model.minVal
 
     s = [minR + (maxR - minR)*random.random() for z in range(0,model.n)]
-    print s
+    #print s
     e = model.evaluate(s)
     emax = int(myoptions['SA']['emax'])
     sb = s                       #Initial Best Solution
@@ -159,9 +165,14 @@ class SA(SearchersBasic):
         count+=1
       self.display(".",en),
       k += 1
+      if(self.model.lives == 0):
+        bestScore=en
+        bestSolution=sn
+        self.display2()
+        return bestSolution,bestScore
       if(k % 50 == 0):
-         print "\n"
          self.display2()
+         self.model.evalBetter()
        #  print "%f{%d}"%(sb,count),
          count=0
     return sb,eb 

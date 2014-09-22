@@ -3,25 +3,26 @@ import sys
 import random
 import math 
 import numpy as np
+from options import *
 sys.dont_write_bytecode = True
 
 sqrt=math.sqrt
 
 class Log(): #only 1 attribute can be stored here
-  listing =None
   def __init__(self):
-    listing=[]
-    lo,hi,median,iqr=1e6,-1e6,0,0
-    changed=True
+    self.listing=[]
+    self.lo,self.hi,self.median,self.iqr=1e6,-1e6,0,0
+    self.changed=True
 
   def add(self,num): 
     if num==None: return num
+    self.listing.append(num)
     self.lo=min(self.lo,num)
     self.hi=max(self.hi,num)
     self.changed=True
 
   def stats(self):
-    temp=sorted(listing)
+    temp=sorted(self.listing)
     n=len(temp)
     p=n//2
     if n%2 : return temp[p]
@@ -33,20 +34,21 @@ class Log(): #only 1 attribute can be stored here
     
 
   def report(self):
-    if changed == False: return median,iqr
+    if self.changed == False: return median,iqr
     return self.stats()
     
         
 
-class ModelBasic():
-  pastLogf1 = Log()
-  pastLogf2 = Log()
-  presentLogf1 = Log()
-  presentLogf2 = Log()
-  lives=myModeloptions[Lives]
+class ModelBasic(object):
+ 
+  pastLogf1 = None
+  pastLogf2 = None
+  presentLogf1 = None
+  presentLogf2 = None
+  lives=None
 
   #From Dr. M's files: a12.py
-  def a12slow(lst1,lst2):
+  def a12slow(self,lst1,lst2):
     more = same = 0.0
     for x in sorted(lst1):
       for y in sorted(lst2):
@@ -61,25 +63,36 @@ class ModelBasic():
   Given two logs, it would maintain states of lives etc
   """
   def better(self,past,present):
-    if list(past.listing) == 0: return
-    betteriqr = past.iqr > present.iqr
+    betteriqr,bettermedian= False,False
+    if(len(past.listing) == 0 ): return(True,False)
+    #if len(past.listing) == None: return (True,False)
+    if(present.changed == True): present.report()
+
     bettermedian = past.median > present.median
-    return (bettermedian | betteriqr),a12slow(past.listing,present.listing)<= myModeloptions[a12]
+    if bettermedian == True: return (True,self.a12slow(past.listing,present.listing)<= myModeloptions['a12'])
+    if past.median == present.median:
+       betteriqr = past.iqr > present.iqr
+    return betteriqr,self.a12slow(past.listing,present.listing)<= myModeloptions['a12']
 
   def evalBetter(self):
-    better1,same1=self.better(pastLogf1,presentLogf1)
-    better2,same2=self.better(pastLogf2,presentLogf2)
+    better1,same1=self.better(self.pastLogf1,self.presentLogf1)
+    better2,same2=self.better(self.pastLogf2,self.presentLogf2)
+    #print better1,same1,better2,same2
     
-    if(same1&same2 == True): lives-=1
-    lives = myModeloptions[Lives]
+    if(same1&same2 == True): 
+      self.lives-=1
+    elif((better1 or better2) == True):
+      pass #it would be the same. Stupid but true
+    else:
+      self.lives-=1
     
-    pastLogf1.listing[:]=[]
-    pastLogf2.listing[:]=[]
-    import copy
-    pastLogf1.listing = copy.copy(presentLogf1.listing)
-    pastLogf2.listing = copy.copy(presentLogf2.listing)
-    presentLogf1.listing[:]=[]
-    presentLogf2.listing[:]=[]
+    self.pastLogf1.listing[:]=[]
+    self.pastLogf2.listing[:]=[]
+    import copy #http://stackoverflow.com/questions/184643/what-is-the-best-way-to-copy-a-list
+    self.pastLogf1.listing = copy.copy(self.presentLogf1.listing)
+    self.pastLogf2.listing = copy.copy(self.presentLogf2.listing)
+    self.presentLogf1.listing[:]=[]
+    self.presentLogf2.listing[:]=[]
 
   def returnMin(self,num):
     if(num<self.minVal):
@@ -98,7 +111,8 @@ class ModelBasic():
   def evaluate(self,listpoint):
     f1 = self.f1(listpoint)
     f2 = self.f2(listpoint)
-    presentLogf1.
+    self.presentLogf1.add(f1)
+    self.presentLogf2.add(f2)
     energy = f1+f2
     return (energy-self.minVal)/(self.maxVal-self.minVal)
 
@@ -108,15 +122,17 @@ class ModelBasic():
     return minN + (maxN-minN)*random.random()
 
 class Fonseca(ModelBasic):
-  maxVal=-10000
-  minVal=10000
-
   def __init__(self,minR=-4,maxR=4,n=3):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
     n=len(listpoint)
@@ -138,7 +154,7 @@ class Fonseca(ModelBasic):
     return "Fonseca~"
 
   def baseline(self,minR,maxR):
-    for x in range(0,50000):
+    for x in range(0,100000):
       solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
       self.returnMax(self.f1(solution)+ self.f2(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution))
@@ -151,6 +167,11 @@ class Kursawe(ModelBasic):
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
 
  
   def f1(self,listpoint):
@@ -183,6 +204,11 @@ class ZDT1(ModelBasic):
     self.minR=minR
     self.maxR=maxR
     self.n=n
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
 
   def f1(self,lst):
     assert(len(lst)==self.n),"Something's Messed up"
@@ -219,11 +245,20 @@ class Schaffer(ModelBasic):
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
  
   def evaluate(self,listpoint):
     assert(len(listpoint) == 1),"Something's Messed up"
     var=listpoint[0]
-    rawEnergy = (var**2 +(var-2)**2)
+    f1 = var**2
+    f2 = (var-2)**2
+    self.presentLogf1.add(f1)
+    self.presentLogf2.add(f2)
+    rawEnergy = f1+f2
     energy = (rawEnergy -self.minVal)/(self.maxVal-self.minVal)
     return energy
 
@@ -250,6 +285,11 @@ class ZDT3(ModelBasic):
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
     return listpoint[0];
@@ -282,6 +322,11 @@ class Viennet(ModelBasic):
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
     x=listpoint[0]

@@ -32,8 +32,8 @@ def display(modelName,searcher,runTimes,scores):
   
 
 def multipleRun():
- r = 20
- for klass in [Schaffer]:#, Fonseca, Kursawe, ZDT1]:
+ r = 1
+ for klass in [Schaffer, Fonseca, Kursawe, ZDT1]:
    #print "Model Name: %s"%klass.__name__
    for searcher in [ MaxWalkSat]:
      n = 0.0
