@@ -3,6 +3,7 @@ import sys
 import random
 import math 
 import numpy as np
+from utilities import *
 from options import *
 sys.dont_write_bytecode = True
 
@@ -11,14 +12,18 @@ sqrt=math.sqrt
 class Log(): #only 1 attribute can be stored here
   def __init__(self):
     self.listing=[]
-    self.lo,self.hi,self.median,self.iqr=1e6,-1e6,0,0
+    self.history=[] #Would have the history
+    self.historyhi,self.historylo,self.historyIndex=-1e10,1e10,0
+    self.lo,self.hi,self.median,self.iqr=1e10,-1e10,0,0
     self.changed=True
+
 
   def add(self,num): 
     if num==None: return num
     self.listing.append(num)
     self.lo=min(self.lo,num)
     self.hi=max(self.hi,num)
+    #print self.lo,self.hi
     self.changed=True
 
   def stats(self):
@@ -33,6 +38,12 @@ class Log(): #only 1 attribute can be stored here
     return self.median,self.iqr
   
   def empty(self):
+    import copy 
+    self.history.append(self.listing)
+    self.historyIndex+=1
+    self.historylo=min(self.lo,self.historylo)
+    self.historyhi=max(self.hi,self.historyhi)
+
     self.listing=[]
     self.lo,self.hi,self.median,self.iqr=1e6,-1e6,0,0
     self.changed=True  
@@ -44,15 +55,9 @@ class Log(): #only 1 attribute can be stored here
         
 
 class ModelBasic(object):
- 
-  #past =None #List of Logs
-  #present = None #List of Logs
-  pastLogf1 = None
-  pastLogf2 = None
-  presentLogf1 = None
-  presentLogf2 = None
-  pastLogf3=None    #I am sorry this is crude
-  presentf3=None    #I am sorry this is crude
+  objf=None
+  past =None #List of Logs
+  present = None #List of Logs
   lives=None
 
   #From Dr. M's files: a12.py
@@ -83,24 +88,33 @@ class ModelBasic(object):
     return betteriqr,self.a12slow(past.listing,present.listing)<= myModeloptions['a12']
 
   def evalBetter(self):
-    better1,same1=self.better(self.pastLogf1,self.presentLogf1)
-    better2,same2=self.better(self.pastLogf2,self.presentLogf2)
-    #print better1,same1,better2,same2
-    
-    if(same1&same2 == True): 
+    better,same=[],[]
+    for x in xrange(self.objf):
+      tempbetter,tempsame=self.better(self.past[x],self.present[x])
+      better.append(tempbetter)
+      same.append(tempsame)
+     
+    import operator
+    if(reduce(operator.and_,same)==True):
       self.lives-=1
-    elif((better1 or better2) == True):
-      pass #it would be the same. Stupid but true
+      print "-------------DIE"
+    elif(reduce(operator.or_,better)==True): #need to check!
+      pass
     else:
       self.lives-=1
-    
-    self.pastLogf1.listing[:]=[]
-    self.pastLogf2.listing[:]=[]
-    import copy #http://stackoverflow.com/questions/184643/what-is-the-best-way-to-copy-a-list
-    self.pastLogf1.listing = copy.copy(self.presentLogf1.listing)
-    self.pastLogf2.listing = copy.copy(self.presentLogf2.listing)
-    self.presentLogf1.listing[:]=[]
-    self.presentLogf2.listing[:]=[]
+      print "-------------DIE"
+
+    for x in xrange(self.objf):
+      self.past[x].empty()
+      import copy 
+      #http://stackoverflow.com/questions/184643/
+      #what-is-the-best-way-to-copy-a-list
+      self.past[x].listing = copy.copy(self.present[x].listing)
+      self.past[x].listing = copy.copy(self.present[x].listing)
+      self.past[x].lo = self.present[x].lo
+      self.past[x].hi = self.present[x].hi
+      self.present[x].empty()         
+
 
   def returnMin(self,num):
     if(num<self.minVal):
@@ -116,19 +130,28 @@ class ModelBasic(object):
     else:
       return self.maxVal
 
+  def addWrapper(self,listpoint):#list of objective scores
+    #len(listpoint) should be equal to objective function(self.objf)
+    if(listpoint==None): return None
+    for x in xrange(len(listpoint)):
+      self.present[x].add(listpoint[x])
+      #print self.present[x].listing
+
   def evaluate(self,listpoint):
-
-    #for x in xrange(0,self.obj):
-    #   callName = "f"+str(x+1)
-    #   print callName
-    #   exec(callName +"="+getattr(self, callName)(listpoint))
-    #   present.add(callName)
-
-    f1 = self.f1(listpoint)
-    f2 = self.f2(listpoint)
-    self.presentLogf1.add(f1)
-    self.presentLogf2.add(f2)
-    energy = f1+f2
+    temp=[]
+    for x in xrange(0,self.objf):
+       callName = "f"+str(x+1)
+       #exec(getattr(self, callName)(listpoint))
+       temp.append(getattr(self, callName)(listpoint))
+    
+    self.addWrapper(temp) 
+    energy= np.sum(temp)
+    
+    #f1 = self.f1(listpoint)
+    #f2 = self.f2(listpoint)
+    #self.presentLogf1.add(f1)
+    #self.presentLogf2.add(f2)
+    #energy = f1+f2
     return (energy-self.minVal)/(self.maxVal-self.minVal)
 
 
@@ -137,16 +160,15 @@ class ModelBasic(object):
     return minN + (maxN-minN)*random.random()
 
 class Fonseca(ModelBasic):
-  def __init__(self,minR=-4,maxR=4,n=3):
+  def __init__(self,minR=-4,maxR=4,n=3,objf=2):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
-    self.pastLogf1 = Log()
-    self.pastLogf2 = Log()
-    self.presentLogf1 = Log()
-    self.presentLogf2 = Log()
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
@@ -176,16 +198,15 @@ class Fonseca(ModelBasic):
 
 
 class Kursawe(ModelBasic):
-  def __init__(self,minR=-5,maxR=5,n=3):
+  def __init__(self,minR=-5,maxR=5,n=3,objf=2):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
-    self.pastLogf1 = Log()
-    self.pastLogf2 = Log()
-    self.presentLogf1 = Log()
-    self.presentLogf2 = Log()
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
 
  
@@ -215,14 +236,13 @@ class ZDT1(ModelBasic):
   maxVal=-10000
   minVal=10000
 
-  def __init__(self,minR=0,maxR=1,n=30):
+  def __init__(self,minR=0,maxR=1,n=30,objf=2):
     self.minR=minR
     self.maxR=maxR
     self.n=n
-    self.pastLogf1 = Log()
-    self.pastLogf2 = Log()
-    self.presentLogf1 = Log()
-    self.presentLogf2 = Log()
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
 
   def f1(self,lst):
@@ -254,18 +274,17 @@ class ZDT1(ModelBasic):
 
 class Schaffer(ModelBasic):
 
-  def __init__(self,minR=-1e4,maxR=1e4,n=1):
+  def __init__(self,minR=-1e4,maxR=1e4,n=1,objf=2):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
-    self.pastLogf1 = Log()
-    self.pastLogf2 = Log()
-    self.presentLogf1 = Log()
-    self.presentLogf2 = Log()
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
- 
+  """
   def evaluate(self,listpoint):
     assert(len(listpoint) == 1),"Something's Messed up"
     var=listpoint[0]
@@ -276,7 +295,12 @@ class Schaffer(ModelBasic):
     rawEnergy = f1+f2
     energy = (rawEnergy -self.minVal)/(self.maxVal-self.minVal)
     return energy
+  """
+  def f1(self,lst):
+    return lst[0]**2
 
+  def f2(self,lst):
+    return (lst[0]-2)**2
 
   def info(self):
     return "Schaffer~"
@@ -294,16 +318,15 @@ class Schaffer(ModelBasic):
 
 class ZDT3(ModelBasic):
   
-  def __init__(self,minR=0,maxR=1,n=30):
+  def __init__(self,minR=0,maxR=1,n=30,objf=2):
     self.minR=minR
     self.maxR=maxR
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
-    self.pastLogf1 = Log()
-    self.pastLogf2 = Log()
-    self.presentLogf1 = Log()
-    self.presentLogf2 = Log()
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
 
   def f1(self,listpoint):
@@ -337,15 +360,19 @@ class Viennet(ModelBasic):
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
-    #self.past = [Log() for count in xrange(3)]
-    #self.present = [Log() from count in xrange(3)]
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
+    self.lives=myModeloptions['Lives']
+    """
     self.pastLogf1 = Log()
     self.pastLogf2 = Log()
     self.pastLogf3 = Log()     #I am sorry this is crude
     self.presentLogf1 = Log()
     self.presentLogf2 = Log()
     self.presentLogf3 = Log()     #I am sorry this is crude
-    self.lives=myModeloptions['Lives']
+    """
+    
 
   def f1(self,listpoint):
     x=listpoint[0]
@@ -365,6 +392,7 @@ class Viennet(ModelBasic):
     temp1=(x**2+y**2+1)**-1 
     temp2=1.1*math.exp(-(x**2+y**2))
     return temp1+temp2
+  """
   #@override
   def evalBetter(self):
     better1,same1=self.better(self.pastLogf1,self.presentLogf1)
@@ -399,7 +427,7 @@ class Viennet(ModelBasic):
     self.presentLogf3.add(f3)
     energy = f1+f2+f3
     return (energy-self.minVal)/(self.maxVal-self.minVal)
-
+  """
   def baseline(self,minR,maxR):
     for x in range(0,90000):
       solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]

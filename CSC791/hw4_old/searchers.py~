@@ -93,12 +93,12 @@ class MaxWalkSat(SearchersBasic):
          self.display(".",score),
          if(self.model.lives == 0):
            self.display2()
-           return bestSolution,bestScore,self.model
+           return bestSolution,bestScore
          if(j%50==0):
             self.display2()
             self.model.evalBetter()
 
-    return bestSolution,bestScore,self.model      
+    return bestSolution,bestScore       
 
 def probFunction(old,new,t):
    return math.exp(1 *(old-new)/t)
@@ -165,10 +165,10 @@ class SA(SearchersBasic):
       k += 1
       if(self.model.lives == 0):
         self.display2()
-        return sb,eb,self.model
+        return bestSolution,bestScore
       if(k % 50 == 0):
          self.display2()
          self.model.evalBetter()
        #  print "%f{%d}"%(sb,count),
          count=0
-    return sb,eb,self.model 
+    return sb,eb 

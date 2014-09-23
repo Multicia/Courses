@@ -53,6 +53,10 @@ class Utilities:
 
 
 """ 
+def say(x): 
+  "Print something with no trailing new line."
+  sys.stdout.write(str(x)+"\n"); sys.stdout.flush()
+
 def pairs(lst):
   last=lst[0]
   for i in lst[1:]:

@@ -14,7 +14,7 @@ rand=  random.random # generate nums 0..1
 any=   random.choice # pull any from list
 sqrt= math.sqrt  #square root function
 
-def display(modelName,searcher,runTimes,scores,historyhi,historylo):
+def display(modelName,searcher,runTimes,scores):
   assert(len(runTimes) == len(scores)),'Ouch! it hurts'
   print "==============================================================="
   print "Model Name: %s"%modelName
@@ -24,42 +24,33 @@ def display(modelName,searcher,runTimes,scores,historyhi,historylo):
   import time
   print ("Data: %s"%time.strftime("%d/%m/%Y"))
   print "Average running time: %f " %np.mean(runTimes)
-  for x in xrange(myModelobjf[modelName]):
-    print "Objective No. %d: High: %f Low: %f"%(x+1,historyhi[x],historylo[x])
   #for i in range(0,len(runTimes)):
   #  print "RunNo: %s RunTime: %s Score: %s"%(i+1,runTimes[i],scores[i])
-  #print scores
-  print xtile(scores,width=25,show=" %1.6f")
+  print scores
+  #print xtile(scores,width=25,show=" %1.6f")
   print "==============================================================="
 
   
 
 def multipleRun():
- r = 30
+ r = 1
  for klass in [Schaffer, Fonseca, Kursawe, ZDT1,ZDT3,Viennet]:
    #print "Model Name: %s"%klass.__name__
-   for searcher in [SA,MaxWalkSat]:
+   for searcher in [MaxWalkSat]:
      n = 0.0
      listTimeTaken = []
      listScores = []
-     random.seed(3)
-     historyhi=[-1e10 for count in xrange(myModelobjf[klass.__name__])]
-     historylo=[1e10 for count in xrange(myModelobjf[klass.__name__])]
+     random.seed(1)
      for _ in range(r):
        test = searcher(klass(),"display2")
-        
        import time
        t1 = time.time()
-       solution,score,model = test.evaluate()
-       for x in xrange(model.objf):
-         historyhi[x]=max(model.past[x].historyhi,historyhi[x])
-         historylo[x]=min(model.past[x].historylo,historylo[x])
-         sys.stdout.flush()
-       print
+       solution,score = test.evaluate()
+       print len(solution)
        timeTaken = (time.time() - t1) * 1000
        listTimeTaken.append(timeTaken)
        listScores.append(score)
-     display(klass.__name__,searcher,listTimeTaken,listScores,historyhi,historylo)
+     display(klass.__name__,searcher,listTimeTaken,listScores)
 def step2():
     rdivDemo([
       ["Romantic",385,214,371,627,579],
