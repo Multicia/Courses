@@ -103,7 +103,10 @@ class ModelBasic(object):
     else:
       self.lives-=1
       #print "-------------DIE"
+    self.emptyWrapper()
 
+  def emptyWrapper(self):
+    print "emptyWrapper"
     for x in xrange(self.objf):
       self.past[x].empty()
       import copy 
@@ -138,6 +141,7 @@ class ModelBasic(object):
       #print self.present[x].listing
 
   def evaluate(self,listpoint):
+    #print "EVALUATE"
     temp=[]
     for x in xrange(0,self.objf):
        callName = "f"+str(x+1)
@@ -145,6 +149,7 @@ class ModelBasic(object):
        temp.append(getattr(self, callName)(listpoint))
     
     self.addWrapper(temp) 
+    #print temp
     energy= np.sum(temp)
     
     #f1 = self.f1(listpoint)

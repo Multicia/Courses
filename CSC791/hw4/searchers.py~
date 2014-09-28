@@ -101,7 +101,7 @@ class MaxWalkSat(SearchersBasic):
     return bestSolution,bestScore,self.model      
 
 def probFunction(old,new,t):
-   return math.exp(1 *(old-new)/t)
+   return np.exp(1 *(old-new)/t)
 
 class SA(SearchersBasic):
   model = None
@@ -130,7 +130,7 @@ class SA(SearchersBasic):
     minR = model.minR
     maxR = model.maxR
     model.baseline(minR,maxR)
-    print model.maxVal, model.minVal
+    print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
 
     s = [minR + (maxR - minR)*random.random() for z in range(0,model.n)]
     #print s
@@ -142,6 +142,7 @@ class SA(SearchersBasic):
     kmax = int(myoptions['SA']['kmax'])
     count=0
     while(k <= kmax and e > emax):
+      #print k,e
       sn = self.neighbour(s,minR,maxR)
       en = model.evaluate(sn)
       if(en < eb):
@@ -165,10 +166,15 @@ class SA(SearchersBasic):
       k += 1
       if(self.model.lives == 0):
         self.display2()
+        self.model.emptyWrapper()
+        #print "out1"
         return sb,eb,self.model
       if(k % 50 == 0):
          self.display2()
-         self.model.evalBetter()
+         #self.model.evalBetter()
        #  print "%f{%d}"%(sb,count),
          count=0
+    #print "out2"
+    self.mode.present[0]
+    self.model.emptyWrapper()
     return sb,eb,self.model 
