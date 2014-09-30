@@ -37,7 +37,7 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
  r = 1
- for klass in [Schaffer]:#, Fonseca, Kursawe, ZDT1,ZDT3,Viennet]:
+ for klass in [Schaffer]:#DTLZ7]:#Schaffer, Fonseca, Kursawe, ZDT1,ZDT3,Viennet]:
    #print "Model Name: %s"%klass.__name__
    for searcher in [SA,MaxWalkSat]:
      n = 0.0
@@ -121,8 +121,11 @@ def callrdivdemo(eraCollector):
       #print "Length of array: %f"%len(eraCollector[keylist[y]][x])
       rdivarray.append(eraCollector[keylist[y]][x])
     rdivDemo(rdivarray) 
-  
 
+def testGA():
+  for klass in [Viennet]:
+    test = GA(klass(),"display2")          
+    test.evaluate()
 
 if __name__ == '__main__': 
  # random.seed(1)
@@ -132,7 +135,8 @@ if __name__ == '__main__':
  # model.testgx()
  # for klass in [ZDT1]:
  #   print klass.__name__
- multipleRun()
+ #multipleRun()
+ testGA()
  #part6()
  #step2()
  
