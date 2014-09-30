@@ -82,7 +82,7 @@ class ModelBasic(object):
     if(present.changed == True): present.report()
     past.report()
     #print ">>>> %f %f"%(past.median,present.median)
-    bettermedian = past.median >= present.median
+    bettermedian = past.median > present.median
     if bettermedian == True: 
       #print "................%f"%self.a12slow(past.listing,present.listing)
       return (True,self.a12slow(past.listing,present.listing)\
@@ -90,7 +90,7 @@ class ModelBasic(object):
     if past.median == present.median:
        betteriqr = past.iqr > present.iqr
        return betteriqr,self.a12slow(past.listing,present.listing)<= myModeloptions['a12']
-     else:
+    else:
        return(False,False)
 
   def evalBetter(self):
@@ -100,16 +100,26 @@ class ModelBasic(object):
       print tempbetter,tempsame
       better.append(tempbetter)
       same.append(tempsame)
-     
+    
+
+    for i in xrange(len(same)):
+      if(better[i]!=True or same[i]==True):
+        self.lives-=1
+        print "----------------DEAD"
+        break
+      else:
+        continue 
+    """
     import operator
     if(reduce(operator.and_,same)==True):
       self.lives-=1
       print "-------------DIE"
-    elif(reduce(operator.or_,better)==True): #need to check!
-      pass
-    else:
+    elif(reduce(operator.or_,better)!=True): #need to check!
       self.lives-=1
       print "-------------DIE"
+    else:
+      pass
+    """
     self.emptyWrapper()
 
   def emptyWrapper(self):
@@ -125,7 +135,7 @@ class ModelBasic(object):
       self.past[x].lo = self.present[x].lo
       self.past[x].hi = self.present[x].hi
       self.present[x].empty()  
-      #self.past[x].report()       
+      self.past[x].report()       
 
 
   def returnMin(self,num):

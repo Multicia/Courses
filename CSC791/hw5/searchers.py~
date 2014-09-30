@@ -302,6 +302,8 @@ class GA(SearchersBasic):
      
 
   def evaluate(self):
+    bestSolution=[]
+    bestScore = 1e6
     done=False
     model=self.model
     #print "Model used: %s"%(model.info())
@@ -321,16 +323,16 @@ class GA(SearchersBasic):
         strs,fitness = self.keyTransform(s2)
         self.display(score=fitness)
         self.population[strs]=fitness
-        if(self.model.lives == 0):
-          self.display2()
-          self.model.emptyWrapper()
-          done=True
-      
-      self.display2()
-      self.model.evalBetter()
-      if(done==True): break
+        if(fitness<bestScore):
+          bestScore=fitness
+          bestSolution=strs
       self.elitism()
-
+      self.display2()
       
     print sorted(self.population.values())
+    lol = lambda lst, sz: [lst[i:i+sz] \
+    for i in range(0, len(lst), sz)]
+    tempSolution = [int(''.join(map(str,x)))/10**len(x)\
+     for x in lol(m1,int(len(m1)/model.n))]
+    print map(lambda x:minR+x*(maxR-minR),tempSolution) 
 
