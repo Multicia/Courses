@@ -43,16 +43,16 @@ def display(modelName,searcher,runTimes,scores):
   
 
 def multipleRun():
- r = 3
+ r = 20
  for klass in [Schaffer, Fonseca, Kursawe, ZDT1]:
    #print "Model Name: %s"%klass.__name__
-   for searcher in [SA, MaxWalkSat]:
+   for searcher in [ MaxWalkSat]:
      n = 0.0
      listTimeTaken = []
      listScores = []
      random.seed(1)
      for _ in range(r):
-       test = searcher(klass.__name__)
+       test = searcher(klass())
        import time
        t1 = time.time()
        solution,score = test.evaluate()

@@ -13,9 +13,10 @@ class Log(): #only 1 attribute can be stored here
   def __init__(self):
     self.listing=[]
     self.history=[] #Would have the history
-    self.historyhi,self.historylo,self.historyIndex=-1e10,1e10,0
+    self.historyhi,self.historylo,self.historyIndex=-9e10,9e10,0
     self.lo,self.hi,self.median,self.iqr=1e10,-1e10,0,0
     self.changed=True
+    self.bestIndex=-1
 
 
   def add(self,num): 
@@ -37,31 +38,38 @@ class Log(): #only 1 attribute can be stored here
     self.changed=False
     return self.median,self.iqr
   
-  def empty(self):
+  def historyCopy(self):
+    #print "historyCopy"
     import copy 
     self.history.append(self.listing)
-    self.historyIndex+=1
     self.historylo=min(self.lo,self.historylo)
+    if(self.lo == self.historylo):self.bestIndex=self.historyIndex
     self.historyhi=max(self.hi,self.historyhi)
+    self.historyIndex+=1
+    #print self.historylo,self.historyhi
 
+  def empty(self):
     self.listing=[]
     self.lo,self.hi,self.median,self.iqr=1e6,-1e6,0,0
     self.changed=True  
 
   def report(self):
     if self.changed == False: return self.median,self.iqr
+    #print "report_______________________",
+    #print self.listing
     return self.stats()
     
         
 
 class ModelBasic(object):
   objf=None
-  #past =None #List of Logs
-  #present = None #List of Logs
+  past =None #List of Logs
+  present = None #List of Logs
   lives=None
 
   #From Dr. M's files: a12.py
   def a12slow(self,lst1,lst2):
+    #print lst1,lst2
     more = same = 0.0
     for x in sorted(lst1):
       for y in sorted(lst2):
@@ -76,65 +84,72 @@ class ModelBasic(object):
   Given two logs, it would maintain states of lives etc
   """
   def better(self,past,present):
-    betteriqr,bettermedian= False,False
-    if(len(past.listing) == 0 ): return(True,False)
+    betteriqr,same,bettermedian= False,False,False
+    if(len(past.listing) == 0 ): 
+      return(True,True)
     #if len(past.listing) == None: return (True,False)
-    if(present.changed == True): present.report()
-    past.report()
-    #print ">>>> %f %f"%(past.median,present.median)
+    if(present.changed == True): 
+      past.report()
+      present.report()
+    #print " pastMedian: %f presentMedian: %f"%(past.median,present.median)
     bettermedian = past.median > present.median
-    if bettermedian == True: 
-      #print "................%f"%self.a12slow(past.listing,present.listing)
-      return (True,self.a12slow(past.listing,present.listing)\
-      <= myModeloptions['a12'])
-    if past.median == present.median:
-       betteriqr = past.iqr > present.iqr
-       return betteriqr,self.a12slow(past.listing,present.listing)<= myModeloptions['a12']
-    else:
-       return(False,False)
+    betteriqr = past.iqr > present.iqr
+    #print bettermedian,betteriqr
+    return bettermedian,betteriqr
+
+  def same(self,past,present):
+    if(len(past.listing) == 0 ): 
+      self.emptyWrapper()
+      return(False)
+    return self.a12slow(past.listing,present.listing)<= myModeloptions['a12']
+
 
   def evalBetter(self):
-    better,same=[],[]
+    def worsed():
+      return  ((same     and not betterIqr) or 
+               (not same and not betterMed))
+    def bettered():
+      return  not same and betterMed
+    out=False
     for x in xrange(self.objf):
-      tempbetter,tempsame=self.better(self.past[x],self.present[x])
-      print tempbetter,tempsame
-      better.append(tempbetter)
-      same.append(tempsame)
-    
-
-    for i in xrange(len(same)):
-      if(better[i]!=True or same[i]==True):
-        self.lives-=1
-        break
+      if(len(self.past[x].listing) != 0):
+        betterMed,betterIqr=self.better(self.past[x],self.present[x])
+        same = self.same(self.past[x],self.present[x])
+        #print "###############Worse %d"%worsed()
+        #print "###############Better %d"%bettered()
+        #print "asddddddddddddDD"
+        #print betterMed,betterIqr,same
+        if worsed():
+          print "---%d %d---ads--%d-----DIE"%(betterMed,betterIqr,x)
+          self.lives-=1
+          self.emptyWrapper()
+          return False
+        if bettered(): out = out or True
       else:
-        continue 
-    """
-    import operator
-    if(reduce(operator.and_,same)==True):
+        out=True
+        break
+    
+    if(out == False): 
+      self.emptyWrapper()
       self.lives-=1
-      print "-------------DIE"
-    elif(reduce(operator.or_,better)!=True): #need to check!
-      self.lives-=1
-      print "-------------DIE"
-    else:
-      pass
-    """
+      print "-------adas------DIE"
+      return False
     self.emptyWrapper()
+    return False
 
   def emptyWrapper(self):
-    print "emptyWrapper"
+    #print "emptyWrapper"
     for x in xrange(self.objf):
+      self.past[x].historyCopy()
       self.past[x].empty()
       import copy 
       #http://stackoverflow.com/questions/184643/
       #what-is-the-best-way-to-copy-a-list
       self.past[x].listing = copy.copy(self.present[x].listing)
-      #print self.past[x].listing
       self.past[x].listing = copy.copy(self.present[x].listing)
       self.past[x].lo = self.present[x].lo
       self.past[x].hi = self.present[x].hi
-      self.present[x].empty()  
-      self.past[x].report()       
+      self.present[x].empty()         
 
 
   def returnMin(self,num):
@@ -156,8 +171,8 @@ class ModelBasic(object):
     if(listpoint==None): return None
     for x in xrange(len(listpoint)):
       self.present[x].add(listpoint[x])
-      #print ">>>>>>>>>>>>>>>>>>>>>> %f"%x
-      #print self.present[x].listing
+      #print "&&&&&&&&&&&&&&&&&&&&&&&&"
+      #print listpoint[x]
 
   def evaluate(self,listpoint):
     #print "EVALUATE"
@@ -197,19 +212,19 @@ class Fonseca(ModelBasic):
 
   def f1(self,listpoint,num=0):
     n=len(listpoint)
-    rootn=(n**0.5)**-1
+    rootn=(n**0.5)
     sum=0
     for i in range(0,n):
-        sum+=(listpoint[i]-rootn)**2
-    return (1 - math.exp(-sum))
+        sum+=(listpoint[i]-1/rootn)**2
+    return (1 - np.exp(-sum))
   
   def f2(self,listpoint,num=0):
     n=len(listpoint)
     rootn=(n**0.5)**-1
     sum=0
     for i in range(0,n):
-        sum+=(listpoint[i]+rootn)**2
-    return (1 - math.exp(-sum))
+        sum+=(listpoint[i]+1/rootn)**2
+    return (1 - np.exp(-sum))
  
   def info(self):
     return "Fonseca~"
@@ -278,7 +293,7 @@ class ZDT1(ModelBasic):
 
 
   def f1(self,lst,num=0):
-    assert(len(lst)==self.n),"Something's Messed up"
+    assert(len(lst)==self.n),"Something's Messed up %d"%len(lst)
     return lst[0]
  
   def gx(self,lst):
@@ -350,7 +365,7 @@ class Schaffer(ModelBasic):
       temp = (inputRand**2 +(inputRand-2)**2)
       self.minVal=self.returnMin(temp)
       self.maxVal=self.returnMax(temp)
-    print("Max: %d Min: %d"%(self.maxVal,self.minVal))
+    #print("Max: %d Min: %d"%(self.maxVal,self.minVal))
 
 class ZDT3(ModelBasic):
   
@@ -403,10 +418,14 @@ class Viennet(ModelBasic):
     self.past = [Log() for count in xrange(objf)]
     self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
-    self.functionDict = {}
-    self.functionDict["f1"]="f1"
-    self.functionDict["f2"]="f2"
-    self.functionDict["f3"]="f3"
+    """
+    self.pastLogf1 = Log()
+    self.pastLogf2 = Log()
+    self.pastLogf3 = Log()     #I am sorry this is crude
+    self.presentLogf1 = Log()
+    self.presentLogf2 = Log()
+    self.presentLogf3 = Log()     #I am sorry this is crude
+    """
     
 
   def f1(self,listpoint,num=0):

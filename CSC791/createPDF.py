@@ -14,7 +14,7 @@ def doSomethingCool():
   if(os.path.isfile(filename)== False):
     print "Check your file path"
     return
-  command1 = "a2ps --center-title=\""+str(comment)+"\" -qr2gC -o ./temp.ps " + str(filename)
+  command1 = "a2ps --center-title=\""+str(comment)+"\" -qr1gC -f4 -o ./temp.ps " + str(filename)
   print command1
   os.system(command1)
   command2 = "ps2pdf ./temp.ps ./" + str(filename.split(".")[0])+".pdf"

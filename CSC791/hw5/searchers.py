@@ -19,7 +19,7 @@ class SearchersBasic():
   
   def display2(self):
     if(self.displayStyle=="display2"):
-      print xtile(self.tempList,width=25,show=" %1.6f")
+      #print xtile(self.tempList,width=25,show=" %1.6f")
       self.tempList=[]
 
 class MaxWalkSat(SearchersBasic):
@@ -47,10 +47,10 @@ class MaxWalkSat(SearchersBasic):
     bestSolution=[]
 
 
-    print "Value of p: %f"%probLocalSearch
+    #print "Value of p: %f"%probLocalSearch
    # model = Fonseca()
     model.baseline(minR,maxR)
-    print model.maxVal,model.minVal
+    #print model.maxVal,model.minVal
     
     for i in range(0,maxTries): #Outer Loop
       solution=[]
@@ -69,36 +69,43 @@ class MaxWalkSat(SearchersBasic):
          # optional-end
          if(score < threshold):
            #print "threshold reached|Tries: %d|Changes: %d"%(i,j)
-           self.display(score,"."),
+           self.display(".",score),
            self.display2()
-           break 
+           self.model.evalBetter()    
+           revN = model.maxVal-model.minVal
+           return bestSolution,bestScore*revN+model.minVal,self.model
          
-         if random.random() > probLocalSearch:
-             c = int(0 + (self.model.n-0)*random.random())
+         if(random.random() > probLocalSearch):
+             c = int((self.model.n)*random.random())
              solution[c]=model.neighbour(minR,maxR)
              self.display(score,"+"),
          else:
              tempBestScore=score
              tempBestSolution=solution
              interval = (maxR-minR)/10
-             c = int(0 + (self.model.n-0)*random.random())
+             c = int(self.model.n*random.random())
              for itr in range(0,10):
                 solution[c] = minR + (itr*interval)*random.random()
                 tempScore = model.evaluate(solution)
-                if tempBestScore > tempScore:     # score is correlated to max?
+                if(tempBestScore > tempScore):     # score is correlated to max?
                   tempBestScore=tempScore
                   tempBestSolution=solution
              solution=tempBestSolution
              self.display(tempBestScore,"!"),
          self.display(score,"."),
-         if(self.model.lives == 0):
+         if(self.model.lives == 1):
+           #print "DEATH"
            self.display2()
-           return bestSolution,bestScore,self.model
+           self.model.evalBetter()
+           revN = model.maxVal-model.minVal
+           return bestSolution,bestScore*revN+model.minVal,self.model
+         
          if(j%50==0):
+            #print "here"
             self.display2()
             self.model.evalBetter()
-
-    return bestSolution,bestScore,self.model      
+    revN = model.maxVal-model.minVal
+    return bestSolution,bestScore*revN+model.minVal,self.model      
 
 def probFunction(old,new,t):
    return np.exp(1 *(old-new)/t)
@@ -130,8 +137,8 @@ class SA(SearchersBasic): #minimizing
     minR = model.minR
     maxR = model.maxR
     model.baseline(minR,maxR)
-    print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
-    print "n: %d"%model.n
+    #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
+
     s = [minR + (maxR - minR)*random.random() for z in range(0,model.n)]
     #print s
     e = model.evaluate(s)
@@ -156,7 +163,7 @@ class SA(SearchersBasic): #minimizing
         s = sn
         e = en
         self.display(en,"+"), #we get to somewhere better locally
-      elif(tempProb <= tempRand):
+      elif(tempProb > tempRand):
         jump = True
         s = sn
         e = en
@@ -167,8 +174,10 @@ class SA(SearchersBasic): #minimizing
       if(self.model.lives == 0):
         self.display2()
         self.model.emptyWrapper()
-        #print "out1"
-        return sb,eb,self.model
+        #print "out1" 
+        revN = model.maxVal-model.minVal
+        return sb,eb*revN+model.minVal,self.model 
+      
       if(k % 50 == 0):
          self.display2()
          self.model.evalBetter()
@@ -176,7 +185,8 @@ class SA(SearchersBasic): #minimizing
          count=0
     #print "out2"
     self.model.emptyWrapper()
-    return sb,eb,self.model 
+    revN = model.maxVal-model.minVal
+    return sb,eb*revN+model.minVal,self.model
 
 class GA(SearchersBasic):
   model = None
@@ -232,6 +242,8 @@ class GA(SearchersBasic):
      return singlelist 
 
   def generate(self):
+    minR = self.model.minR
+    maxR = self.model.maxR
     #http://stackoverflow.com/questions/4119070/
     #how-to-divide-a-list-into-n-equal-parts-python
     lol = lambda lst, sz: [lst[i:i+sz] for i in range(0, len(lst), sz)]
@@ -258,7 +270,14 @@ class GA(SearchersBasic):
     normalc2 = [int(''.join(map(str,x)))/10**len(x) for x in lol(m2,int(len(m1)/model.n))]
     #normalc1 = map(lambda x:minR+x*(maxR-minR),normalc1)    
     #normalc2 = map(lambda x:minR+x*(maxR-minR),normalc2)
-    return normalc1,normalc2
+    if(len(normalc1)<=self.model.n and len(normalc2)<=self.model.n):
+      return normalc1[:self.model.n],normalc2[:self.model.n]  #workaround
+    else:
+      str1 = [random.random() for z in range(0,self.model.n)]
+      normalc1 = map(lambda x:minR+x*(maxR-minR),str1)
+      str2 = [random.random() for z in range(0,self.model.n)]  
+      normalc2 = map(lambda x:minR+x*(maxR-minR),str2)
+      return normalc1,normalc2
 
   #http://stackoverflow.com/questions/10324015
   #/fitness-proportionate-selection-roulette-wheel-selection-in-python
@@ -302,6 +321,7 @@ class GA(SearchersBasic):
      
 
   def evaluate(self):
+    print "evaluate"
     bestSolution=[]
     bestScore = 1e6
     done=False
@@ -310,11 +330,12 @@ class GA(SearchersBasic):
     minR = model.minR
     maxR = model.maxR
     model.baseline(minR,maxR)
-    print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
-    print "n: %d"%model.n
+    #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
+    #print "n: %d"%model.n
     self.initialPopulation()
     for x in xrange(self.generation):
       #print "Generation: %d"%x
+      print "#",
       for i in xrange(20):
         s1,s2 = self.generate()
         #TODO: dirty
@@ -326,13 +347,26 @@ class GA(SearchersBasic):
         if(fitness<bestScore):
           bestScore=fitness
           bestSolution=strs
+      self.model.evalBetter()
       self.elitism()
-      self.display2()
+      #self.display2()
+      if(self.model.lives == 0):
+        self.display2()
+        self.model.emptyWrapper()
+        lol = lambda lst, sz: [lst[i:i+sz] \
+        for i in range(0, len(lst), sz)]
+        tempSolution = [int(''.join(map(str,x)))/10**len(x)\
+        for x in lol(bestSolution,int(len(bestSolution)/model.n))]
+        solution= map(lambda x:minR+x*(maxR-minR),tempSolution) 
+        return solution,bestScore,self.model
+
       
-    print sorted(self.population.values())
+    #print sorted(self.population.values())
+    self.model.emptyWrapper()
     lol = lambda lst, sz: [lst[i:i+sz] \
     for i in range(0, len(lst), sz)]
     tempSolution = [int(''.join(map(str,x)))/10**len(x)\
      for x in lol(bestSolution,int(len(bestSolution)/model.n))]
-    print map(lambda x:minR+x*(maxR-minR),tempSolution) 
+    solution= map(lambda x:minR+x*(maxR-minR),tempSolution) 
+    return solution,bestScore,self.model
 
