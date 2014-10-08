@@ -37,7 +37,7 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
  r = 5
- for klass in [Kursawe,Fonseca, Kursawe, ZDT1,ZDT3,Viennet]:
+ for klass in [ZDT1]:#Kursawe,Fonseca, Kursawe, ZDT1,ZDT3,Viennet]:
    for searcher in [SA,MaxWalkSat]:
      #print "Model Name: %s"%klass.__name__
      #print "Searcher Name: %s"%searcher.__name__
@@ -48,7 +48,7 @@ def multipleRun():
      historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
      historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
      for _ in range(r):
-       print "Searcher: %s Model: %s"%(searcher.__name__,klass.__name)
+       print "Searcher: %s Model: %s"%(searcher.__name__,klass.__name__)
        test = searcher(klass(),"display2")
        print ".", 
        import time
