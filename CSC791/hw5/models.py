@@ -30,9 +30,11 @@ class Log(): #only 1 attribute can be stored here
   def stats(self):
     temp=sorted(self.listing)
     n=len(temp)
+    #print "Length: %d"%n
     p=n//2
-    if n%2 : return temp[p]
-    q = max(0,(min(p+1,n)))
+    if(n%2==0) : return temp[p]
+    q = max(0,(min(p+1,n-1)))
+    #print "P:%d Q:%d"%(p,q)
     self.iqr=temp[int(n*.75)] - temp[int(n*.25)]
     self.median=(temp[p]+temp[q])/2
     self.changed=False
@@ -383,7 +385,7 @@ class ZDT3(ModelBasic):
     self.functionDict["f1"]="f1"
     self.functionDict["f2"]="f2"
 
-  def f1(self,listpoint):
+  def f1(self,listpoint,num=0):
     return listpoint[0];
 
   def gx(self,listpoint):
@@ -418,6 +420,10 @@ class Viennet(ModelBasic):
     self.past = [Log() for count in xrange(objf)]
     self.present = [Log() for count in xrange(objf)]
     self.lives=myModeloptions['Lives']
+    self.functionDict = {}
+    self.functionDict["f1"]="f1"
+    self.functionDict["f2"]="f2"
+    self.functionDict["f3"]="f3"
     """
     self.pastLogf1 = Log()
     self.pastLogf2 = Log()
@@ -482,9 +488,15 @@ class DTLZ7(ModelBasic):
   
   def g(self,listpoints):
     summ=0
-    for i in range(self.objf,self.n):
-      summ+=listpoints[i]
-    return(1+9*summ/self.k)
+    try:
+      #print "len of listpoints %d"%len(listpoints)
+      for i in range(self.objf,self.n):
+        #print i
+        summ+=listpoints[i]
+      return(1+9*summ/self.k)
+    except:
+      print i,len(listpoints)
+      raise Exception("ERROR")
    
   def h(self,listpoints):
     g=self.g(listpoints)

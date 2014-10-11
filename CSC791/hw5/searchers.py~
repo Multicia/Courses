@@ -73,7 +73,7 @@ class MaxWalkSat(SearchersBasic):
            self.display2()
            self.model.evalBetter()    
            revN = model.maxVal-model.minVal
-           return bestSolution,bestScore*revN+model.minVal,self.model
+           return bestSolution,bestScore,self.model
          
          if(random.random() > probLocalSearch):
              c = int((self.model.n)*random.random())
@@ -98,14 +98,14 @@ class MaxWalkSat(SearchersBasic):
            self.display2()
            self.model.evalBetter()
            revN = model.maxVal-model.minVal
-           return bestSolution,bestScore*revN+model.minVal,self.model
+           return bestSolution,bestScore,self.model
          
          if(j%50==0):
             #print "here"
             self.display2()
             self.model.evalBetter()
     revN = model.maxVal-model.minVal
-    return bestSolution,bestScore*revN+model.minVal,self.model      
+    return bestSolution,bestScore,self.model      
 
 def probFunction(old,new,t):
    return np.exp(1 *(old-new)/t)
@@ -176,7 +176,7 @@ class SA(SearchersBasic): #minimizing
         self.model.emptyWrapper()
         #print "out1" 
         revN = model.maxVal-model.minVal
-        return sb,eb*revN+model.minVal,self.model 
+        return sb,eb,self.model 
       
       if(k % 50 == 0):
          self.display2()
@@ -186,7 +186,7 @@ class SA(SearchersBasic): #minimizing
     #print "out2"
     self.model.emptyWrapper()
     revN = model.maxVal-model.minVal
-    return sb,eb*revN+model.minVal,self.model
+    return sb,eb,self.model
 
 class GA(SearchersBasic):
   model = None
@@ -207,9 +207,11 @@ class GA(SearchersBasic):
     #assert(len(listdaddy)==len(listmommy)),"Something's messed up"
     if(random.random()<rate):
       minR,maxR=0,len(listdaddy)
-      one = int(minR + random.random()*(maxR-minR))
-      two = int(minR + random.random()*(maxR-minR))
-      if(one==two):two+=1
+      tone = int(minR + random.random()*((maxR)-minR))
+      ttwo = int(minR + random.random()*(maxR-(minR)))
+      one,two=min(tone,ttwo),max(tone,ttwo)
+      #print "CrossOver: %d %d "%(one,two)
+      #if(one==two):two+=2+(minR+random.random()*(maxR-minR-two-2))
       newDaddy=listdaddy[:one]+listmommy[one:two]+listdaddy[two:]
       newMommy=listmommy[:one]+listdaddy[one:two]+listmommy[two:]
       return newDaddy,newMommy
@@ -250,29 +252,38 @@ class GA(SearchersBasic):
     model=self.model
     minR = model.minR
     maxR = model.maxR
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     temps1 = self.Roulette(self.population)
     temps2 = self.Roulette(self.population)
     #workaround: Bug: was getting e in temp2 so,
     #whenever I see anything other than 0-9
     #I replace it
-    import re 
-    temps1 = re.sub('[^0-9]', '', temps1)
-    temps2 = re.sub('[^0-9]', '', temps2)
-    s1 = map(int, temps1)
-    s2 = map(int, temps2)
+    try:
+      import re 
+      temps1 = re.sub('[^0-9]', '', temps1)
+      temps2 = re.sub('[^0-9]', '', temps2)
+    except:
+      print temps1
+      print temps2
+      raise Exception("Ouch!")
+    s1 = map(int, temps1)[:self.model.n]
+    s2 = map(int, temps2)[:self.model.n]
+    #print "S1,S2: %d %d " %(len(s1),len(s2))
     c1,c2=self.crossOver(s1,s2)
+    #print "C1,C2: %d %d " %(len(c1),len(c2))
     m1 = self.mutation(c1,c2)
     m2 = self.mutation(c2,c1)
-    #print len(m1),len(m2)
-    #print model.n
-    normalc1 = [int(''.join(map(str,x)))/10**len(x) for x in lol(m1,int(len(m1)/model.n))]
-    normalc2 = [int(''.join(map(str,x)))/10**len(x) for x in lol(m2,int(len(m1)/model.n))]
+    #print "M1,M2: %d %d " %(len(m1),len(m2))
+    #print "self.model.n: %d"%model.n
+    normalc1 = [int(''.join(map(str,x)))/10**len(x) for x in lol(m1,1)]
+    normalc2 = [int(''.join(map(str,x)))/10**len(x) for x in lol(m2,1)]
+    #print "normalc1,normalc2: %d %d"%(len(normalc1),len(normalc2))
     #normalc1 = map(lambda x:minR+x*(maxR-minR),normalc1)    
     #normalc2 = map(lambda x:minR+x*(maxR-minR),normalc2)
-    if(len(normalc1)<=self.model.n and len(normalc2)<=self.model.n):
+    if(len(normalc1)>=self.model.n and len(normalc2)>=self.model.n):
       return normalc1[:self.model.n],normalc2[:self.model.n]  #workaround
     else:
+      #print "eeeeeeeeeeee>>>>>>>>>>>>>>>>>>>>>>>>eeeeeeehaha"
       str1 = [random.random() for z in range(0,self.model.n)]
       normalc1 = map(lambda x:minR+x*(maxR-minR),str1)
       str2 = [random.random() for z in range(0,self.model.n)]  
@@ -282,13 +293,15 @@ class GA(SearchersBasic):
   #http://stackoverflow.com/questions/10324015
   #/fitness-proportionate-selection-roulette-wheel-selection-in-python
   def Roulette(self,choices):
-    max = sum(choices.values())
-    pick = random.uniform(0, max)
+    maxN = sum(choices.values())
+    pick = random.uniform(0, maxN)
     current = 0
     for key, value in choices.items():
         current += value
         if current > pick:
             return key
+    print "Ouch!!"
+    print pick,maxN
   
   def keyTransform(self,s):
     minR = self.model.minR
@@ -321,7 +334,7 @@ class GA(SearchersBasic):
      
 
   def evaluate(self):
-    print "evaluate"
+    #print "evaluate>>>>>>>>>>>>>>>>>>>>>>>>>"
     bestSolution=[]
     bestScore = 1e6
     done=False
@@ -333,10 +346,11 @@ class GA(SearchersBasic):
     #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
     #print "n: %d"%model.n
     self.initialPopulation()
+    #print "initial population generated"
     for x in xrange(self.generation):
       #print "Generation: %d"%x
-      print "#",
-      for i in xrange(5):
+      #print "#",
+      for i in xrange(20):
         s1,s2 = self.generate()
         #TODO: dirty
         strs,fitness = self.keyTransform(s1)
@@ -347,6 +361,7 @@ class GA(SearchersBasic):
         if(fitness<bestScore):
           bestScore=fitness
           bestSolution=strs
+        #print "child born"
       self.model.evalBetter()
       self.elitism()
       #self.display2()

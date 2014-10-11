@@ -37,12 +37,11 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 5
-   for klass in [Kursawe, ZDT1,ZDT3,Viennet,DTLZ7]:
+   r = 30
+   for klass in [Viennet,DTLZ7]:
+     print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
-     for searcher in [GA]:#,SA,MaxWalkSat]:
-       #print "Model Name: %s"%klass.__name__
-       #print "Searcher Name: %s"%searcher.__name__
+     for searcher in [GA,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -77,19 +76,19 @@ def step2():
 
 
 def callrdivdemo(eraCollector):
-  print eraCollector
+  #print eraCollector
   #print "callrdivdemo %d"%len(eraCollector.keys())
   keylist = eraCollector.keys() 
-  print keylist
+  #print keylist
   variant = len(keylist)
-  print variant
+  #print variant
   rdivarray=[]
   for y in xrange(variant):
       #print "Length of array: %f"%len(eraCollector[keylist[y]][x])
       temp = eraCollector[keylist[y]]
-      print temp
+      #print temp
       temp.insert(0,str(keylist[y]))
-      print temp
+      #print temp
       rdivarray.append(temp)
   rdivDemo(rdivarray) 
   
