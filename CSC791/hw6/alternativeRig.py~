@@ -38,10 +38,10 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 def multipleRun():
    from collections import defaultdict
    r = 5
-   for klass in [DTLZ7]:
+   for klass in [Schwefel,Fonseca,Viennet,Kursawe,ZDT1,ZDT3,Schaffer,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
-     for searcher in [GA,SA,MaxWalkSat]:
+     for searcher in [DE,GA,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -54,6 +54,7 @@ def multipleRun():
          import time
          t1 = time.time()
          solution,score,model = test.evaluate()
+         #print score,model.minVal,model.maxVal
          for x in xrange(model.objf):
            #print len(model.past[x].listing)
            #print x
@@ -94,12 +95,13 @@ def callrdivdemo(eraCollector):
   rdivDemo(rdivarray) 
   
 
-"""
-def testGA():
+
+def testDE():
   for klass in [Viennet]:
-    test = GA(klass(),"display2")          
-    test.evaluate()
-"""
+    random.seed(6)
+    test = DE(klass(),"display2")          
+    print test.evaluate()
+
 if __name__ == '__main__': 
  # random.seed(1)
  # nums = [random.random()**2 for _ in range(100)]
@@ -109,6 +111,7 @@ if __name__ == '__main__':
  # for klass in [ZDT1]:
  #   print klass.__name__
  multipleRun()
+ #testDE()
  #part6()
  #step2()
 

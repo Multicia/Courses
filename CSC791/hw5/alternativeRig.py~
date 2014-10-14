@@ -37,11 +37,11 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 30
-   for klass in [Viennet,DTLZ7]:
+   r = 5
+   for klass in [DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
-     for searcher in [MaxWalkSat]:
+     for searcher in [GA]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -56,6 +56,7 @@ def multipleRun():
          solution,score,model = test.evaluate()
          for x in xrange(model.objf):
            #print len(model.past[x].listing)
+           #print x
            historyhi[x]=max(model.past[x].historyhi,historyhi[x])
            historylo[x]=min(model.past[x].historylo,historylo[x])
            sys.stdout.flush()

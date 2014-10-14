@@ -30,11 +30,11 @@ class Log(): #only 1 attribute can be stored here
   def stats(self):
     temp=sorted(self.listing)
     n=len(temp)
-    print "Length: %d"%n
+    #print "Length: %d"%n
     p=n//2
     if(n%2==0) : return temp[p]
     q = max(0,(min(p+1,n-1)))
-    print "P:%d Q:%d"%(p,q)
+    #print "P:%d Q:%d"%(p,q)
     self.iqr=temp[int(n*.75)] - temp[int(n*.25)]
     self.median=(temp[p]+temp[q])/2
     self.changed=False
@@ -460,7 +460,7 @@ class Viennet(ModelBasic):
       self.returnMin(self.f1(solution)+ self.f2(solution)+self.f3(solution))
 
 class DTLZ7(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=2,n=21,k=20):
+  def __init__(self,minR=0,maxR=1,objf=20,n=39,k=20):
     self.minR=minR
     self.maxR=maxR
     self.n=n
