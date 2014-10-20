@@ -533,7 +533,7 @@ class PSO(SearchersBasic):
     model.baseline(minR,maxR)
 
     for i in xrange(Repeat):
-      #if(i%998):print "boom"     
+      if(i%998):print "boom"     
       if(eb<threshold):
         return 0,eb,model
       for n in xrange(model.n):

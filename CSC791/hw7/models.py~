@@ -177,6 +177,8 @@ class ModelBasic(object):
       #print listpoint[x]
 
   def evaluate(self,listpoint):
+    print "EVALUATE"
+    print listpoint
     temp=[]
     for x in xrange(0,self.objf):
        callName = "f"+str(x+1)
