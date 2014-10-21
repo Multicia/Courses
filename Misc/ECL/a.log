@@ -1,13 +1,16 @@
-00000000 2014-10-02 13:43:24  8515  8515 Logging to /home/vivek/Courses/Misc/ECL/a.log
-00000001 2014-10-02 13:43:24  8515  8515 Waiting for workunit lock
-00000002 2014-10-02 13:43:24  8515  8515 Obtained workunit lock
-00000003 2014-10-02 13:43:24  8515  8515 Starting process
-00000004 2014-10-02 13:43:24  8515  8515 RoxieMemMgr: Setting memory limit to 314572800 bytes (300 pages)
-00000005 2014-10-02 13:43:24  8515  8515 RoxieMemMgr: 320 Pages successfully allocated for the pool - memsize=335544320 base=0x7ffafff00000 alignment=1048576 bitmapSize=10
-00000006 2014-10-02 13:43:24  8515  8515 setResultString((null),0,'hello world')
-00000007 2014-10-02 13:43:24  8515  8515 Releasing run lock
-00000008 2014-10-02 13:43:24  8515  8515 Releasing persist read locks
-00000009 2014-10-02 13:43:24  8515  8515 Released persist read locks
-0000000A 2014-10-02 13:43:24  8515  8515 Process complete
-0000000B 2014-10-02 13:43:24  8515  8515 Workunit written complete
-0000000C 2014-10-02 13:43:24  8515  8515 RoxieMemMgr: releasing heap
+00000000 2014-10-21 00:59:31  9014  9014 Logging to /home/vivek/Courses/Misc/ECL/a.log
+00000001 2014-10-21 00:59:31  9014  9014 Waiting for workunit lock
+00000002 2014-10-21 00:59:31  9014  9014 Obtained workunit lock
+00000003 2014-10-21 00:59:31  9014  9014 Starting process
+00000004 2014-10-21 00:59:31  9014  9014 RoxieMemMgr: Setting memory limit to 314572800 bytes (300 pages)
+00000005 2014-10-21 00:59:31  9014  9014 RoxieMemMgr: 320 Pages successfully allocated for the pool - memsize=335544320 base=0x7f120ff00000 alignment=1048576 bitmapSize=10
+00000006 2014-10-21 00:59:31  9014  9014 setResultString(word,-1,'FRED')
+00000007 2014-10-21 00:59:31  9014  9014 Executing hthor graph graph1
+00000008 2014-10-21 00:59:31  9014  9014 Executing subgraph 1
+00000009 2014-10-21 00:59:31  9014  9014 Completed subgraph 1
+0000000A 2014-10-21 00:59:31  9014  9014 Releasing run lock
+0000000B 2014-10-21 00:59:31  9014  9014 Releasing persist read locks
+0000000C 2014-10-21 00:59:31  9014  9014 Released persist read locks
+0000000D 2014-10-21 00:59:31  9014  9014 Process complete
+0000000E 2014-10-21 00:59:31  9014  9014 Workunit written complete
+0000000F 2014-10-21 00:59:31  9014  9014 RoxieMemMgr: releasing heap

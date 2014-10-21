@@ -536,7 +536,7 @@ class PSO(SearchersBasic):
       #if(i%998):print "boom"     
       if(eb<threshold):
         return 0,eb,model
-      for n in xrange(model.n):
+      for n in xrange(N):
         v[n]=self.velocity(v[n],p[n],lb[n],gb)
         p[n]=self.displace(v[n],p[n])
         pener= model.evaluate(p[n])

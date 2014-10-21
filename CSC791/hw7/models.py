@@ -349,7 +349,6 @@ class Schaffer(ModelBasic):
     return energy
   """
   def f1(self,lst,num=0):
-    print lst
     return lst[0]**2
 
   def f2(self,lst,num=0):

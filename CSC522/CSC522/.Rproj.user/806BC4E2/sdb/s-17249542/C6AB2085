@@ -1,0 +1,17 @@
+{
+    "contents" : "#mydata <- read.csv(\"/home/vivek/Courses/CSC522/CSC522/Kmean.dat\", header=TRUE)\n#dim(mydata)\n#print mydata[,1]\n\n\nbubba<- c(3,5,6,7)\nbubba",
+    "created" : 1410545412673.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3758797835",
+    "id" : "C6AB2085",
+    "lastKnownWriteTime" : 4919681444328191024,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

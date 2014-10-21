@@ -38,10 +38,10 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 def multipleRun():
    from collections import defaultdict
    r = 30
-   for klass in [Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,ZDT3,Schaffer,DTLZ7]:
+   for klass in [Osyczka]:# [Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,ZDT3,Schaffer,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
-     for searcher in [PSO,DE,GA,SA,MaxWalkSat]:
+     for searcher in [PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []

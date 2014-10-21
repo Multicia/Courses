@@ -1,0 +1,17 @@
+{
+    "contents" : "mydata <- read.csv(\"/home/vivek/DataSet/Wisonsin/breast-cancer-wisconsin.data\", header=TRUE)\ndim(mydata)\n#To print the dimensions of the table\nstr(mydata)\nsummary(mydata)\nlibrary(\"party\")\niris_ctree <- ctree(Class ~ ClumpThickness+UniformityofCellSize+UniformityofCellShape, data=mydata)\nprint(iris_ctree)\nplot(iris_ctree)\n\n#Density plot of the first line\n#set.seed(1)\n#d<-data.frame(a=rnorm(100))\n#library(lattice)\n#densityplot(~a,data=d)\n\n#Kmean clustering\n#data preps\n#mydata <- scale(mydata) # standardize variables\n# Determine number of clusters\n#wss <- (nrow(mydata)-1)*sum(apply(mydata,2,var))\n#for (i in 2:15) wss[i] <- sum(kmeans(mydata, \n#                                     centers=i)$withinss)\n#plot(1:15, wss, type=\"b\", xlab=\"Number of Clusters\",\n#     ylab=\"Within groups sum of squares\")",
+    "created" : 1409668351913.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3388614076",
+    "id" : "EA24D3C6",
+    "lastKnownWriteTime" : 1409696672,
+    "path" : "~/Courses/BIG/Arythmia/KMeans.R",
+    "project_path" : "KMeans.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}
