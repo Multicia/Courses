@@ -12,26 +12,22 @@ dictionary ={}
 
 
 def neighbourhood(xblock,yblock):
+  temp=[[-1,0,1],[-1,0,1]]
+  comb=[]
+  import itertools
+  for e in itertools.product(*temp):
+   comb.append(e)
+  neigbour ={}
   def neighr(xblock,yblock):
     index=xblock*100+yblock
     try:
       #only return the neighbours who has threshold number of
       #elements in it.
-      if(len(dictionary[index])>3):
-        print "blah"
-        return index
-    except:
-      return None
-  neigbour =[] #typo
-  neigbour.append(neighr((xblock-1)%8,(yblock-1)%8))
-  neigbour.append(neighr((xblock-1)%8,(yblock)))
-  neigbour.append(neighr((xblock-1)%8,(yblock+1)%8))
-  neigbour.append(neighr((xblock)%8,(yblock-1)%8))
-  neigbour.append(neighr((xblock)%8,(yblock+1)%8))
-  neigbour.append(neighr((xblock+1)%8,(yblock-1)%8))
-  neigbour.append(neighr((xblock+1)%8,(yblock)%8))
-  neigbour.append(neighr((xblock+1)%8,(yblock+1)%8))
-  print "========================"
+      neigbour[index]=len(dictionary[index])
+      #else:print len(dictionary[index])
+    except: pass  
+  for i in comb:
+    neighr((xblock-i[0])%8,(yblock-i[1])%8)
   return neigbour
 
 def stats(listl):
@@ -43,32 +39,66 @@ def stats(listl):
   return median(listl),(q3-q1)
 
 def energy(xblock,yblock):
-  tempIndex=100*xblock+yblock
+  tempIndex=int(100*xblock+yblock)
   energy=[]
   try:
     for x in dictionary[tempIndex]:
       energy.append(np.sum(x.obj))      
     median,iqr=stats(energy)
-    print "%d, %f, %f"%(len(dictionary[tempIndex]),median,iqr),
+    #print "%d, %f, %f"%(len(dictionary[tempIndex]),median,iqr),
+    return median,iqr
   except:
-    print "0, Cell Empty",
-  return " "
+    print "Error"
 
-def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-  assert(len(lx)==len(ly))
-  genPoint=[]
-  for i in xrange(len(lx)):
-    x,y=lx[i],ly[i]
-    rand = random.random()
-    if rand < cr:
-      probEx = fmin +(fmax-fmin)*random.random()
-      new = min(x,y)+probEx*abs(x-y)
-    else:
-      new = y
-    genPoint.append(new)
-  return genPoint
+
+def getpoints(index):
+  tempL = []
+  for x in dictionary[index]:tempL.append(x.dec)
+  return tempL
+    
   
-#There are three points and I am trying to extrapolate.
+
+def wrapperInterpolate(xindex,yindex):
+  def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    assert(len(lx)==len(ly))
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y=lx[i],ly[i]
+      #print x
+      #print y
+      rand = random.random()
+      if rand < cr:
+        probEx = fmin +(fmax-fmin)*random.random()
+        new = min(x,y)+probEx*abs(x-y)
+      else:
+        new = y
+      genPoint.append(new)
+    return genPoint
+  xpoints=getpoints(xindex)
+  print "asd: ",len(xpoints)
+  print "adfsd: ",len(xpoints[0])
+  ypoints=getpoints(yindex)
+  import itertools 
+  listpoints=list(itertools.product(xpoints,ypoints))
+  print "Length of listpoints: ",len(listpoints)
+  print "dafdf: ",len(listpoints[0])
+  for x in listpoints:
+    print "Point A: ",x[0]
+    print "Point B: ",x[1]
+    decision=interpolate(x[0],x[1])
+    newpoint = Slots(changed = True,
+            scores=None, 
+            xblock=-1, #sam
+            yblock=-1,  #sam
+            x=-1,
+            y=-1,
+            obj = [None] * len(objectives()), #[None]*4
+            dec = decision)
+    scores(newpoint)
+    print newpoint
+
+  
+#There are three points and I am trying to extrapolate. Need to pass two cell numbers
 def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
   def lo(m)      : return 0.0
   def hi(m)      : return  5.0
@@ -92,7 +122,27 @@ def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
 
 
 def decisionMaker(xblock,yblock):
-  threshold=4
+  def opposite(a,b):
+    ax,ay,bx,by=a/100,a%100,b/100,b%100
+    if(abs(ax-bx)==2 or abs(ay-by)==2):return True
+    else: return False
+  threshold=3
+  if(len(dictionary[xblock*100+yblock])<threshold):
+    print "Cell is relatively sparse: Might need to generate new points"
+  neigh = neighbourhood(xblock,yblock)
+  neigh = dict((k, v) for k, v in neigh.iteritems() if v>threshold)
+  for key, value in neigh.iteritems():
+    print key,value,energy(int(key/100),key%10) 
+  vallist=neigh.keys()
+  import itertools 
+  for pair in itertools.combinations(vallist,2):
+    if(opposite(*pair)):
+      print energy(xblock,yblock)
+      print "We could create more points in this cell %d %d"%(xblock,yblock),
+      print pair
+      wrapperInterpolate(pair[0],pair[1])
+
+
   index=xblock*100+yblock
   #If number of elements less than a threshold, create new points
   if(len(dictionary[index])<threshold):
@@ -119,9 +169,9 @@ def main():
             assert(len(temp)==len(dictionary[index])),"something"
             #print dictionary[index][0].xblock
   #print (dictionary.keys())
-  print "Elements: %d"%len(dictionary[506])
-  print neighbourhood(5,6)
-  #decisionMaker(5,6)
+  #print "Elements: %d"%len(dictionary[506])
+  #print neighbourhood(5,6)
+  decisionMaker(5,6)
 
 def _neighbourhood():
   neighbourhood(0,0)
@@ -142,7 +192,7 @@ def _interpolate():
 
 
 if __name__ == '__main__':
-  _interpolate()
+ # _interpolate()
   main()
   #_extrapolate()
   #_neighbourhood()
