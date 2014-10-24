@@ -454,7 +454,7 @@ In practice, you would **start** here to build hooks from WHERE into your model
 
 """
 def decisions(m) : return [0,1,2,3,4]
-def objectives(): return [0,1,2,3]
+def objectives(m): return [0,1,2,3]
 def lo(m,x)      : return 0.0
 def hi(m,x)      : return  1.0
 def w(m,o)       : return 1 # min,max is -1,1
@@ -492,7 +492,6 @@ def candidate(m):
 
 def scores(m,t):
   "Score an individual."
-  print t.changed
   if t.changed:
     score(m,t)
     new, n = 0, 0
@@ -505,7 +504,6 @@ def scores(m,t):
     new += tmp #<--------?? 
     t.scores = (new**0.5)*1.0 / (n**0.5)
     t.changed = False
-  print t.scores
   return t.scores
   
   """

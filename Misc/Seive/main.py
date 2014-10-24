@@ -58,7 +58,7 @@ def getpoints(index):
     
   
 
-def wrapperInterpolate(xindex,yindex):
+def wrapperInterpolate(m,xindex,yindex):
   def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
     assert(len(lx)==len(ly))
     genPoint=[]
@@ -74,30 +74,31 @@ def wrapperInterpolate(xindex,yindex):
         new = y
       genPoint.append(new)
     return genPoint
+  decision=[]
   xpoints=getpoints(xindex)
-  print "asd: ",len(xpoints)
-  print "adfsd: ",len(xpoints[0])
   ypoints=getpoints(yindex)
   import itertools 
   listpoints=list(itertools.product(xpoints,ypoints))
-  print "Length of listpoints: ",len(listpoints)
-  print "dafdf: ",len(listpoints[0])
   for x in listpoints:
-    print "Point A: ",x[0]
-    print "Point B: ",x[1]
-    decision=interpolate(x[0],x[1])
-    newpoint = Slots(changed = True,
+    decision.append(interpolate(x[0],x[1]))
+  return decision
+
+
+def generateSlot(m,decision):
+  newpoint = Slots(changed = True,
             scores=None, 
             xblock=-1, #sam
             yblock=-1,  #sam
             x=-1,
             y=-1,
-            obj = [None] * len(objectives()), #[None]*4
+            obj = [None] * len(objectives(m)), #[None]*4
             dec = decision)
-    scores(newpoint)
-    print newpoint
+  scores(m,newpoint)
+  #print "Decision: ",newpoint.dec
+  #print "Objectives: ",newpoint.obj
+  return newpoint
 
-  
+
 #There are three points and I am trying to extrapolate. Need to pass two cell numbers
 def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
   def lo(m)      : return 0.0
@@ -121,11 +122,13 @@ def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
 
 
 
-def decisionMaker(xblock,yblock):
+def decisionMaker(m,xblock,yblock):
   def opposite(a,b):
     ax,ay,bx,by=a/100,a%100,b/100,b%100
     if(abs(ax-bx)==2 or abs(ay-by)==2):return True
     else: return False
+
+  newpoints=[]
   threshold=3
   if(len(dictionary[xblock*100+yblock])<threshold):
     print "Cell is relatively sparse: Might need to generate new points"
@@ -140,7 +143,12 @@ def decisionMaker(xblock,yblock):
       print energy(xblock,yblock)
       print "We could create more points in this cell %d %d"%(xblock,yblock),
       print pair
-      wrapperInterpolate(pair[0],pair[1])
+      decisions = wrapperInterpolate(m,pair[0],pair[1])
+      for decision in decisions:newpoints.append(generateSlot(m,decision))
+  print "Number of new points generated: ", len(newpoints)
+  for ij in newpoints:
+    print ij.obj
+
 
 
   index=xblock*100+yblock
@@ -151,6 +159,7 @@ def decisionMaker(xblock,yblock):
 
   
 def main():
+  m='model'
   chessBoard = whereMain()
   x= int(8*random.random())
   y= int(8*random.random()) 
@@ -171,7 +180,7 @@ def main():
   #print (dictionary.keys())
   #print "Elements: %d"%len(dictionary[506])
   #print neighbourhood(5,6)
-  decisionMaker(5,6)
+  decisionMaker(m,5,6)
 
 def _neighbourhood():
   neighbourhood(0,0)
