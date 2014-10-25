@@ -28,7 +28,3 @@ Find below the things that I would like to change in my daily schedule to increa
 1. Put in more time in development. This is not the correct way to judge this since I have not been using this laptop for most part of the day. But again it's is always nice to put in more time into work.
 2. Spend less time on social networking sites. I am thinking of adding some plugins which would stop me from visiting facebook and other social networking sites during work hours.
 3. I would like to refrain myself from checking emails and answering them during work hours. I have noticed that this is very distracting. I would also turn off the notification of my cell phone. 
-
-
-
-
