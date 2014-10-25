@@ -215,9 +215,6 @@ def main():
   wrapperextrapolate(m,405,607)
 
 
-def _extrapolate():
-  print extrapolate([2,2,2],[3,3,3],[1,1,1],fmin=0,fmax=0.1)
-
 if __name__ == '__main__':
  # _interpolate()
   main()
