@@ -60,6 +60,10 @@ def getpoints(index):
 
 def wrapperInterpolate(m,xindex,yindex):
   def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def lo(m)      : return 0.0
+    def hi(m)      : return  1.0
+    def trim(x)  : # trim to legal range
+      return max(lo(x), x%hi(x))
     assert(len(lx)==len(ly))
     genPoint=[]
     for i in xrange(len(lx)):
@@ -69,11 +73,12 @@ def wrapperInterpolate(m,xindex,yindex):
       rand = random.random()
       if rand < cr:
         probEx = fmin +(fmax-fmin)*random.random()
-        new = min(x,y)+probEx*abs(x-y)
+        new = trim(min(x,y)+probEx*abs(x-y))
       else:
         new = y
       genPoint.append(new)
     return genPoint
+
   decision=[]
   xpoints=getpoints(xindex)
   ypoints=getpoints(yindex)
@@ -84,11 +89,11 @@ def wrapperInterpolate(m,xindex,yindex):
   return decision
 
 
-def generateSlot(m,decision):
+def generateSlot(m,decision,x,y):
   newpoint = Slots(changed = True,
             scores=None, 
-            xblock=-1, #sam
-            yblock=-1,  #sam
+            xblock=x, #sam
+            yblock=y,  #sam
             x=-1,
             y=-1,
             obj = [None] * len(objectives(m)), #[None]*4
@@ -100,25 +105,56 @@ def generateSlot(m,decision):
 
 
 #There are three points and I am trying to extrapolate. Need to pass two cell numbers
-def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
-  def lo(m)      : return 0.0
-  def hi(m)      : return  5.0
-  def trim(x)  : # trim to legal range
-    return max(lo(x), x%hi(x))
-  assert(len(lx)==len(ly)==len(lz))
-  genPoint=[]
-  for i in xrange(len(lx)):
-    x,y,z = lx[i],ly[i],lz[i]
-    rand = random.random()
+def wrapperextrapolate(m,xindex,yindex):
+  def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
+    def lo(m)      : return 0.0
+    def hi(m)      : return  1.0
+    def trim(x)  : # trim to legal range
+      return max(lo(x), x%hi(x))
+    assert(len(lx)==len(ly)==len(lz))
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
 
-    if rand < cr:
-      probEx = fmin + (fmax-fmin)*random.random()
-      print probEx
-      new = trim(x + probEx*(y-z))
-    else:
-      new = y #Just assign a value for that decision
-    genPoint.append(new)
-  return genPoint
+      if rand < cr: 
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(x + probEx*(y-z))
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    print genPoint
+    return genPoint
+
+  decision=[]
+  #TODO: need to put an assert saying checking whether extrapolation is actually possible
+  xpoints=getpoints(xindex)
+  ypoints=getpoints(yindex)
+  for ij in xpoints:
+    two = ij
+    index2,index3=0,0
+    while(index2 == index3): #just making sure that the indexes are not the same
+      index2=random.randint(0,len(ypoints)-1)
+      index3=random.randint(0,len(ypoints)-1)
+      print "++index2: ",index2
+      print "++index3: ",index3
+
+    print "index2: ",index2
+    print "index3: ",index3
+    three=ypoints[index2]
+    four=ypoints[index3]
+    print "Two: ",two
+    print "Three: ",three
+    print "Four: ",four
+    temp = extrapolate(two,three,four)
+    print "Extrapolated: ",temp
+    print
+    #decision.append(extrapolate(two,three,four))
+    decision.append(temp)
+  return decision
+
+
+
 
 
 
@@ -139,22 +175,17 @@ def decisionMaker(m,xblock,yblock):
   vallist=neigh.keys()
   import itertools 
   for pair in itertools.combinations(vallist,2):
-    if(opposite(*pair)):
+    if(opposite(*pair)==True):
       print energy(xblock,yblock)
       print "We could create more points in this cell %d %d"%(xblock,yblock),
       print pair
       decisions = wrapperInterpolate(m,pair[0],pair[1])
-      for decision in decisions:newpoints.append(generateSlot(m,decision))
+      for decision in decisions:newpoints.append(generateSlot(m,decision,xblock,yblock))
   print "Number of new points generated: ", len(newpoints)
   for ij in newpoints:
-    print ij.obj
+    print ij.xblock,ij.yblock
 
 
-
-  index=xblock*100+yblock
-  #If number of elements less than a threshold, create new points
-  if(len(dictionary[index])<threshold):
-    print "Create New Points"
     
 
   
@@ -180,25 +211,12 @@ def main():
   #print (dictionary.keys())
   #print "Elements: %d"%len(dictionary[506])
   #print neighbourhood(5,6)
-  decisionMaker(m,5,6)
+  #decisionMaker(m,5,6)
+  wrapperextrapolate(m,405,607)
 
-def _neighbourhood():
-  neighbourhood(0,0)
-  neighbourhood(7,7)
-  neighbourhood(0,7)
-  neighbourhood(7,0)
-  neighbourhood(0,4)
-  neighbourhood(4,0)
-  neighbourhood(7,4)
-  neighbourhood(4,7)
 
 def _extrapolate():
   print extrapolate([2,2,2],[3,3,3],[1,1,1],fmin=0,fmax=0.1)
-
-def _interpolate():
-  print interpolate([3,3,3],[2,2,2])
-
-
 
 if __name__ == '__main__':
  # _interpolate()
