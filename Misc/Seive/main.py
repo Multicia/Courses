@@ -209,7 +209,6 @@ def main():
             assert(len(temp)==len(dictionary[index])),"something"
             #print dictionary[index][0].xblock
   #print (dictionary.keys())
-  
   #print "Elements: %d"%len(dictionary[506])
   #print neighbourhood(5,6)
   #decisionMaker(m,5,6)
