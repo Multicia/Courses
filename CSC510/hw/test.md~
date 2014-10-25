@@ -15,7 +15,7 @@ The most of the time I am answering emails at the end of the day and checking fa
 
 **Thursday:**
 Again I was at the lab today and had a couple of classes to attend. We can observe the same trend as the wednesday since I was at the class most of the time and not carry about my laptop.
-![alt-text](thrusday.png)
+![alt-text](thursday.png)
 
 **Friday**
 I was at home today and most of the time I was working on my assignment which is evident from the fact that I have been using vim and visiting stackoverflow for most of the time.
