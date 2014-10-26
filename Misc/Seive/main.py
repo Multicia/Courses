@@ -136,38 +136,124 @@ def wrapperextrapolate(m,xindex,yindex):
     while(index2 == index3): #just making sure that the indexes are not the same
       index2=random.randint(0,len(ypoints)-1)
       index3=random.randint(0,len(ypoints)-1)
-      print "++index2: ",index2
-      print "++index3: ",index3
 
-    print "index2: ",index2
-    print "index3: ",index3
     three=ypoints[index2]
     four=ypoints[index3]
-    print "Two: ",two
-    print "Three: ",three
-    print "Four: ",four
     temp = extrapolate(two,three,four)
-    print "Extrapolated: ",temp
-    print
     #decision.append(extrapolate(two,three,four))
     decision.append(temp)
   return decision
 
 
 
-
-
+"""
+def decisions:
+if there are enough points then look at the neighbour. Look for the cell which has 
+  i.   highest number of points
+  ii.  lowest mean energy. energy is a the sum of all the objectives
+  iii. lowest variance
+else
+  if the opposite cells have threshold number of cells interpolate
+  else if there are consequtive points which have threshold points then extrapolate
+"""
 
 def decisionMaker(m,xblock,yblock):
+  gonw = lambda x: x - 101
+  gow = lambda x: x-1
+  gosw = lambda x: x + 99
+  gos = lambda x: x + 100
+  gose = lambda x: x +101
+  goe = lambda x: x+1
+  gone = lambda x: x - 99
+  gon = lambda x: x-100
+  convert = lambda x,y: x*100+y
+
+  def indexConvert(index):
+    return int(index/100),index%10
+
   def opposite(a,b):
     ax,ay,bx,by=a/100,a%100,b/100,b%100
     if(abs(ax-bx)==2 or abs(ay-by)==2):return True
     else: return False
 
+  def thresholdCheck(index):
+    if(len(dictionary[index])<threshold):return True
+    else:return False
+
+  def extrapolateCheck(xblock,yblock):
+    #TODO: If there are more than one consequetive blocks with threshold number of points how do we handle it?
+    #TODO: Need to make this logic more succint
+
+    #go North West
+    temp = gonw(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gonw(temp))
+      if(result1 and result2 == True):
+        return temp,gonw(temp)
+
+    #go North 
+    temp = gon(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gon(temp))
+      if(result1 and result2 == True):
+        return temp,gon(temp)
+
+    #go North East
+    temp = gone(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gone(temp))
+      if(result1 and result2 == True):
+        return temp,gone(temp)
+
+    #go East
+    temp = goe(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(goe(temp))
+      if(result1 and result2 == True):
+        return temp,goe(temp)
+
+    #go South East
+    temp = gose(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gose(temp))
+      if(result1 and result2 == True):
+        return temp,gose(temp)
+
+    #go South
+    temp = gos(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gos(temp))
+      if(result1 and result2 == True):
+        return temp,gos(temp)
+
+    #go South West
+    temp = gosw(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gosw(temp))
+      if(result1 and result2 == True):
+        return temp,gosw(temp)
+
+    #go West
+    temp = gow(convert(xblock,yblock))
+    result1 = thresholdCheck(temp)
+    if result == True:
+      result2 = thresholdCheck(gow(temp))
+      if(result1 and result2 == True):
+        return temp,gow(temp)
+    return None,None
+
   newpoints=[]
   threshold=3
-  if(len(dictionary[xblock*100+yblock])<threshold):
-    print "Cell is relatively sparse: Might need to generate new points"
+  if(thresholdCheck(convert(xblock,yblock))==False):
+    print "Cell is relwatively sparse: Might need to generate new points"
+
   neigh = neighbourhood(xblock,yblock)
   neigh = dict((k, v) for k, v in neigh.iteritems() if v>threshold)
   for key, value in neigh.iteritems():
@@ -181,12 +267,23 @@ def decisionMaker(m,xblock,yblock):
       print pair
       decisions = wrapperInterpolate(m,pair[0],pair[1])
       for decision in decisions:newpoints.append(generateSlot(m,decision,xblock,yblock))
-  print "Number of new points generated: ", len(newpoints)
+  
+  print "Interpolation: Number of new points generated: ", len(newpoints)
   for ij in newpoints:
-    print ij.xblock,ij.yblock
-
-
-    
+    print ij.obj
+  
+  if(len(newpoints)==0):
+    findex,sindex = extrapolateCheck(xblock,yblock)
+    if(findex==None and sindex==None):
+      print "In a tight spot..somewhere in the desert"
+    else:
+      decisions = wrapperextrapolate(m,findex,sindex)
+      for decision in decisions: newpoints.append(generateSlot(m,decisions,xblock,yblock))
+  
+      print "Extrapolation: Number of new points generated: ", len(newpoints)
+      for ij in newpoints:
+        print ij.obj
+  
 
   
 def main():
@@ -211,8 +308,8 @@ def main():
   #print (dictionary.keys())
   #print "Elements: %d"%len(dictionary[506])
   #print neighbourhood(5,6)
-  #decisionMaker(m,5,6)
-  wrapperextrapolate(m,405,607)
+  decisionMaker(m,5,6)
+  #wrapperextrapolate(m,405,607)
 
 
 if __name__ == '__main__':
