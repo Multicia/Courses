@@ -10,17 +10,54 @@ rand=random.random
 # 100*xblock+yblock and 
 dictionary ={} 
 threshold =3
+ncol=8
+nrow=8
 
-There is something wrong with the lambda expressions need to make sure it wraps around.
-gonw = lambda x: x - 101
-gow = lambda x: x-1
-gosw = lambda x: x + 99
-gos = lambda x: x + 100
-gose = lambda x: x +101
-goe = lambda x: x+1
-gone = lambda x: x - 99
-gon = lambda x: x-100
+#There is something wrong with the lambda expressions need to make sure it wraps around.
 convert = lambda x,y: (x*100)+y
+rowno = lambda x: int(x/100)
+colmno = lambda x: x%10
+
+def gonw(x):
+  if(rowno(x)==1 and colmno(x)==1):return convert(nrow,ncol)#in the first coulumn and first row
+  elif(rowno(x)==1): return convert(nrow,colmno(x)-1)
+  elif(colmno(x)==1): return convert(rowno(x)-1,ncol)#in the first column
+  else: return (x-101)
+
+def gow(x):
+ if(colmno(x)==1): return convert(rowno(x),ncol)
+ else: return (x-1)
+
+def gosw(x):
+  if(rowno(x)==nrow and colmno(x)==1): return convert(1,ncol)
+  elif(rowno(x)==nrow): return convert(1,colmno(x)-1)
+  elif(colmno(x)==1): return convert(rowno(x)+1,ncol)
+  else: return (x+99)
+
+def gos(x):
+  if(rowno(x)==nrow): return convert(1,colmno(x))
+  else: return x+100
+
+def gose(x):
+  if(rowno(x)==nrow and colmno(x)==ncol): return convert(1,1)
+  elif(rowno(x)==nrow): return convert(1,colmno(x)+1)
+  elif(colmno(x)==ncol): return convert(rowno(x)+1,1)
+  else: return x+101
+
+def goe(x):
+  if(colmno(x)==ncol): return convert(rowno(x),1)
+  else: return x+1
+
+def gone(x):
+  if(rowno(x)==1 and colmno(x)==ncol): return convert(nrow,1)
+  elif(rowno(x)==1): return convert(nrow,colmno(x)+1)
+  elif(colmno(x)==ncol): return convert(rowno(x)-1,1)
+  else: return x-99
+
+def gon(x):
+  if(rowno(x)==1): return convert(nrow,colmno(x))
+  else: return x-100 
+
 import collections
 compare = lambda x, y: collections.Counter(x) == collections.Counter(y)
 
@@ -414,8 +451,22 @@ def searcher(m):
   print ">>>>>>>>>>>>>>WOW Soultion: ",bsoln
 
 
+def _checkdirection(x):
+  print "North: ",gon(x)
+  print "North West: ",gonw(x)
+  print "North East: ",gone(x)
+  print "East: ",goe(x)
+  print "South East: ",gose(x)
+  print "South: ",gos(x)
+  print "South West: ",gosw(x)
+  print "West: ",gow(x)
+  print "-------------------------------"
 
-      
+def _wrappercheckdirection():
+  _checkdirection(101)
+  _checkdirection(801)
+  _checkdirection(808)
+  _checkdirection(108)
 
 
 def _checkDictionary():
@@ -426,6 +477,7 @@ def _checkDictionary():
 
 def main():
   m='model'
+  random.seed(31)
   chessBoard = whereMain()
   x= int(8*random.random())
   y= int(8*random.random()) 
@@ -454,6 +506,7 @@ def main():
 
 
 if __name__ == '__main__':
+  #_wrappercheckdirection()
  # _interpolate()
   main()
   #_extrapolate()
