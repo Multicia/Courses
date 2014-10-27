@@ -9,9 +9,12 @@ rand=random.random
 # consist of dictionary where the index is 
 # 100*xblock+yblock and 
 dictionary ={} 
-threshold =3
-ncol=8
-nrow=8
+threshold =3         #threshold for number of points to be considered as a prospective solution
+ncol=8               #number of columns in the chess board
+nrow=8               #number of rows in the chess board
+intermaxlimit=20     #Max number of points that can be created by interpolation
+extermaxlimit=20     #Max number of points that can be created by extrapolation
+
 
 #There is something wrong with the lambda expressions need to make sure it wraps around.
 convert = lambda x,y: (x*100)+y
@@ -91,8 +94,8 @@ def stats(listl):
 
 def energy(xblock,yblock):
   tempIndex=int(100*xblock+yblock)
-  print "xblock: %d yblock: %d"%(xblock,yblock)
-  print "TempIndex>>>>>>>>>: " ,tempIndex
+  #print "energy| xblock: %d yblock: %d"%(xblock,yblock)
+  #print "energy| TempIndex: " ,tempIndex
   energy=[]
   try:
     for x in dictionary[tempIndex]:
@@ -101,7 +104,7 @@ def energy(xblock,yblock):
     #print "%d, %f, %f"%(len(dictionary[tempIndex]),median,iqr),
     return median,iqr
   except:
-    print "Error"
+    print "Energy Error"
 
 
 def getpoints(index):
@@ -140,8 +143,11 @@ def wrapperInterpolate(m,xindex,yindex):
   import itertools 
   listpoints=list(itertools.product(xpoints,ypoints))
   #print "Length of Listpoints: ",len(listpoints)
+  count=0
   for x in listpoints:
+    if(count>min(len(xpoints),intermaxlimit)):break
     decision.append(interpolate(x[0],x[1]))
+    count+=1
   return decision
 
 
@@ -187,7 +193,9 @@ def wrapperextrapolate(m,xindex,yindex):
   #TODO: need to put an assert saying checking whether extrapolation is actually possible
   xpoints=getpoints(xindex)
   ypoints=getpoints(yindex)
+  count=0
   for ij in xpoints:
+    if(count>min(len(xpoints),extermaxlimit)):break
     two = ij
     index2,index3=0,0
     while(index2 == index3): #just making sure that the indexes are not the same
@@ -199,6 +207,7 @@ def wrapperextrapolate(m,xindex,yindex):
     temp = extrapolate(two,three,four)
     #decision.append(extrapolate(two,three,four))
     decision.append(temp)
+    count+=1
   return decision
 
 
@@ -316,42 +325,50 @@ def generateNew(m,xblock,yblock):
     return None,None
   
   newpoints=[]
-  print "xblock: %d yblock: %d"%(xblock,yblock)
-  #print "convert: ",convert(xblock,yblock)
-  #print "thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+  #print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
+  #print "generateNew| convert: ",convert(xblock,yblock)
+  #print "generateNew|thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
   if(thresholdCheck(convert(xblock,yblock))==False):
-    print "Cell is relatively sparse: Might need to generate new points"
+    #print "generateNew| Cell is relatively sparse: Might need to generate new points"
     xb,yb=interpolateCheck(xblock,yblock)
     if(xb!=None and yb!=None):
-      print thresholdCheck(xb),thresholdCheck(yb)
+      #print thresholdCheck(xb),thresholdCheck(yb)
       decisions = wrapperInterpolate(m,xb,yb)
-      print len(decisions)
       if convert(xblock,yblock) in dictionary: pass
       else:
-        assert(convert(xblock,yblock)>101),"Something's wrong!" 
+        #print convert(xblock,yblock)
+        assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+        assert(convert(xblock,yblock)<=808),"Something's wrong!" 
         dictionary[convert(xblock,yblock)]=[]
-      for decision in decisions:newpoints.append(generateSlot(m,decision,xblock,yblock))
-      print "Interpolation works!"
-      print "Number of new points generated: ", len(newpoints)
+      old = _checkDictionary()
+      for decision in decisions:dictionary[convert(xblock,yblock)].append(generateSlot(m,decision,xblock,yblock))
+      #print "generateNew| Interpolation works!"
+      new = _checkDictionary()
+      #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
       return True
     else:
-      print "Interpolation failed!"
+      #print "generateNew| Interpolation failed!"
       findex,sindex = extrapolateCheck(xblock,yblock)
       if(findex==None and sindex==None):
-        print "In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+        print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
         return False
       else:
         decisions = wrapperextrapolate(m,findex,sindex)
         if convert(xblock,yblock) in dictionary: pass
         else: 
-          assert(convert(xblock,yblock)>101),"Something's wrong!" 
+          assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
           dictionary[convert(xblock,yblock)]=[]
+        old = _checkDictionary()
         for decision in decisions: dictionary[convert(xblock,yblock)].append(generateSlot(m,decision,xblock,yblock))
-        print "Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+        new = _checkDictionary()
+        #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+        #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
         return True
   else:
     findex,sindex = extrapolateCheck(xblock,yblock)
     if(findex==None and sindex==None):
+      print "generateNew| Lot of points but middle of a desert"
       return False #A lot of points but right in the middle of a deseart
     else:
       return True
@@ -364,7 +381,7 @@ Return a list of neighbours:
 """
 def listofneighbours(m,xblock,yblock):
   index=convert(xblock,yblock)
-  print "listofneighboursBBBBBBBBBBBBBB: ",index
+  #print "listofneighbours| Index passed: ",index
   listL=[]
   listL.append(goe(index))
   listL.append(gose(index))
@@ -380,15 +397,18 @@ def printNormal():
 
   def thresholdCheck(index):
     try:
-      if(len(dictionary[index])>threshold):return True
+      if(len(dictionary[index])>threshold):return len(dictionary[index])
       else:return False
     except:
       return False
 
   for i in xrange(1,9):
     for j in xrange(1,9):
-      print (convert(i,j)),thresholdCheck(convert(i,j)),
-      print "      ",
+      #print '[%s]' % ', '.join(map(str, mylist))
+      print "%d|%d  |"%((convert(i,j)),thresholdCheck(convert(i,j))),
+      temp = energy(i,j)
+      print "%2.3f,%2.3f"%(temp[0],temp[1]),
+      print "    ",
     print
 """
 Generate random cell number pass it to generateNew() and if the point is in between a deseart then jump to a random cell
@@ -401,51 +421,63 @@ def searcher(m):
   def randomcell(): 
     return [randomC() for _ in xrange(2)]
 
-  tries,repeat=0,0
+  tries=0
   bmean,biqr=1e6,1e6
   bsoln=[-1,-1]
-  while(tries<19):
-    print "------------------------------------------------------------------"
+  while(tries<40):
+    print "---------------------------Tries: %d---------------------------------------"%tries
     soln = randomcell()
+    tries+=1
+    repeat=0
     while(repeat<32):
       print "Solution being tried: %d %d "%(soln[0],soln[1])
       result = generateNew(m,soln[0],soln[1])
       if(result == False): 
-        print ">>>>>>>>>>>>>here %d"%tries
-        tries+=1
-        printNormal()
+        print
         break
       else:
-        print "*********************************Solution being tried: %d %d "%(soln[0],soln[1])
+        #print "Searcher| Solution being tried: %d %d "%(soln[0],soln[1])
         mean,iqr = energy(soln[0],soln[1])
+        btsoln=[]
         neighbours = listofneighbours(m,soln[0],soln[1])
+        print neighbours
+        btmean,btiqr=1e6,1e6
         for neighbour in neighbours:
-          print "neighbour: ",neighbour
+          #print "Searcher| neighbour: ",neighbour
           result = generateNew(m,int(neighbour/100),neighbour%10)
-          print result
           if(result == True):
-            mean,iqr = energy(int(neighbour/100),neighbour%10)
-            print ">>>>>>>>>>>>>>Temp Mean:%f IQR: %f"%(mean,iqr)
-            if(mean<bmean or (mean == bmean and iqr<biqr)):
-              print "&&&&&&&&&&&&&&&&&&&& Better than best found!!"
-              bmean = mean
-              biqr = iqr
-              bsoln = [int(neighbour/100),neighbour%10]
-              print "SOLUTION: ",bsoln
-          else:
-            print "NAAAAAAAAAAAAH"
+            tmean,tiqr = energy(int(neighbour/100),neighbour%10)
+            if((tmean<btmean and tmean<mean) or (tmean==mean and tiqr < iqr and tmean<=btmean and tiqr<=btiqr)):
+              #print "Searcher| tmean: %f mean: %f"%(tmean,mean)
+              #print "Searcher| tiqr: %f iqr: %f"%(tiqr,iqr)
+              btsoln = [int(neighbour/100),neighbour%10]
+              #print "Searcher|btsoln: ",btsoln
+              btmean=tmean
+              btiqr=tiqr
 
-        print "++++++++++++++++++++++soln: ",soln
-        print "++++++++++++++++++++++bsoln: ",bsoln
-        if(compare(bsoln,soln)!=True):
-          print "##################Found old solution!!: ",bsoln
-          print "##################Found new solution!!: ",soln
-          soln=bsoln
-          print "Mean: %f IQR: %f "%(bmean,biqr)
-          repeat+=1
+            #print "Searcher|Temp Mean:%f IQR: %f"%(mean,iqr)
+            if(tmean<bmean or (tmean == bmean and tiqr<biqr)):
+              print "Searcher| Better than best found!!"
+              #print "Searcher| Good Mean:%f IQR: %f"%(mean,iqr)
+              bmean = tmean
+              biqr = tiqr
+              bsoln = [int(neighbour/100),neighbour%10]
+              #print "Searcher| SOLUTION: ",bsoln
+          else:
+            #print "Searcher|NAAAAAAAAAAAAH"
+            pass
+
+        #print "++++++++++++++++++++++soln: ",soln
+        #print "++++++++++++++++++++++bsoln: ",bsoln
+        if(compare(btsoln,soln)!=True and len(btsoln)!=0):
+          #print "##################Found old solution!!: ",bsoln
+          #print "##################Found new solution!!: ",soln
+          soln=btsoln
+          print "Searcher| Mean: %f IQR: %f "%(tmean,tiqr)
         else:
-          tries+=1
+          repeat+=1
           break
+
 
   print ">>>>>>>>>>>>>>WOW Mean:%f IQR: %f"%(bmean,biqr)
   print ">>>>>>>>>>>>>>WOW Soultion: ",bsoln
@@ -473,11 +505,11 @@ def _checkDictionary():
   sum=0
   for i in dictionary.keys():
     sum+=len(dictionary[i])
-  print sum
+  return sum
 
 def main():
   m='model'
-  random.seed(31)
+  random.seed(3)
   chessBoard = whereMain()
   x= int(8*random.random())
   y= int(8*random.random()) 
@@ -502,7 +534,8 @@ def main():
   #_checkDictionary()
   #wrapperextrapolate(m,405,607)
   searcher(m)
-  _checkDictionary()
+  printNormal()
+  print "Total number of points in the grid: ",_checkDictionary()
 
 
 if __name__ == '__main__':
