@@ -192,13 +192,13 @@ class ModelBasic(object):
 
 
 
-  def  neighbour(self,minN,maxN):
-    return minN + (maxN-minN)*random.random()
+  def  neighbour(self,minN,maxN,c):
+    return minN[c] + (maxN[c]-minN[c])*random.random()
 
 class Fonseca(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=3,objf=2):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -232,15 +232,15 @@ class Fonseca(ModelBasic):
 
   def baseline(self,minR,maxR):
     for x in range(0,100000):
-      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
+      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,3)]
       self.returnMax(self.f1(solution)+ self.f2(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution))
 
 
 class Kursawe(ModelBasic):
   def __init__(self,minR=-5,maxR=5,n=3,objf=2):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -272,7 +272,7 @@ class Kursawe(ModelBasic):
 
   def baseline(self,minR,maxR):
     for x in range(0,50000):
-      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,3)]
+      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,3)]
       self.returnMax(self.f1(solution)+ self.f2(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution))
 
@@ -281,8 +281,8 @@ class ZDT1(ModelBasic):
   minVal=10000
 
   def __init__(self,minR=0,maxR=1,n=30,objf=2):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.objf=objf
     self.past = [Log() for count in xrange(objf)]
@@ -312,7 +312,7 @@ class ZDT1(ModelBasic):
  
   def baseline(self,minR=0,maxR=1):
     for x in range(0,90000):
-      solution = [(minR + random.random()*(maxR-minR)) for z in range(0,30)]
+      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,30)]
       self.returnMax(self.f1(solution)+ self.f2(solution))
       self.returnMin(self.f2(solution)+ self.f2(solution))
 
@@ -323,8 +323,8 @@ class ZDT1(ModelBasic):
 class Schaffer(ModelBasic):
 
   def __init__(self,minR=-1e4,maxR=1e4,n=1,objf=2):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -358,8 +358,8 @@ class Schaffer(ModelBasic):
     return "Schaffer~"
 
   def baseline(self,minR,maxR):
-    low = self.minR
-    high = self.maxR
+    low = self.minR[0]
+    high = self.maxR[0]
     for index in range(0,1000000):
       inputRand =(low + (high-low)*random.random())
       #print "inputRand: %s"%inputRand
@@ -371,8 +371,8 @@ class Schaffer(ModelBasic):
 class ZDT3(ModelBasic):
   
   def __init__(self,minR=0,maxR=1,n=30,objf=2):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
@@ -401,7 +401,7 @@ class ZDT3(ModelBasic):
 
   def baseline(self,minR,maxR):
     for x in range(0,180000):
-      solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,30)]
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,30)]
       self.returnMax(self.f1(solution)+ self.f2(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution))
 
@@ -410,8 +410,8 @@ class ZDT3(ModelBasic):
 
 class Viennet(ModelBasic):
   def __init__(self,minR=-3,maxR=3,n=2,objf=3):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
@@ -454,14 +454,14 @@ class Viennet(ModelBasic):
 
   def baseline(self,minR,maxR):
     for x in range(0,90000):
-      solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       self.returnMax(self.f1(solution)+ self.f2(solution)+self.f3(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution)+self.f3(solution))
 
 class DTLZ7(ModelBasic):
   def __init__(self,minR=0,maxR=1,objf=20,n=39,k=20):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.k=k
     self.minVal=1e6
@@ -506,7 +506,7 @@ class DTLZ7(ModelBasic):
    
   def baseline(self,minR,maxR):
     for x in range(0,90000):
-      solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
       for i in xrange(self.objf):
         temp="f"+str(i+1)
@@ -517,8 +517,8 @@ class DTLZ7(ModelBasic):
 
 class Osyczka(ModelBasic):
   def __init__(self,minR=0,maxR=10,objf=2,n=6):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[0, 0, -1, 0, 1, 0]
+    self.maxR=[10, 10, 5, 6, 5, 10]
     self.n=n
     self.minVal=1e6
     self.maxVal=-1e6
@@ -588,7 +588,7 @@ class Osyczka(ModelBasic):
   
   def baseline(self,minR,maxR):
     for x in range(0,90000):
-      solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
       for i in xrange(self.objf):
         temp="f"+str(i+1)
@@ -599,8 +599,8 @@ class Osyczka(ModelBasic):
 
 class Schwefel(ModelBasic):
   def __init__(self,minR=-math.pi,maxR=math.pi,objf=1,n=10):
-    self.minR=minR
-    self.maxR=maxR
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
     self.n=n
     self.f_bias=-460
     self.minVal=1e6
@@ -628,7 +628,7 @@ class Schwefel(ModelBasic):
 
   def baseline(self,minR,maxR):
     for x in range(0,90000):
-      solution = [(self.minR + random.random()*(self.maxR-self.minR)) for z in range(0,self.n)]
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
       for i in xrange(self.objf):
         temp="f"+str(i+1)

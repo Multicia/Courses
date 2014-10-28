@@ -30,7 +30,7 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
   #for i in range(0,len(runTimes)):
   #  print "RunNo: %s RunTime: %s Score: %s"%(i+1,runTimes[i],scores[i])
   #print scores
-  print xtile(scores,width=25,show=" %1.6f")
+  print xtile(scores,width=25,show=" %1.2f")
   print "==============================================================="
 
   
@@ -38,9 +38,10 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 def multipleRun():
    from collections import defaultdict
    r = 30
-   for klass in [Osyczka]:# [Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,ZDT3,Schaffer,DTLZ7]:
+   for klass in [DTLZ7,Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,ZDT3,Schaffer]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
+     timeCollector=defaultdict(list)
      for searcher in [PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
@@ -64,10 +65,12 @@ def multipleRun():
          timeTaken = (time.time() - t1) * 1000
          listTimeTaken.append(timeTaken)
          listScores.append(score)
+         timeCollector[searcher.__name__]=listTimeTaken
          eraCollector[searcher.__name__]=listScores
          #print "Score: %f"%(score)
        print
      callrdivdemo(eraCollector)
+     callrdivdemo(timeCollector)
 
 def step2():
     rdivDemo([

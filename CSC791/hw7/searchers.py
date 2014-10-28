@@ -55,7 +55,7 @@ class MaxWalkSat(SearchersBasic):
     for i in range(0,maxTries): #Outer Loop
       solution=[]
       for x in range(0,n):
-        solution.append(minR + random.random()*(maxR-minR))
+        solution.append(minR[x] + random.random()*(maxR[x]-minR[x]))
       #print "Solution: ",
       #print solution  
       for j in range(1,maxChanges):      #Inner Loop
@@ -77,15 +77,15 @@ class MaxWalkSat(SearchersBasic):
          
          if(random.random() > probLocalSearch):
              c = int((self.model.n)*random.random())
-             solution[c]=model.neighbour(minR,maxR)
+             solution[c]=model.neighbour(minR,maxR,c)
              self.display(score,"+"),
          else:
              tempBestScore=score
-             tempBestSolution=solution
-             interval = (maxR-minR)/10
+             tempBestSolution=solution             
              c = int(self.model.n*random.random())
-             for itr in range(0,10):
-                solution[c] = minR + (itr*interval)*random.random()
+             interval = (maxR[c]-minR[c])/10
+             for itr in range(0,10):                
+                solution[c] = minR[c] + (itr*interval)*random.random()
                 tempScore = model.evaluate(solution)
                 if(tempBestScore > tempScore):     # score is correlated to max?
                   tempBestScore=tempScore
@@ -126,7 +126,7 @@ class SA(SearchersBasic): #minimizing
     for i in range(0,n):
       tempRand = random.random()
       if tempRand <(1/self.model.n):
-        returnValue.append(minR + (maxR - minR)*random.random())
+        returnValue.append(minR[i] + (maxR[i] - minR[i])*random.random())
       else:
         returnValue.append(solution[i])
     return returnValue
@@ -139,7 +139,7 @@ class SA(SearchersBasic): #minimizing
     model.baseline(minR,maxR)
     #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
 
-    s = [minR + (maxR - minR)*random.random() for z in range(0,model.n)]
+    s = [minR[z] + (maxR[z] - minR[z])*random.random() for z in range(0,model.n)]
     #print s
     e = model.evaluate(s)
     emax = int(myoptions['SA']['emax'])
@@ -285,9 +285,13 @@ class GA(SearchersBasic):
     else:
       #print "eeeeeeeeeeee>>>>>>>>>>>>>>>>>>>>>>>>eeeeeeehaha"
       str1 = [random.random() for z in range(0,self.model.n)]
-      normalc1 = map(lambda x:minR+x*(maxR-minR),str1)
+      normalc1,normalc2=[],[]
+      for ij in xrange(len(str1)):
+        normalc1.append(minR[ij]+str1[ij]*(maxR[ij]-minR[ij]))
       str2 = [random.random() for z in range(0,self.model.n)]  
-      normalc2 = map(lambda x:minR+x*(maxR-minR),str2)
+      for ij in xrange(len(str2)):
+        normalc2.append(minR[ij]+str1[ij]*(maxR[ij]-minR[ij]))
+      #normalc2 = map(lambda x:minR+x*(maxR-minR),str2)
       return normalc1,normalc2
 
   #http://stackoverflow.com/questions/10324015
@@ -308,7 +312,10 @@ class GA(SearchersBasic):
     maxR = self.model.maxR
     strs = self.singleStream(s)
     strs = (''.join(map(str,strs)))
-    fitness = self.model.evaluate(map(lambda x:minR+x*(maxR-minR),s))
+    temp=[]
+    for i in xrange(len(s)):
+      temp.append(minR[i]+s[i]*(maxR[i]-minR[i]))
+    fitness = self.model.evaluate(temp)
     return strs,fitness
 
   def initialPopulation(self):
@@ -372,7 +379,10 @@ class GA(SearchersBasic):
         for i in range(0, len(lst), sz)]
         tempSolution = [int(''.join(map(str,x)))/10**len(x)\
         for x in lol(bestSolution,int(len(bestSolution)/model.n))]
-        solution= map(lambda x:minR+x*(maxR-minR),tempSolution) 
+        solution=[]
+        for ij in xrange(len(tempSolution)):
+          solution.append(minR[ij]+tempSolution[ij]*(maxR[ij]-minR[ij]))
+        #solution= map(lambda x:minR+x*(maxR-minR),tempSolution) 
         return solution,bestScore,self.model
 
       
@@ -408,9 +418,9 @@ class DE(SearchersBasic):
     then = other()
     return this,that,then
   
-  def trim(self,x)  : # trim to legal range
+  def trim(self,x,i)  : # trim to legal range
     m=self.model
-    return max(m.minR, min(x, m.maxR))      
+    return max(m.minR[i], min(x, m.maxR[i]))      
 
   def extrapolate(self,frontier,one,f,cf):
     #print "Extrapolate"
@@ -420,7 +430,7 @@ class DE(SearchersBasic):
     for d in xrange(self.model.n):
       x,y,z=two[d],three[d],four[d]
       if(random.random() < cf):
-        solution.append(self.trim(x + f*(y-z)))
+        solution.append(self.trim(x + f*(y-z),d))
       else:
         solution.append(one[d]) 
     #print "blah"
@@ -453,7 +463,7 @@ class DE(SearchersBasic):
     minR = model.minR
     maxR = model.maxR
     model.baseline(minR,maxR)
-    frontier = [[model.minR+random.random()*(model.maxR-model.minR) for _ in xrange(model.n)]
+    frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
                for _ in xrange(np)]
     #print frontier
     for i in xrange(repeat):
@@ -476,8 +486,8 @@ class PSO(SearchersBasic):
     self.p = []
     self.lb = []
     self.model=modelName
-    self.gb = [self.model.minR + random.random()*(self.model.maxR-self.model.minR) \
-    for _ in xrange(self.model.n)]
+    self.gb = [self.model.minR[i] + random.random()*(self.model.maxR[i]-self.model.minR[i]) \
+    for i in xrange(self.model.n)]
     self.eb=self.model.evaluate(self.gb)
     self.displayStyle=displayS 
     self.phi1=myoptions['PSO']['phi1']
@@ -488,16 +498,16 @@ class PSO(SearchersBasic):
     self.threshold=myoptions['PSO']['threshold'] 
     for x in xrange(self.N):
       self.v.append([0 for _ in xrange(self.model.n)])
-      self.p.append([self.model.minR + random.random()*(self.model.maxR-self.model.minR)\
-      for _ in xrange(self.model.n)])
+      self.p.append([self.model.minR[i] + random.random()*(self.model.maxR[i]-self.model.minR[i])\
+      for i in xrange(self.model.n)])
       self.lb.append(self.p[x])
       if(self.model.evaluate(self.p[x])<self.model.evaluate(self.gb)):
         self.gb = self.p[x]
         self.eb = self.model.evaluate(self.gb)
   
-  def trim(self,x)  : # trim to legal range
+  def trim(self,x,i)  : # trim to legal range
     m=self.model
-    return max(m.minR, min(x, m.maxR))  
+    return max(m.minR[i], min(x, m.maxR[i]))  
   
   def velocity(self,v,p,lb,gb):
 
@@ -508,7 +518,8 @@ class PSO(SearchersBasic):
 
   def displace(self,v,p):
     newp = [v[i]+p[i] for i in xrange(self.model.n)]
-    return [self.trim(i) for i in newp] 
+    #print "NEWP: ",newp
+    return [self.trim(newp[i],i) for i in xrange(len(newp))] 
 
   def evaluate(self,N=30,phi1=1.3,phi2=2.8,w=1):
 
