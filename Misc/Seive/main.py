@@ -105,6 +105,8 @@ def energy(xblock,yblock):
     return median,iqr
   except:
     print "Energy Error"
+    import traceback
+    traceback.print_exc()
 
 
 def getpoints(index):
@@ -156,6 +158,7 @@ def wrapperInterpolate(m,xindex,yindex,maxlimit):
 
 
 def generateSlot(m,decision,x,y):
+  print decision
   newpoint = Slots(changed = True,
             scores=None, 
             xblock=x, #sam
@@ -340,13 +343,15 @@ def generateNew(m,xblock,yblock):
   if(thresholdCheck(convert(xblock,yblock))==False):
     #print "generateNew| Cell is relatively sparse: Might need to generate new points"
     listInter=interpolateCheck(xblock,yblock)
-    
+    #print "generateNew|listInter: ",listInter
     if(len(listInter)!=0):
       decisions=[]
       assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
       for i in xrange(int(len(listInter)/2)):
-        decisions.append(wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(intermaxlimit/len(listInter))+1))
+        decisions.extend(wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(intermaxlimit/len(listInter))+1))
+        #print "generateNew| Decisions Length: ",len(decisions)
+      #print "generateNew| Decisions: ",decisions
       if convert(xblock,yblock) in dictionary: pass
       else:
         #print convert(xblock,yblock)
@@ -453,7 +458,7 @@ def searcher(m):
         mean,iqr = energy(soln[0],soln[1])
         btsoln=[]
         neighbours = listofneighbours(m,soln[0],soln[1])
-        print neighbours
+        #print neighbours
         btmean,btiqr=1e6,1e6
         for neighbour in neighbours:
           #print "Searcher| neighbour: ",neighbour
@@ -539,13 +544,8 @@ def main():
             index=temp[0].xblock*100+temp[0].yblock
             dictionary[index] = temp
             assert(len(temp)==len(dictionary[index])),"something"
-            #print dictionary[index][0].xblock
-  #print (dictionary.keys())
-  #print "Elements: %d"%len(dictionary[506])
-  #print neighbourhood(5,6)
-  #generateNew(m,3,6)
-  #_checkDictionary()
-  #wrapperextrapolate(m,405,607)
+  for x in dictionary.keys():
+    print "Key: ",x," Length: ",len(dictionary[x])
   searcher(m)
   printNormal()
   print "Total number of points in the grid: ",_checkDictionary()
