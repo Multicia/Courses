@@ -1,0 +1,728 @@
+
+%% This style is provided exclusively for the ICSE 2012 main conference,
+%% ICSE 2012 co-located events, and ICSE 2012 workshops.
+
+%% bare_conf_ICSE12.tex
+%% V1.4
+%% 2012-01-21
+%%
+
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.7 or later) with an IEEE conference paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%
+%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
+%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
+%%*************************************************************************
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. IEEE's font choices can trigger bugs that do  ***
+% *** not appear when using other class files.                            ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+% Note that the a4paper option is mainly intended so that authors in
+% countries using A4 can easily print to A4 and see how their papers will
+% look in print - the typesetting of the document will not typically be
+% affected with changes in paper size (but the bottom and side margins will).
+% Use the testflow package mentioned above to verify correct handling of
+% both paper sizes by the user's LaTeX system.
+%
+% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
+% should be used if it is desired that the figures are to be displayed in
+% draft mode.
+%
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
+% Add the compsocconf option for Computer Society conferences.
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[conference]{../sty/IEEEtran}
+
+
+\usepackage{balance}
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
+% not currently provide for hyperlinked citations.
+% The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at: 
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
+% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics. If using
+% it, be sure to load this package with the cmex10 option to ensure that
+% only type 1 fonts will utilized at all point sizes. Without this option,
+% it is possible that some math symbols, particularly those within
+% footnotes, will be rendered in bitmap form which will result in a
+% document that can not be IEEE Xplore compliant!
+%
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
+% There is also a support site at:
+% http://algorithms.berlios.de/index.html
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/tools/
+
+
+%\usepackage{mdwmath}
+%\usepackage{mdwtab}
+% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
+% especially mdwmath.sty and mdwtab.sty which are used to format equations
+% and tables, respectively. The MDWtools set is already installed on most
+% LaTeX systems. The lastest version and documentation is available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+%\usepackage{eqparbox}
+% Also of notable interest is Scott Pakin's eqparbox package for creating
+% (automatically sized) equal width boxes - aka "natural width parboxes".
+% Available at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
+
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\usepackage[tight,footnotesize]{subfigure}
+% subfigure.sty was written by Steven Douglas Cochran. This package makes it
+% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
+% work, it is a good idea to load it with the tight package option to reduce
+% the amount of white space around the subfigures. subfigure.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at:
+% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
+% subfigure.sty has been superceeded by subfig.sty.
+
+
+
+%\usepackage[caption=false]{caption}
+%\usepackage[font=footnotesize]{subfig}
+% subfig.sty, also written by Steven Douglas Cochran, is the modern
+% replacement for subfigure.sty. However, subfig.sty requires and
+% automatically loads Axel Sommerfeldt's caption.sty which will override
+% IEEEtran.cls handling of captions and this will result in nonIEEE style
+% figure/table captions. To prevent this problem, be sure and preload
+% caption.sty with its "caption=false" package option. This is will preserve
+% IEEEtran.cls handing of captions. Version 1.3 (2005/06/28) and later 
+% (recommended due to many improvements over 1.2) of subfig.sty supports
+% the caption=false option directly:
+%\usepackage[caption=false,font=footnotesize]{subfig}
+%
+% The latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
+% The latest version and documentation of caption.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure. The latest version and documentation can be found at:
+% http://www.ctan.org/tex-archive/macros/latex/base/
+
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
+% Documentation is contained in the stfloats.sty comments as well as in the
+% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
+% does not allow \baselineskip to stretch. Authors submitting work to the
+% IEEE should note that IEEE rarely uses double column equations and
+% that authors should try to avoid such use. Do not be tempted to use the
+% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
+% not format its papers in such ways.
+
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
+% Read the url.sty source comments for usage information. Basically,
+% \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+\title{Survey Paper}
+
+
+% author names and affiliations
+% use a multiple column layout for up to two different
+% affiliations
+
+\author{\IEEEauthorblockN{Naveen Patinjaraeveetil Ravikumar}
+\IEEEauthorblockA{Department of Computer Science and Engineering\\
+North Carolina State University\\
+Raleigh\\
+npatinj@ncsu.edu}
+\and
+\IEEEauthorblockN{Vivek Nair}
+\IEEEauthorblockA{Department of Computer Science and Engineering\\
+North Carolina State University\\
+Raleigh\\
+vnair2@ncsu.edu}
+}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
+%Homer Simpson\IEEEauthorrefmark{2},
+%James Kirk\IEEEauthorrefmark{3}, 
+%Montgomery Scott\IEEEauthorrefmark{3} and
+%Eldon Tyrell\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
+%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+
+\begin{abstract}
+Software debugging is one of the most expensive,time consuming and tedious among the activities in software development cycle. This means that fully autonomic software debugging techniques is the need to the day. A autonomic debugging technique should be able to guide developers and perform fault localization with minimum human intervention. This generated a lot of interest in the software engineering community and as a result a various methods have been proposed. Recntly, there has been also a push to use statistical methods to use historical data to guide the debugging process. In this article we provide an overview of the techniques and recent advances in this field. 
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Program debugging, software fault localization, testing, code completion, static analysis
+
+\end{IEEEkeywords}
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+
+The work is run by software and a look around is an evidence to that. From the household appliances to the most advanced satellites all are run by software. Given the centrality of software in the modern life of our species and given the propensity of making mistakes, software reliability has become a issues of concern. To reduce the number of bugs in the software attempts are made by spending more resources(testing and debugging contribute to 50\% to 80\%[ref1] of the development time) and make smart tool which make the process of debugging less tedious and time consuming.
+
+The survey paper aims to review recent contributions in the field of static analysis, bug localization, software repair and code completion. We aim to look at the trends prevalent in the software community regarding the use of these methodologies. There are many static analysis tools available for the community. Some of the papers presented in ICSE’14, introduces novel techniques in areas of Static Analysis, Bug localization etc. For Static analysis we are particularly interested in two papers: an automated approach to detect violation[1] and use of the statistical prediction[2]. We are also plan to investigate ‘bug localization’, which tries to find bugs in code using the information directly from the bug repository. We would be studying a bug localization technique using the Markov chain logic [3] and explore BOAT [4], which is an experimental platform to evaluate different bug localization techniques. We will also look into the techniques used in the current software repair strategies such as MintHint[5], which automatically synthesizes repair hints. Code completion is another field which is of interest to us. We will focus on Cookbook[6] which provides in-situ code completion using edit recipes learned from examples and CodeHint[7], which provides dynamic and interactive synthesis of repair hints.
+
+Based on the understanding gained from the above papers, we will try to adopt some of these techniques, which can be used in the wild to enhance current practices.
+
+\section{Body}
+\subsection{Static Analysis}
+Static analysis is a method used by the software community to check the code for defects without running the code. Running a static analyzer on the code would help developers to identify problems with the code and would act as a testing tool for the developers. A substantial amount of work has been done in the past to detect defect and vulnerabilities. Lint program is considered to be the first static analysis tool, which enforces or flags style issues such as, naming conventions etc. Though the lint tool is obsolete now, it has paved way for tools which detect defects which lead to security vulnerabilities such as SQL injection and cross-site scripting.Find-bugs is one such tool that looks for coding defects\cite{ayewah2008using}. 
+
+With all the advantages of static analysis there are various limitations which needs to be addressed before static analysis becomes a one stop solution to the code defect problems.  Static analysis can’t tell the user whether they have got the requirements wrong. This is because the code doesn’t know what the tool needs to do. On the same line of thought, the tool also can’t detect mistakes in logic even though mistakes in logic might or might not be caught in the unit testing phase. It has also been pointed out in some previous studies that different static analysis tool return different results which show almost no overlap between them. This means that ideally a developer should run multiple static analyzer on the code base before she can breathe a sigh of relief. There is also a debate whether manual review should be considered rather than using bug finding tools, which are licensed most of the time and is very expensive. A study was conducted by Wagner et. al\cite{wagner2005comparing} shows that the tools are strongly tied to the personal programming style and the design of the software since the results differed strongly from project to project. Mantyla et. al\cite{mantyla2009types} points out the bug finding tools found ``found more problems with maintainability than real defects’’ than real defects. Testing phase of the tool found fewer bugs than reviews and as mentioned before has no overlap between the bugs found during reviews and static analysis. Wedyan et. al\cite{wedyan2009effectiveness} conducted a study, where two static analysis tools were run on two open source projects and the effectiveness of the tools were measured with respect to the actual defects that were fixed by the developers  (using the bug reports). The results shows that fewer than 3\% of the detected faults correspond to the coding concerns reported by ASA tools. This shows that static analysis tools are good at finding problems that ``could happen’’ rather than that ``do happen’’. Johnson et. al\cite{johnson2013don}, conducted a study with 20 developers and found that even though developers think that static analysis tool should be used but the number of false positives, the way the warning is presented among other issues which deters in the widespread adoption of these tools. We can’t stress enough on the importance of keeping the the number of false negatives as low as possible. Blackstone’s formulation succinctly put is as ``It is better that ten guilty persons escape than that one innocent suffers’’.
+
+Software engineering community has recognized  static analysis as a potential tool which could reduce the number of defects in a software system. This is an active area of research and we present two such works which shows how researchers are circumventing the problems by by building better tools. 
+
+Static analysis is performed whenever a new version of a software is released. Most of the time programmers are only interested in knowing which are the new issues which was introduced in the code base after the previous version was released. Which means programmers are only looking for warning deltas between the versions. This would expose new issues and the issue which have not been resolved since the previous version. As mentioned earlier time required to run the Static analysis tools on a fairly large code base and then post processing the results to determine issues can be very time consuming and tedious. Intuitively a programmer would want a static analysis tool which could proactively identify issues and report it to programmers.  
+
+Radhika et al.\cite{venkatasubramanyam2014automated} proposed a similar tool and build a prototype, which would help the programmers to find new bugs proactively with the scope only being the new set of code and should avoid the overhead of running multiple tools on the entire code base.  The proposed tool identifies issues by performing analysis of code across version at the time of commit of each change in the new version. Authors have also implemented a learning system, which uses the expert knowledge to improve accuracy and spread of the system. Given the length of the report generated by the current state of the art static analyzer, developers need to manually go through the output and find out the issues which needs attention and the others which are warning. Using this intuition, authors developed expert system, which can identify the patterns and context in which the issues occur. The system can use this expert knowledge to improve its prediction accuracy. In addition of accurately identifying issues, the system returns a ranked list of issues based on several factors such as confidence level, criticality etc. Authors evaluated the system by running it on three projects from the Siemens CT DC AA Healthcare sector. It was observed that there is a reduction of about 15\% of false positives and detects ``considerable’’ number of false negatives (since the system has been learning from the expert). The results also showed that system reduced the time to analyze the results went down by 24\%. The tool reduces the time spent running static analysis tools on the code base and encourages developers to use it. 
+
+Though this is a very novel way to solve the problem there are few limitations which we think should be taken care of. The authors have mentioned in the paper that the system would work only if there are atleast 3 version of the software under development. Though this doesn’t seem to be a big problem, it would be very useful if the system could learn from other projects of the same domain. This would make sure that the system can be used even in initial stages of the project. This system also introduces bias (similar to all expert systems) to avoid this we would recommend to include  some form of triangulation, which can remove most of the bias.
+
+Rahman et al. \cite{rahman2014comparing} in the paper compares two different techniques: statistical defect prediction and static big-finding, and try to find synergies between the two approaches. Static bug finding(SBF) is very similar to static analysis. Static bug finding ranges from a simple pattern checking to a detailed static analysis. FindBugs[ref], a static bug finding tool, has both pattern matching,which scales well, as well as static analysis build into it. Defect Prediction(DP) on the other hand uses historical data to develop model, which simulates the behaviour of the software, to predict where the defect can occur. 
+
+Though these approaches were developed in complete isolation, they try to solve the same problem. But, it is very difficult to compare the performances of these approaches. DP tools are easy to implement, agnostic to language, platform etc. The easy availability of metric required for the tools have made DP tools to be more valuable than the other available approaches. Coarse granularity(file) is the Achilles heal of this technique. SBF on the other hand is language- and platform specific, requires a separate build process but has a finer granularity.
+
+Authors introduce a new metric to compare these two approaches: comparability bugginess identification. This metric has two parts to it, zonation and measurement. Zonation refers to the granularity at which the tool reports errors whereas measurement deals with how spread out the error is. Based on this metric author reports results from a comparative study of two SBF tools(PMD and FindBugs) and DP based on a logistic model on five open source models and tries to answer if SBF tools compare with DF prediction and if there exists any synergy between them.
+
+The authors find that SDF tools do better than PMD in most of the cases which DP doesn’t fare well again Findbugs. Authors find that SBF warnings based on DP improves upon the native SBF priority while vice-versa is not true. [TODO: Talk about threats to validity]
+
+\subsection{Bug Localization}
+
+Testing is the fundamental part of the software development project. A lot of effort is spent on testing a program and bug removal(introduction) happens continuously throughout the development process. During program debugging, fault localization is required to figure out which part of the program is buggy. Static Analysis, Machine learning based methods, model based method, data mining based method are just a few to name. Fault localization can be viewed more as an art rather than a automated mechanical process. Techniques like static analysis helps us to narrow down the scope of the search domain to a particular method or a file. Certain methods \cite{guo2006accurately}\cite{zeller2002isolating} only selects a single failed test case and a single successful test case to locate bug. These methods fail to leverage other information to make a more informed choice. Alternate methods \cite{liblit2005scalable}\cite{liu2006statistical} uses combination of data from multiple failed and successful test to locate a bug.  A general rule of thumb for the fault localization techniques is to provide a high ``suspiciousness’’ to the code that contains bugs low ``suspiciousness’’ to part of the code which contains less bugs. This would help to generate a ranked list of bugs, which can then be used by developers to debug effectively and reduce time required for debugging. There is a rich collection of literature that explores various ways to facilitate fault location, but they are far from perfect. As more and more sophisticated techniques are being developed we need to note that the software systems are being increasingly complex which means that the challenges posed are also growing. We would look at two methods which increases our understanding about fault localization.
+
+Zhang et al. points out that most coverage based approaches has two common limitation. Firstly they work with an underlying assumption that the buggy statements are sequential and separate. These bugs ignore the inter-statement relation in a program ie. a error in one statement  effects the following statements. Second, these method do not exploit multiple source of information to narrow down the scope of the fault ie. as mentioned before only single failed and pass test case is considered for fault localization. The authors hypothesize joint inference to exploit global information as well as historical information can open up new avenues for the research of bug localization.
+
+Authors propose a new bug localization technique based on Markov logic(MLN). MLN when applied to a bug localization problem permits to combine different information source into a comprehensive solution. Authors define MLN  has a first-order knowledge base with a weight attached to each formula. Which means rather than having hard constraint like a first-order knowledge base, MLN softens these constraints, so that if the world violates any of the constraints then it becomes less probable rather than impossible. Authors use three program features to predict a bug’s location namely statement coverage, program structure and prior bug knowledge. With MLN, one can encode the program features into a joint inference system and conduct inference. The model contains first order formula with predicates and negations. After the program features have been encoded it is important to train the MLN. Authors use the Alchemy toolkit for this purpose. 
+
+Authors build a prototype(MLNDebugger) which takes a set of passed and failed tests as input and outputs a list of suspicious statements. This prototype was evaluated using four subject programs from the Siemens suite and was tested against Tarantula which is a state of the art statement based approaches. Their experimental results show that MLNDebugger consistently outperform Tarantula. Authors also report that their tool is fairly portable and doesn’t require enormous amount of computing resources.
+
+Though the results look promising there is one aspect which we think is a red flag. It is mentioned in the paper that the current inference program assumes that there is only one bug in the tested program and argues that this is a common practice in modern software development.  We don’t think this is true since a lot of developers work with legacy systems and assuming that a developers starts out with a bug free system is a big assumption. There needs to be more work to get this working.
+
+With all the approaches we can see that it is very difficult to compare these techniques. This is because the techniques are tested on different  datasets and is hard to compare their effectiveness. Since, the datasets are not made publicly available, it is often hard to replicate their results. Then to top it all some of the techniques have been used in a small number of subsets. To circumvent this problem Wang et al.\cite{wang2014boat} proposes a platform,BOAT that can be used to compare various techniques and reduce the threat of external validity.
+
+The platform build by the authors consists of three components: data collection component, local debugging component and remote execution component. The data collection component processes the project and collect all the data related to the project (details of the bug from the bug tracking system, delta between files before and after the fix). The local debugging component allows the users to interact with BOAT in the local environment and configure the set up. After the system is configured, jobs are specified and run by the remote execution component. An email is sent out by the system to inform the user about the progress/failure of the system.
+
+BOAT as a web based platform would enable researchers to compare and replicate various approaches over a large dataset of bug report. Authors have also done considerable amount of work to collect considerable number of bug reports from various projects. Though authors have claimed that they have made their tool publicly available, the link is not active. 
+
+\subsection{Code Completion}
+Code completion is a feature that enables the programmer to find the suitable code that needs to be used  based on some static 
+analysis. Auto complete is one such feature found in Eclipse IDE wherein the API that need to be used are provided as recommendations.
+This is very easy to use and reduces the load on the developers as we do not need to remember the names of various method calls. This is also helpful if we are importing an unknown API and is not aware of the different methods in the same.
+
+It is seen that many of the tools rely on static techniques for finding the code fragments. We are surveying 2 papers on code completion. The first one is  CodeHint: Dynamic and Interactive Synthesis of Code Snippets\cite{galenson2014codehint} and the second one is Cookbook: In Situ Code Completion using Edit Recipes Learned from Examples\cite{jacobellis2014cookbook}. These 2 techniques use novel ideas which can be integrated in the IDE that we use today and the results are amazing. We will now look into these 2 techniques in more detail.
+
+
+
+\cite{galenson2014codehint} suggests that many of the code completion tools that are used today rely heavily on the static techniques for finding code fragments. The CodeHint uses a dynamic(giving accurate results and allowing programmers to reason about concrete executions), easy-to-use and interactive method(allowing users to refine the candidate code snippets). It is seen that the search and autocomplete have limitations when using a new or unknown API. We need to have the static information about the return calls to use them and usually generates tiny code fragments. The CodeHint approach generates a code fragment at a programmer chosen location at run time while executing a specific concrete input. The main advantages of CodeHint above others include running in dynamic context unlike the static which enables the filtering of the desired results. It supports a wide variety of specifications and also interactive letting user give inputs.
+
+In summary the main contributions of CodeHint are:
+\begin{enumerate}
+\item A new dynamic method for synthesizing code that is easy to use as well as interactive
+\item An efficient algorithm that exploits the dynamic context to generate candidate statements that can include advanced features of the host language such as I/O, reflection, and native calls.
+\item An implementation as a Eclipse IDE plugin that synthesizes the JAVA code as well as Android programs
+\item Evaluation based on 2 user studies
+\end{enumerate}
+
+
+We will now look briefly into the working of the CodeHint. Imagine a user who writes the code given in Fig1 and wants to write the code at line 6 to find the menu bar for the window that contains the graphical tree and store it in the variable o. We know that the Menubar is represented by a JMenuBar object but there is no information as to how this object is obtained. This is where the CodeHint comes useful. We will now shed some light on how a programmer can use the same. the user can set a breakpoint after line 5 (e.g., near the comment on line 6) and run the program to that breakpoint, which is the current context. He can also provide the specification o' instanceof JMenuBar to CodeHint called as the pdspec. Given this query, CodeHint will begin a search for expressions that it can assign to o to try to satisfy the pdspec. This iterative search will start with local variables and generate larger expressions with operations such as addition and method calls. CodeHint will evaluate these expressions in the current context, undoing side effects as they occur, to enable it to get precise results that satisfy the user’s pdspec. A probabilistic model is also used to make sure that upto 5 best results are displayed to the user. Once the results are obtained the user can choose one of them that best satisfies his requirement. At this point the user can add few more testcases and eliminate some of the results or choose one of them.
+
+
+It can also be used to detect the clicks on a graphical tree of elements. In Java objects have a toString method, which can be used to find the object which initiated the click event by checking if dspec o .toString().contains("Alice"), who initiated this. We can now check for different element "Bob" by clicking on it. Also when he does a NULL click, we can evaluate the candidate expressions to point to the one that evaluates pdSpec o = NULL , it eliminates all but one candidate and find the correct code: 
+o = ((JTree)tree).getPathForLocation(x, y);
+
+It can also be used in the skelton which CodeHint will use to guide its search. Specifically, we can enter the skeleton o.getPathComponent(??) where the ??represents the missing portion of the code.
+More information about the pdspec and the sythesis algorithm used is seen in \cite{galenson2014codehint}.
+
+
+2 user studies and an empirical evaluation were conducted to evaluate the usability of CodeHint. 
+The empirical evaluation clearly showed that CodeHint is sufficiently scalable.
+
+The first study focused on constrained single line code edits and the second focused on larger open-ended tasks and used an improved version of CodeHint.
+The evaluation was done based on the following measures:
+\begin{enumerate}
+\item Task completion time: Time taken to either complete or abandon a task.
+\item Task completion rate: Percentage of tasks users successfully completed.
+\item Code quality: Number of bugs in participants’ task code.
+\item Tool choice: Fraction of tasks in the choice condition for which participants opted to use CodeHint.
+\end{enumerate}
+
+The studies clearly showed that CodeHint significantly improves programmer productivity.
+
+
+
+\cite{jacobellis2014cookbook} introduces an another code completion strategy that uses the edit recipes learned from examples for code completion.It clearly has significance compared to other methods that leverages on the pre-defined templates or match a set of user-defined APIs to complete the
+rest of changes. The other techniques that are currently present provide simple quick fix for API  method calls. Many of the older code completion strategies rank other methods higher based on the patterss found in the version history or code base\cite{bruch2009learning}. Some of them make use of the edit examples but needs the developers to manually supply the input API usage patterns\cite{nguyen2012graph} whereas some use the editing pattern of the user\cite{foster2012witchdoctor} but limited to the predefined refactoring operations by the IDE. 
+ 
+ The proposed code completion, scheme is called CookBook where developers can define custom edit recipes—a reusable template of complex edit operations—by specifying change examples. This helps the user to define new recipes and store them in an XML file for easy sharing of the library.Cookbook matches a developer’s edit stream to the individual recipes’ context and edit operations
+and ranks suitable recipes in the background.
+
+When a user provides one or more method-level change examples by selecting their old and new versions,
+Cookbook generates an abstract edit recipe that shows the most specific generalization of changes demonstrated by the
+change examples. This edit recipe then can be applied to different target contexts where control and data flow contexts
+match but use different type, method, and variable names. Cookbook performs realtime matching of the incoming edit stream against the library of edit recipes and ranks them with a confidence score. Once the edit recipe is chosen then Cookbook concretizes the template edits to current context and apply rest of the changes.
+
+Once users have a collection of recipes in Cookbook, their edit operations are matched with the recipes frequently so that any potentially applicable recipes are found as early as possible and listed for developers to select and automatically complete the rest of editing. Cookbook only requires the developers to provide one or more examples as input fdefine the new edit recipe. This can either be provided by the developers or taken from the code base.
+
+The above figure shows the 2 recipes that is being used one being the Comment Mapper Recipe(Fig) and the other one the Event handler reciper(Fig). These are both saved to the shared recipe library. The (Fig) shows the code change that the programmer is making and maps this to the edit recipe. The change made is mapped to Comment Mapper Recipe and the auto complete is done based on that.
+
+The main steps that are involved in the CookBook strategy are:
+\begin{enumerate}
+\item Recipe creation
+\item Recipe Matching with Edit Stream
+\item Recipe Ranking
+\item Recipe Application
+\end{enumerate}
+
+
+Cookbook was evaluated using 68 systematic changed methods drawn from the version history of Eclipse SWT.
+Results show that overhead of recipe matching in real time is imperceptible, and Cookbook is able to narrow down to a single most suitable recipe within 8.2 keystrokes on average. Cookbook is highly accurate, producing results 82\% similar to the expected edits in the evaluation data set.  Cookbook is able to narrow down to the most suitable recipe in 75\% of the cases. It takes 120 milliseconds to find the correct suitable recipe on average, and the edits produced by the selected recipe are on average 82\% similar to developers’ hand edit.
+
+
+\subsection{Software Repair}
+Debugging is a very important task for maintenance of the products, so we need to give more emphasize towards the program repair task. Although there are many tools available now they are having many limitations. Some of the limitations include the existence of the specification for the program being debugged and the repair space being very large existing techniques see a bigger search space.
+
+MintHint\cite{kaleeswaran2013minthint} is a novel technique for the program repair which is a departure from the current techniques that is being used today. It is different from the approach used by the common repair tools. Most of the repair tools use the traditional fault localization information alone. MintHint does not try to find a complete repair unlike the other tools. It aims to to generate repair hints that suggest how to rectify a faulty statement and help developers find a complete, actual repair\cite{kaleeswaran2013minthint}. 
+
+
+MintHint operates in 4 steps as shown in the high level diagram above[Fig]. The first step identifies the potential faulty statements using a fault localozation strategy. Thus, a list of fault statements are obtained. The fault locatization strategy used here is Ochiai approach\cite{janssen2009zoltar}. Then it runs the hint generation algorithm in each of the fault statements obtained.
+
+Next step involved the derivation of state transformers. Since there are no inherent specification present, this is obtained using the test suite. Basically, the specification is a function defined for all program states that reach the faulty statement in the given test suite and produces right output for each of them.
+
+Ranking of expressions is done in the next step during which the repair space is searched for expression whose value over the input state of the state transformer are statistically correlated to the output states. The partial list of expressions are ranked then.
+Synthesis of repair hints is prepared after analysing the list using the pattern matching . The hint is either simple or compound one.
+After the hints are generated it is prioritized and given to the developers.
+
+MintHint overcomes the limitations of the other approaches by:
+\begin{enumerate}
+\item it does not rely on a formal specification; it instead derives an operational specification (i.e., a state transformer) from the test cases available.
+\item approaches that aim at deriving complete repair typically use equality with the state transformer (or an analogous entity) as a criterion for selecting a candidate repair.The statistical correlation used in MintHint is a more relaxed and robust notion than
+equality and can thus be more effective in identifying which expressions are likely to be part of the repaired code; this allows MintHint to synthesize more general repairs and to be effective in the presence of incomplete data or even imperfect data (i.e., state transformer mappings that do not arise in execution of the fault-free program).
+
+\item Since MintHint looks for building blocks of repair (rather than the complete repair itself) and then combines them algorithmi-
+cally to generate compound hints, it can generate useful, actionable hints even when exploring an incomplete repair space.
+\end{enumerate}
+
+
+
+
+Evaluation consists of two main parts: 
+\begin{enumerate}
+\item a user study that assesses whether MintHint can improve developers’ productivity, and
+\item an empirical study which applies MintHint to several faulty versions of three Unix utilities to further assess the effectiveness of the approach.
+\end{enumerate}
+ The study involved 10 users and consisted of a control phase and an experimental phase. In both phases,  each user was provided with a single repair task along with fault localization information and a test suite. In the experimental phase, in addition,  the users were given repair hints generated by MintHint.  Without therepair hints, only 6 of the 10 users completed
+their task within 2h. With repair hints, all 10 users could complete their task within the same time limit. Moreover, the tasks completed in both phases were completed over 5 times faster by the users who used MintHint’s repair hints.
+
+In addition, MintHint was evaluated on a total of 11 faulty versions of Unix utilities sed, flex, and grep . Symbolic execution timed
+out for one of them where For 7 of the remaining 10 faulty versions, MintHint generated hints that immediately led to a repair.
+
+When debugging, developers’ productivity improved manyfold with the use of repair hints—instead of traditional fault localization information alone.
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation Results}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command, the
+% \label for the overall figure must come after \caption.
+% \hfil must be used as a separator to get equal spacing.
+% The subfigure.sty package works much the same way, except \subfigure is
+% used instead of \subfloat.
+%
+%\begin{figure*}[!t]
+%\centerline{\subfloat[Case I]\includegraphics[width=2.5in]{subfigcase1}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{subfigcase2}%
+%\label{fig_second_case}}}
+%\caption{Simulation results}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+
+
+% An example of a floating table. Note that, for IEEE style tables, the 
+% \caption command should come BEFORE the table. Table text will default to
+% \footnotesize as IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that IEEE does not put floats in the very first column - or typically
+% anywhere on the first page for that matter. Also, in-text middle ("here")
+% positioning is not used. Most IEEE journals/conferences use top floats
+% exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
+% footnotes above bottom floats. This can be corrected via the \fnbelowfloat
+% command of the stfloats package.
+
+
+
+\section{Conclusion}
+The conclusion goes here. this is more of the conclusion
+
+% conference papers do not normally have an appendix
+
+
+% use section* for acknowledgement
+\section*{Acknowledgment}
+
+
+We would like to thank Dr. Christopher Parnin for his support throught the course of this paper. Standing on the shoulders of gaints, we would also like to thank various authors of the referred papers for their hardwork. 
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% Better way for balancing the last page:
+
+\balance
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\bibliographystyle{abbrv}
+\bibliography{bare_conf_CS}
+
+
+
+
+% that's all folks
+\end{document}
+
+

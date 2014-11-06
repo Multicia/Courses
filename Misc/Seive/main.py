@@ -112,9 +112,12 @@ def getpoints(index):
   for x in dictionary[index]:tempL.append(x.dec)
   return tempL
     
-  
+def one(m,lst): 
+  def any(l,h):
+    return (0 + random.random()*(h-l))
+  return lst[int(any(0,len(lst) - 1)) ]  
 
-def wrapperInterpolate(m,xindex,yindex):
+def wrapperInterpolate(m,xindex,yindex,maxlimit):
   def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
     def lo(m)      : return 0.0
     def hi(m)      : return  1.0
@@ -126,9 +129,9 @@ def wrapperInterpolate(m,xindex,yindex):
       x,y=lx[i],ly[i]
       #print x
       #print y
-      rand = random.random()
+      rand = random.random
       if rand < cr:
-        probEx = fmin +(fmax-fmin)*random.random()
+        probEx = fmin +(fmax-fmin)*rand()
         new = trim(min(x,y)+probEx*abs(x-y))
       else:
         new = y
@@ -144,8 +147,9 @@ def wrapperInterpolate(m,xindex,yindex):
   listpoints=list(itertools.product(xpoints,ypoints))
   #print "Length of Listpoints: ",len(listpoints)
   count=0
-  for x in listpoints:
-    if(count>min(len(xpoints),intermaxlimit)):break
+  while True:
+    if(count>min(len(xpoints),maxlimit)):break
+    x=one(m,listpoints)
     decision.append(interpolate(x[0],x[1]))
     count+=1
   return decision
@@ -244,15 +248,20 @@ def generateNew(m,xblock,yblock):
       return False
 
   def interpolateCheck(xblock,yblock):
+    returnList=[]
     if(thresholdCheck(gonw(convert(xblock,yblock))) and thresholdCheck(gose(convert(xblock,yblock))) == True):
-      return gonw(convert(xblock,yblock)),gose(convert(xblock,yblock))
-    elif(thresholdCheck(gow(convert(xblock,yblock))) and thresholdCheck(goe(convert(xblock,yblock))) == True):
-      return gow(convert(xblock,yblock)),goe(convert(xblock,yblock))
-    elif(thresholdCheck(gosw(convert(xblock,yblock))) and thresholdCheck(gone(convert(xblock,yblock))) == True):
-      return gosw(convert(xblock,yblock)),gone(convert(xblock,yblock))
-    elif(thresholdCheck(gon(convert(xblock,yblock))) and thresholdCheck(gos(convert(xblock,yblock))) == True):
-      return gon(convert(xblock,yblock)),gos(convert(xblock,yblock))
-    return None,None
+      returnList.append(gonw(convert(xblock,yblock)))
+      returnList.append(gose(convert(xblock,yblock)))
+    if(thresholdCheck(gow(convert(xblock,yblock))) and thresholdCheck(goe(convert(xblock,yblock))) == True):
+     returnList.append(gow(convert(xblock,yblock)))
+     returnList.append(goe(convert(xblock,yblock)))
+    if(thresholdCheck(gosw(convert(xblock,yblock))) and thresholdCheck(gone(convert(xblock,yblock))) == True):
+     returnList.append(gosw(convert(xblock,yblock)))
+     returnList.append(gone(convert(xblock,yblock)))
+    if(thresholdCheck(gon(convert(xblock,yblock))) and thresholdCheck(gos(convert(xblock,yblock))) == True):
+     returnList.append(gon(convert(xblock,yblock)))
+     returnList.append(gos(convert(xblock,yblock)))
+    return returnList
 
 
   def extrapolateCheck(xblock,yblock):
@@ -330,10 +339,14 @@ def generateNew(m,xblock,yblock):
   #print "generateNew|thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
   if(thresholdCheck(convert(xblock,yblock))==False):
     #print "generateNew| Cell is relatively sparse: Might need to generate new points"
-    xb,yb=interpolateCheck(xblock,yblock)
-    if(xb!=None and yb!=None):
+    listInter=interpolateCheck(xblock,yblock)
+    
+    if(len(listInter)!=0):
+      decisions=[]
+      assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
-      decisions = wrapperInterpolate(m,xb,yb)
+      for i in xrange(int(len(listInter)/2)):
+        decisions.append(wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(intermaxlimit/len(listInter))+1))
       if convert(xblock,yblock) in dictionary: pass
       else:
         #print convert(xblock,yblock)

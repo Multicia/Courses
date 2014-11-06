@@ -1,0 +1,120 @@
+\begin{thebibliography}{10}
+
+\bibitem{ayewah2008using}
+N.~Ayewah, D.~Hovemeyer, J.~D. Morgenthaler, J.~Penix, and W.~Pugh.
+\newblock Using static analysis to find bugs.
+\newblock {\em Software, IEEE}, 25(5):22--29, 2008.
+
+\bibitem{bruch2009learning}
+M.~Bruch, M.~Monperrus, and M.~Mezini.
+\newblock Learning from examples to improve code completion systems.
+\newblock In {\em Proceedings of the the 7th joint meeting of the European
+  software engineering conference and the ACM SIGSOFT symposium on The
+  foundations of software engineering}, pages 213--222. ACM, 2009.
+
+\bibitem{foster2012witchdoctor}
+S.~R. Foster, W.~G. Griswold, and S.~Lerner.
+\newblock Witchdoctor: Ide support for real-time auto-completion of
+  refactorings.
+\newblock In {\em Proceedings of the 2012 International Conference on Software
+  Engineering}, pages 222--232. IEEE Press, 2012.
+
+\bibitem{galenson2014codehint}
+J.~Galenson, P.~Reames, R.~Bodik, B.~Hartmann, and K.~Sen.
+\newblock Codehint: dynamic and interactive synthesis of code snippets.
+\newblock In {\em ICSE}, pages 653--663, 2014.
+
+\bibitem{guo2006accurately}
+L.~Guo, A.~Roychoudhury, and T.~Wang.
+\newblock Accurately choosing execution runs for software fault localization.
+\newblock In {\em Compiler Construction}, pages 80--95. Springer, 2006.
+
+\bibitem{jacobellis2014cookbook}
+J.~Jacobellis, N.~Meng, and M.~Kim.
+\newblock Cookbook: in situ code completion using edit recipes learned from
+  examples.
+\newblock In {\em Companion Proceedings of the 36th International Conference on
+  Software Engineering}, pages 584--587. ACM, 2014.
+
+\bibitem{janssen2009zoltar}
+T.~Janssen, R.~Abreu, and A.~J. van Gemund.
+\newblock Zoltar: A toolset for automatic fault localization.
+\newblock In {\em Proceedings of the 2009 IEEE/ACM International Conference on
+  Automated Software Engineering}, pages 662--664. IEEE Computer Society, 2009.
+
+\bibitem{johnson2013don}
+B.~Johnson, Y.~Song, E.~Murphy-Hill, and R.~Bowdidge.
+\newblock Why don't software developers use static analysis tools to find bugs?
+\newblock In {\em Software Engineering (ICSE), 2013 35th International
+  Conference on}, pages 672--681. IEEE, 2013.
+
+\bibitem{kaleeswaran2013minthint}
+S.~Kaleeswaran, V.~Tulsian, A.~Kanade, and A.~Orso.
+\newblock Minthint: automated synthesis of repair hints.
+\newblock {\em arXiv preprint arXiv:1306.1286}, 2013.
+
+\bibitem{liblit2005scalable}
+B.~Liblit, M.~Naik, A.~X. Zheng, A.~Aiken, and M.~I. Jordan.
+\newblock Scalable statistical bug isolation.
+\newblock In {\em ACM SIGPLAN Notices}, volume~40, pages 15--26. ACM, 2005.
+
+\bibitem{liu2006statistical}
+C.~Liu, L.~Fei, X.~Yan, J.~Han, and S.~P. Midkiff.
+\newblock Statistical debugging: A hypothesis testing-based approach.
+\newblock {\em Software Engineering, IEEE Transactions on}, 32(10):831--848,
+  2006.
+
+\bibitem{mantyla2009types}
+M.~V. Mantyla and C.~Lassenius.
+\newblock What types of defects are really discovered in code reviews?
+\newblock {\em Software Engineering, IEEE Transactions on}, 35(3):430--448,
+  2009.
+
+\bibitem{nguyen2012graph}
+A.~T. Nguyen, T.~T. Nguyen, H.~A. Nguyen, A.~Tamrawi, H.~V. Nguyen,
+  J.~Al-Kofahi, and T.~N. Nguyen.
+\newblock Graph-based pattern-oriented, context-sensitive source code
+  completion.
+\newblock In {\em Proceedings of the 2012 International Conference on Software
+  Engineering}, pages 69--79. IEEE Press, 2012.
+
+\bibitem{rahman2014comparing}
+F.~Rahman, S.~Khatri, E.~T. Barr, and P.~T. Devanbu.
+\newblock Comparing static bug finders and statistical prediction.
+\newblock In {\em ICSE}, pages 424--434, 2014.
+
+\bibitem{venkatasubramanyam2014automated}
+R.~D. Venkatasubramanyam and S.~Gupta.
+\newblock An automated approach to detect violations with high confidence in
+  incremental code using a learning system.
+\newblock In {\em Companion Proceedings of the 36th International Conference on
+  Software Engineering}, pages 472--475. ACM, 2014.
+
+\bibitem{wagner2005comparing}
+S.~Wagner, J.~J{\"u}rjens, C.~Koller, and P.~Trischberger.
+\newblock Comparing bug finding tools with reviews and tests.
+\newblock In {\em Testing of Communicating Systems}, pages 40--55. Springer,
+  2005.
+
+\bibitem{wang2014boat}
+X.~Wang, D.~Lo, X.~Xia, X.~Wang, P.~S. Kochhar, Y.~Tian, X.~Yang, S.~Li,
+  J.~Sun, and B.~Zhou.
+\newblock Boat: an experimental platform for researchers to comparatively and
+  reproducibly evaluate bug localization techniques.
+\newblock In {\em Companion Proceedings of the 36th International Conference on
+  Software Engineering}, pages 572--575. ACM, 2014.
+
+\bibitem{wedyan2009effectiveness}
+F.~Wedyan, D.~Alrmuny, and J.~M. Bieman.
+\newblock The effectiveness of automated static analysis tools for fault
+  detection and refactoring prediction.
+\newblock In {\em Software Testing Verification and Validation, 2009. ICST'09.
+  International Conference on}, pages 141--150. IEEE, 2009.
+
+\bibitem{zeller2002isolating}
+A.~Zeller.
+\newblock Isolating cause-effect chains from computer programs.
+\newblock In {\em Proceedings of the 10th ACM SIGSOFT symposium on Foundations
+  of software engineering}, pages 1--10. ACM, 2002.
+
+\end{thebibliography}
