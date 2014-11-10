@@ -1,26 +1,3 @@
-'''
-import ast,sys
-class v(ast.NodeVisitor):
-   def generic_visit(self, node):
-     #print type(node).__name__
-     ast.NodeVisitor.generic_visit(self, node)
-
-class w(v):
-  print
-  #def visit_Name(self,node):print "Name: ",node.id
-  def visit_FunctionDef(self,node):
-    print "Function: ",node.name#args.args#._fields
-    yield node
-  def visit_Call(self,node):
-    try:
-      print "Called out: ------------------", node.func.id#__dict__#attr
-    except: 
-     print 
-     pass
-    #for property, value in vars(node.func.ctx).iteritems():
-    #  print property, ": ", value
-'''
-
 import ast
 
 class RecursiveVisitor(ast.NodeVisitor):
