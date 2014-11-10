@@ -3,6 +3,7 @@ import sys
 import random
 import math 
 import numpy as np
+from where_mod import *
 from models import *
 from options import *
 from utilities import *
@@ -558,3 +559,316 @@ class PSO(SearchersBasic):
             gb = p[n]
       eb = model.evaluate(gb)
     return 0,eb,model
+
+
+class Seive(SearchersBasic): #minimizing
+  model = None
+  minR=0
+  maxR=0
+  random.seed(1)
+  def __init__(self,modelName,displayS):
+    self.model=modelName
+    self.displayStyle=displayS
+  
+
+  def searcher(self,m,dictionary):
+    def randomC(): 
+      return int(1+random.random()*7)
+    def randomcell(): 
+      return [randomC() for _ in xrange(2)]
+
+    tries=0
+    bmean,biqr=1e6,1e6
+    bsoln=[-1,-1]
+    while(tries<myoptions['Seive']['tries']):
+      print "------------------Tries: %d-------------------"%tries
+      soln = randomcell()
+      tries+=1
+      repeat=0
+      while(repeat<myoptions['Seive']['repeat']):
+        print "Solution being tried: %d %d "%(soln[0],soln[1])
+        result = generateNew(m,soln[0],soln[1],dictionary)
+        if(result == False): 
+          print "In middle of the deseart"
+          break
+        else:
+          #print "Searcher| Solution being tried: %d %d "%(soln[0],soln[1])
+          smean,siqr = energy(m,soln[0],soln[1],dictionary)
+          neighbours = listofneighbours(m,soln[0],soln[1])
+          #print neighbours
+          nmean,niqr=1e6,1e6
+          for neighbour in neighbours:
+            #print "Searcher| neighbour: ",neighbour
+            result = generateNew(m,int(neighbour/100),neighbour%10,dictionary)
+            if(result == True):
+              tmean,tiqr = energy(m,int(neighbour/100),neighbour%10,dictionary)
+              if(tmean<nmean or (tmean==nmean and tiqr < niqr)):
+                #print "Searcher| tmean: %f mean: %f"%(tmean,mean)
+                #print "Searcher| tiqr: %f iqr: %f"%(tiqr,iqr)
+                nsoln = [int(neighbour/100),neighbour%10]
+                #print "Searcher|btsoln: ",btsoln
+                nmean=tmean
+                niqr=tiqr
+            else:
+              #print "Searcher|NAAAAAAAAAAAAH"
+              pass
+          if(nmean<smean or (nmean == smean and nmean<smean)):
+            soln=nsoln
+            repeat+=1
+          else:
+            break
+ 
+          if(min(nmean,smean)<bmean or \
+            (min(nmean,smean) == bmean and min(niqr,siqr)<biqr)):
+            bmean=min(nmean,smean)
+            biqr=min(niqr,siqr)
+            if(nmean<smean or (nmean == smean and niqr<siqr)):
+              bsoln=nsoln
+            else: bsoln=soln
+  
+#I need to look at slope now. The number of evaluation is not reducing a lot
+#need to put a visited sign somewhere to stop evaluations 
+
+
+    print ">>>>>>>>>>>>>>WOW Mean:%f IQR: %f"%(bmean,biqr)
+    print ">>>>>>>>>>>>>>WOW Soultion: ",bsoln
+
+
+
+  def generateNew(m,xblock,yblock,dictionary):
+
+
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    def opposite(a,b):
+      ax,ay,bx,by=a/100,a%100,b/100,b%100
+      if(abs(ax-bx)==2 or abs(ay-by)==2):return True
+      else: return False
+
+    def thresholdCheck(index):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>threshold):return True
+        else:return False
+      except:
+        #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>except: ",index
+        return False
+
+    def interpolateCheck(xblock,yblock):
+      returnList=[]
+      if(thresholdCheck(gonw(convert(xblock,yblock))) and thresholdCheck(gose(convert(xblock,yblock))) == True):
+        returnList.append(gonw(convert(xblock,yblock)))
+        returnList.append(gose(convert(xblock,yblock)))
+      if(thresholdCheck(gow(convert(xblock,yblock))) and thresholdCheck(goe(convert(xblock,yblock))) == True):
+       returnList.append(gow(convert(xblock,yblock)))
+       returnList.append(goe(convert(xblock,yblock)))
+      if(thresholdCheck(gosw(convert(xblock,yblock))) and thresholdCheck(gone(convert(xblock,yblock))) == True):
+       returnList.append(gosw(convert(xblock,yblock)))
+       returnList.append(gone(convert(xblock,yblock)))
+      if(thresholdCheck(gon(convert(xblock,yblock))) and thresholdCheck(gos(convert(xblock,yblock))) == True):
+       returnList.append(gon(convert(xblock,yblock)))
+       returnList.append(gos(convert(xblock,yblock)))
+      return returnList
+
+
+    def extrapolateCheck(xblock,yblock):
+      #TODO: If there are more than one consequetive blocks with threshold number of points how do we handle it?
+      #TODO: Need to make this logic more succint
+      returnList=[]
+      #go North West
+      temp = gonw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gonw(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gonw(temp))
+
+      #go North 
+      temp = gon(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gon(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gon(temp))
+
+      #go North East
+      temp = gone(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gone(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gone(temp))
+  
+      #go East
+      temp = goe(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(goe(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(goe(temp))
+
+      #go South East
+      temp = gose(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gose(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gose(temp))
+
+      #go South
+      temp = gos(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gos(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gos(temp))
+
+      #go South West
+      temp = gosw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gosw(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gosw(temp))
+ 
+      #go West
+      temp = gow(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(gow(temp))
+        if(result1 and result2 == True):
+          returnList.append(temp)
+          returnList.append(gow(temp))
+      return returnList
+  
+    newpoints=[]
+    #print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
+    #print "generateNew| convert: ",convert(xblock,yblock)
+    #print "generateNew|thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+    if(thresholdCheck(convert(xblock,yblock))==False):
+      #print "generateNew| Cell is relatively sparse: Might need to generate new points"
+      listInter=interpolateCheck(xblock,yblock)
+      #print "generateNew|listInter: ",listInter
+      if(len(listInter)!=0):
+        decisions=[]
+        assert(len(listInter)%2==0),"listInter%2 not 0"
+      #print thresholdCheck(xb),thresholdCheck(yb)
+        for i in xrange(int(len(listInter)/2)):
+          decisions.extend(wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(intermaxlimit/len(listInter))+1,dictionary))
+          #print "generateNew| Decisions Length: ",len(decisions)
+        #print "generateNew| Decisions: ",decisions
+        if convert(xblock,yblock) in dictionary: pass
+        else:
+          #print convert(xblock,yblock)
+          assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          dictionary[convert(xblock,yblock)]=[]
+        old = _checkDictionary(dictionary)
+        for decision in decisions:dictionary[convert(xblock,yblock)].append(generateSlot(m,decision,xblock,yblock))
+        #print "generateNew| Interpolation works!"
+        new = _checkDictionary(dictionary)
+        #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
+        return True
+      else:
+        #print "generateNew| Interpolation failed!"
+        listExter = extrapolateCheck(xblock,yblock)
+        if(len(listExter)==0):
+          print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          return False
+        else:
+          assert(len(listExter)%2==0),"listExter%2 not 0"
+          for i in xrange(int(len(listExter)/2)):
+            decisions.extend(wrapperextrapolate(m,listExter[2*i],listExter[2*i]+1,int(extermaxlimit)/len(listExter)))
+          if convert(xblock,yblock) in dictionary: pass
+          else: 
+            assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            dictionary[convert(xblock,yblock)]=[]
+          old = _checkDictionary()
+          for decision in decisions: dictionary[convert(xblock,yblock)].append(generateSlot(m,decision,xblock,yblock))
+          new = _checkDictionary()
+          #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+          #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
+          return True
+    else:
+      listExter = extrapolateCheck(xblock,yblock)
+      if(len(listExter) == 0):
+        print "generateNew| Lot of points but middle of a desert"
+        return False #A lot of points but right in the middle of a deseart
+      else:
+        return True
+    """
+    print interpolateCheck(xblock,yblock)
+    """
+
+
+
+
+  def evaluate(self):
+    def generate_dictionary():  
+      dictionary = {}
+      chess_board = whereMain(self.model) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    model=self.model
+    print "Model used: %s"%(model.info())
+    """
+    minR = model.minR
+    maxR = model.maxR
+    model.baseline(minR,maxR)
+    """
+    dictionary = generate_dictionary()
+    self.searcher(model,dictionary)
+    # Need to think about how to deal with models with lower dimension
+
+    # Someway to include early termination
+   
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

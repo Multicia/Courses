@@ -541,9 +541,7 @@ def main():
   dictionary ={}
   m='model'
   random.seed(32)
-  chessBoard = whereMain()
-  x= int(8*random.random())
-  y= int(8*random.random()) 
+  chessBoard = whereMain() 
   #print x,y
   for i in range(1,9):
       for j in range(1,9):

@@ -42,7 +42,7 @@ def multipleRun():
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
-     for searcher in [PSO,GA,DE,SA,MaxWalkSat]:
+     for searcher in [Seive]:#[PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []

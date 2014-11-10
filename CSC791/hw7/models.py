@@ -326,7 +326,7 @@ class Schaffer(ModelBasic):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
-    self.minVal=10000000
+    self.minVal=1e6
     self.maxVal=-1e6
     self.objf=objf
     self.past = [Log() for count in xrange(objf)]
