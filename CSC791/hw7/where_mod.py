@@ -121,6 +121,7 @@ following takes only _O(2N)_ distance calculations:
 
 """
 from numpy import *
+from options import *
 
 def fastmap(m,data,func):
   "Divide data into two using distance to two distant items."
@@ -305,7 +306,7 @@ def where1(m, data, slots, lvl, out,func,var):
       print slots.b4*lvl + str(len(data)) + suffix
   #print " >>>>>>>>>>>>>>>>>>>>>> %f %f"%(lvl,slots.depthMax)
   if tooDeep() or tooFew():
-    show(".")
+    #show(".")
     #print " >>>>>>>>>>>>>>>>>>> %f "%len(out)
     if(var == "x"):
       for x in data:
@@ -315,7 +316,7 @@ def where1(m, data, slots, lvl, out,func,var):
         x.yblock=len(out)+1
     out += [data]
   else:
-    show("")
+    #show("")
     wests,west, easts,east = fastmap(m,data,func) #wests: All the points to the left of the means, easts: All the points to the right of the means 
     goLeft, goRight = maybePrune(m,slots,lvl,west,east) #goLeft,goRight is always True
     if goLeft: 
@@ -461,9 +462,12 @@ def lo(m,x)      : return m.minR[x]
 def hi(m,x)      : return  m.maxR[x]
 #def w(m,o)       : return 
 def score(m, individual): #model
-  individual.score=m.evaluate(individual.dec) 
-  print "Score: ",individual.score
-  individual.changed = True
+  if individual.changed == False: 
+    return individual.scores
+  temp = m.evaluate(individual.dec) 
+  #print "Score| score: ",temp
+  return temp
+  
 
 
 """
@@ -493,19 +497,8 @@ def candidate(m):
 def scores(m,t):
   "Score an individual."
   if t.changed:
-    score(m,t)
-    '''
-    new, n = 0, 0
-    for o in xrange(m.objf):#objectives(m):
-      x   = t.obj[o]
-      n  += 1
-      tmp = norm(m,o,x)**2
-    if w(m,o) < 0: 
-      tmp = 1 - tmp
-    new += tmp #<--------?? 
-    t.scores = (new**0.5)*1.0 / (n**0.5)
-    '''
-    print t.scores #Remove: just to be sure 
+    t.scores = score(m,t)
+    #print t.scores #Remove: just to be sure 
     t.changed = False
   return t.scores
   
@@ -560,19 +553,19 @@ A standard call to WHERE, pruning disabled:
 def whereMain(model):
   
 
-  m, max, pop, kept = model,1000, [], Num()
+  m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
   for _ in range(max):
     one = candidate(m)  #Generate candidate
     #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
     #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
     pop += [one]         #Store all the candidates in pop
     
-  print "Length of pop: ",len(pop)
+  #print "Length of pop: ",len(pop)
   slots = where0(verbose = True,
                minSize = max**0.5,
                prune   = False) #removed wriggle
   points = where(m, pop, slots)
-  print "Length of points: ",len(points)
+  #print "Length of points: ",len(points)
   return points
 
 """

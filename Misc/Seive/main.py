@@ -85,6 +85,14 @@ def neighbourhood(xblock,yblock):
   return neigbour
 
 def stats(listl):
+  def median(lst,ordered=False):
+    if not ordered: lst= sorted(lst)
+    n = len(lst)
+    p = n//2
+    if n % 2: return lst[p]
+    q = p - 1
+    q = max(0,min(q,n))
+    return (lst[p] + lst[q])/2
   from scipy.stats import scoreatpercentile
   q1 = scoreatpercentile(listl,25)
   q3 = scoreatpercentile(listl,75)  

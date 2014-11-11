@@ -121,6 +121,7 @@ following takes only _O(2N)_ distance calculations:
 
 """
 from numpy import *
+from options import *
 
 def fastmap(m,data,func):
   "Divide data into two using distance to two distant items."
@@ -305,7 +306,7 @@ def where1(m, data, slots, lvl, out,func,var):
       print slots.b4*lvl + str(len(data)) + suffix
   #print " >>>>>>>>>>>>>>>>>>>>>> %f %f"%(lvl,slots.depthMax)
   if tooDeep() or tooFew():
-    show(".")
+    #show(".")
     #print " >>>>>>>>>>>>>>>>>>> %f "%len(out)
     if(var == "x"):
       for x in data:
@@ -315,7 +316,7 @@ def where1(m, data, slots, lvl, out,func,var):
         x.yblock=len(out)+1
     out += [data]
   else:
-    show("")
+    #show("")
     wests,west, easts,east = fastmap(m,data,func) #wests: All the points to the left of the means, easts: All the points to the right of the means 
     goLeft, goRight = maybePrune(m,slots,lvl,west,east) #goLeft,goRight is always True
     if goLeft: 
@@ -406,7 +407,9 @@ any  = random.choice
 
 # pretty-prints for list
 def gs(lst) : return [g(x) for x in lst]
-def g(x)    : return float('%g' % x) 
+def g(x)    : 
+  if(x == None): return float(-1)
+  return float('%g' % x) 
 """
 
 ### More interesting, low-level stuff
@@ -453,23 +456,19 @@ In practice, you would **start** here to build hooks from WHERE into your model
 (which is the **m** passed in to these functions).
 
 """
-def decisions(m) : return [0,1,2,3,4]
-def objectives(m): return [0,1,2,3]
-def lo(m,x)      : return 0.0
-def hi(m,x)      : return  1.0
-def w(m,o)       : return 1 # min,max is -1,1
+#def decisions(m) : return [0,1,2,3,4]
+#def objectives(m): return [0,1,2,3]
+def lo(m,x)      : return m.minR[x]
+def hi(m,x)      : return  m.maxR[x]
+#def w(m,o)       : return 
 def score(m, individual): #model
-  individual.score=m.evaluate(individual.dec) 
-  individual.changed = True
+  if individual.changed == False: 
+    return individual.scores
+  temp = m.evaluate(individual.dec) 
+  #print "Score| score: ",temp
+  return temp
+  
 
-  '''
-  d, o = individual.dec, individual.obj
-  o[0] = d[0] * d[1]
-  o[1] = d[2] ** d[3]
-  o[2] = 2.0*d[3]*d[4] / (d[3] + d[4])
-  o[3] =  d[2]/(1 + math.e**(-1*d[2]))
-  individual.changed = True
-  '''
 
 """
 
@@ -492,25 +491,14 @@ def candidate(m):
             yblock=-1,  #sam
             x=-1,
             y=-1,
-            obj = [None] * m.objf #len(objectives(m)), #[None]*4
-            dec = [some(m,d) #Array of random numbers of length 5
-                   for d in xrange(m.n)])
+            obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
+            dec = [some(m,d) for d in xrange(m.n)])
 
 def scores(m,t):
   "Score an individual."
   if t.changed:
-    score(m,t)
-    '''
-    new, n = 0, 0
-    for o in xrange(m.objf):#objectives(m):
-      x   = t.obj[o]
-      n  += 1
-      tmp = norm(m,o,x)**2
-    if w(m,o) < 0: 
-      tmp = 1 - tmp
-    new += tmp #<--------?? 
-    t.scores = (new**0.5)*1.0 / (n**0.5)
-    '''
+    t.scores = score(m,t)
+    #print t.scores #Remove: just to be sure 
     t.changed = False
   return t.scores
   
@@ -564,22 +552,22 @@ A standard call to WHERE, pruning disabled:
 
 def whereMain(model):
   
-  model.info()
-  """
-  m, max, pop, kept = model,1000, [], Num()
+
+  m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
   for _ in range(max):
     one = candidate(m)  #Generate candidate
     #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
     #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
     pop += [one]         #Store all the candidates in pop
+    
+  #print "Length of pop: ",len(pop)
   slots = where0(verbose = True,
                minSize = max**0.5,
-               prune   = False,
-               wriggle = 0.3*kept.s())
-  n=0
+               prune   = False) #removed wriggle
   points = where(m, pop, slots)
+  #print "Length of points: ",len(points)
   return points
-  """
+
 """
 
 Compares WHERE to GAC:
