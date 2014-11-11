@@ -717,10 +717,11 @@ class Seive(SearchersBasic): #minimizing
       return [randomC() for _ in xrange(2)]
 
     tries=0
-    bmean,biqr=1e6,1e6
+    bmean,biqr,lbmean,lbiqr=1e6,1e6,1e6,1e6
     bsoln=[-1,-1]
-    while(tries<int(myoptions['Seive']['tries'])):
-      #print "------------------Tries: %d-------------------"%tries
+    lives=int(myoptions['Seive']['lives'])
+    while(tries<int(myoptions['Seive']['tries']) and  lives >= 0):
+      #print "------------------Tries: %d-------------------"%lives
       #print tries<myoptions['Seive']['tries']
       soln = randomcell()
       tries+=1
@@ -728,7 +729,7 @@ class Seive(SearchersBasic): #minimizing
       #print "myoptions['Seive']['repeat']: ",myoptions['Seive']['repeat']
       #print "myoptions['Seive']['tries']: ",myoptions['Seive']['tries']
       #wait()
-      while(repeat<int(myoptions['Seive']['repeat'])):
+      while(repeat<int(myoptions['Seive']['repeat']) ):
         #print "Solution being tried: %d %d "%(soln[0],soln[1])
         result = self.generateNew(m,soln[0],soln[1],dictionary)
         if(result == False): 
@@ -771,7 +772,12 @@ class Seive(SearchersBasic): #minimizing
             if(nmean<smean or (nmean == smean and niqr<siqr)):
               bsoln=nsoln
             else: bsoln=soln
-  
+      if(bmean<lbmean or biqr <lbiqr): pass
+      else:
+        #print "Lost Life" 
+        lives-=1
+      lbmean=bmean
+      lbiqr=biqr
 #I need to look at slope now. The number of evaluation is not reducing a lot
 #need to put a visited sign somewhere to stop evaluations 
 
