@@ -109,6 +109,18 @@ def generate_dot_code(python_code):
 
     return '\n'.join(dot)
 
+
+def generate_call_sequence(input_file):
+  assert(input_file.count('.')==1),"cannot have more than one . in the file name"
+  assert(input_file.split(".")[1] == "py"),"not a python file"
+  dot_file = input_file.split(".")[0]+".dot"
+  print "The input file is: ",input_file
+  python_code = open(input_file).read()
+  dot_code = generate_dot_code(python_code)
+  with open(dot_file, "w") as text_file:
+    text_file.write(dot_code)
+  return dot_file
+
 if __name__ == '__main__':
     oparser = optparse.OptionParser()
 
