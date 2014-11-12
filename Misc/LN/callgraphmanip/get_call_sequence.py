@@ -42,6 +42,7 @@ class RecursiveVisitor(ast.NodeVisitor):
 
 class start_end(ast.NodeVisitor):
   listL=[]
+  def clear(self): self.listL = []
   def visit_FunctionDef(self,node):
     """ visit a Function node and visits it recursively"""
     temp = store_method()
@@ -49,23 +50,27 @@ class start_end(ast.NodeVisitor):
     temp.end = node.body[len(node.body)-1].lineno
     temp.name = node.name
     self.listL.append(temp)
+    pass
     
 
 def get_call_sequence(input_file,func_name): 
   x = RecursiveVisitor()
   y = start_end()
+  y.clear()
   f = open(input_file,"r")
   t = ast.parse(f.read())
   y.visit(t)
   for i in y.listL: 
     if i.name == func_name:
-      f = open("input1.py","r")
-      lines = f.readlines()
+      f1 = open("input1.py","r")
+      lines = f1.readlines()
       code = [lines[line] for line in xrange(i.start-1,i.end)]
       t = ast.parse(''.join(code))
+      x.clear() 
       x.visit(t)
       i.calls = x.listL[:]
-      x.clear()  
+      i.calls.insert(0,i.name)
+      i.calls.insert(len(i.calls),i.name)
       return i
   #print t.body[0].value
 
@@ -105,11 +110,14 @@ def append_calls_file(calls,source_file):
     return izip(a, b)
   returnList = []
   assert(source_file.split(".")[1] == "py"),"not a dot file"
-  for call in calls:
+
+  for call in calls:    
     call_sub = get_call_sequence(source_file,call) #call_sub is of type store_method()
     if len(call_sub.calls) == 0 : continue
     for cfrom,cto in pairwise(call_sub.calls):
       temp = cfrom + "->" +cto
+      #print cfrom,cto
+      #print temp
       returnList.append(temp)
   return returnList
 
