@@ -24,14 +24,26 @@ class RecursiveVisitor(ast.NodeVisitor):
         #print(type(node).__name__)
 
     @recursive
-    def visit_Call(self,node):
-        """ visit a Call node and visits it recursively"""
+    def visit_Call(self,node):        
         print(type(node).__name__),
         try:
-          print " : ",node.func.id#_fields
+          print node.func._fields#id#node.func.attr
         except:
-          print "Wrong: ",node.func._fields
+          try:
+            print node.func.value.id,".",node.func.attr#_fields
+          except:
+            try:
+              print node.func.value.value.id,".",node.func.value.attr#_fields
+            except:
+              print
+              pass
         
+    
+    def visit_List(self,node):
+        """ visit a Function node """
+        print "LIST>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+        #pass
+        #print(type(node).__name__)
 
     @recursive
     def visit_Lambda(self,node):
@@ -42,28 +54,32 @@ class RecursiveVisitor(ast.NodeVisitor):
     @recursive
     def visit_FunctionDef(self,node):
         """ visit a Function node and visits it recursively"""
-        print(type(node).__name__),
-        print " : ",node.name
+        #print(type(node).__name__),
+        #print " : ",node.name
         print 
 
     @recursive
     def visit_MethodDef(self,node):
         """ visit a Method node and visits it recursively"""
-        print(type(node).__name__),
+        #print(type(node).__name__),
         print " :-------------------------- ",node.name
         print 
+
+
 
     @recursive
     def visit_Module(self,node):
         """ visit a Module node and the visits recursively"""
         pass
-
+    @recursive
     def generic_visit(self,node):
+        #print(type(node).__name__)
         pass
 
  
 x = RecursiveVisitor()
-f = open("main.py","r")
+f = open("input1.py","r")
 t = ast.parse(f.read())
 #print ast.dump(t)
 x.visit(t)
+#print t.body[0].value

@@ -31,7 +31,7 @@ generateNew -> interpolateCheck;
 generateNew -> generateSlot;
 generateNew -> gos;
 _wrappercheckdirection -> _checkdirection;
-main -> searcher;
+main -> searcher [penwidth=3];
 main -> printNormal;
 main -> _checkDictionary;
 wrapperextrapolate -> trim;

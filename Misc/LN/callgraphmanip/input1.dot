@@ -1,0 +1,5 @@
+None
+digraph G {
+rankdir=LR
+test2 -> test;
+}
