@@ -734,6 +734,49 @@ class DTLZ2(ModelBasic):
       self.returnMin(result)
 
 
+class DTLZ3(ModelBasic):
+  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
+    self.minR=[minR for _ in xrange(n)]
+    self.maxR=[maxR for _ in xrange(n)]
+    self.n=n
+    self.k=k
+    self.minVal=1e6
+    self.maxVal=-1e6
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
+    self.lives=myModeloptions['Lives']
+    assert(self.k == self.n-self.objf+1),"Something's Messed up"
+    self.functionDict = {}
+    self.no_eval=0
+    for i in xrange(objf):
+      temp = "f"+str(i+1)
+      self.functionDict[temp]="fi"
+
+
+  def fi(self,listpoints,num):
+    def prod(listpoints):
+      result = 1
+      for x in listpoints: result *= math.cos(x*math.pi/2)
+      return result
+    if num == 1: return (1+self.g(listpoints))*prod(listpoints[:-1])
+    else:
+      return (1+self.g(listpoints))*prod(listpoints[:-num])*math.sin(listpoints[-num+1])
+      
+ 
+  def g(self,listpoints):
+    return 100 * (len(listpoints) + sum([ (x-0.5)**2 -math.cos(20*math.pi*(x-0.5)) for x in listpoints]))
+   
+  def baseline(self,minR,maxR):
+    for x in range(0,90000):
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=int(getattr(self, callName)(solution,i+1))
+      self.returnMax(result)
+      self.returnMin(result)
 
 
 
