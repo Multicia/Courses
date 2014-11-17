@@ -11,9 +11,11 @@ class JobEvent(object):
     self.event_type = etype
     self.job_type = jobt #1- least imp; 3- latency sensitive
 
-
+#TODO: Need to change this global implementation
+flag = False
+start_time=0
 def extract_job_event(file_name,dictionary):
-  flag = False
+  global flag,start_time
   for line in open(file_name):
     temp = line.replace("\n","").split(",")
     if int(temp[0]) == 0: continue
@@ -65,10 +67,6 @@ if __name__ == '__main__':
     print len(dictionary.keys()),
     dictionary = _check_dictionary(dictionary)
     print len(dictionary.keys())
-  import csv
-  writer = csv.writer(open('Results.csv', 'wb'))
-  for key, value in dictionary.items():
-    writer.writerow([key, value])
 
 
 
