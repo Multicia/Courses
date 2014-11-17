@@ -48,9 +48,8 @@ def _check_dictionary(dictionary):
 def get_names(dir_name):
   import glob,os
   name = dir_name+"/*.csv"
-  print name
   filelist = glob.glob(name)
-  return sorted(filelist): 
+  return sorted(filelist)
 
 
 
@@ -58,11 +57,18 @@ if __name__ == '__main__':
 
   dictionary = defaultdict(list)
   files = get_names("job_events")
+  count = 0
   for f in files:
-    dictionary = extract_job_event(files,dictionary)
+    count+=1
+    print count,
+    dictionary = extract_job_event(f,dictionary)
     print len(dictionary.keys()),
     dictionary = _check_dictionary(dictionary)
     print len(dictionary.keys())
+  import csv
+  writer = csv.writer(open('Results.csv', 'wb'))
+  for key, value in dictionary.items():
+    writer.writerow([key, value])
 
 
 
