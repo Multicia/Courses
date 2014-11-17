@@ -37,15 +37,17 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 5
-   for klass in [ZDT3]:#DTLZ7,Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,Schaffer
+   r = 10
+   for klass in [DTLZ7,ZDT3]:#DTLZ7,Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,Schaffer
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
+     evalCollector=defaultdict(list)
      for searcher in [Seive,PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []
+       list_eval = []
        random.seed(6)
        historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
        historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
@@ -55,7 +57,6 @@ def multipleRun():
          import time
          t1 = time.time()
          solution,score,model = test.evaluate()
-         #print score,model.minVal,model.maxVal
          for x in xrange(model.objf):
            #print len(model.past[x].listing)
            #print x
@@ -64,13 +65,17 @@ def multipleRun():
            sys.stdout.flush()
          timeTaken = (time.time() - t1) * 1000
          listTimeTaken.append(timeTaken)
+         list_eval.append(model.no_eval)
          listScores.append(score)
          timeCollector[searcher.__name__]=listTimeTaken
          eraCollector[searcher.__name__]=listScores
+         evalCollector[searcher.__name__]=list_eval
          #print "Score: %f"%(score)
        print
      callrdivdemo(eraCollector)
+     callrdivdemo(evalCollector)
      callrdivdemo(timeCollector)
+     
 
 def step2():
     rdivDemo([

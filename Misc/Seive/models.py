@@ -68,6 +68,7 @@ class ModelBasic(object):
   past =None #List of Logs
   present = None #List of Logs
   lives=None
+  no_eval=-1
 
   #From Dr. M's files: a12.py
   def a12slow(self,lst1,lst2):
@@ -187,6 +188,7 @@ class ModelBasic(object):
     self.addWrapper(temp) 
     #print temp
     energy= np.sum(temp)
+    self.no_eval+=1
     #print (energy-self.minVal)/(self.maxVal-self.minVal)
     return (energy-self.minVal)/(self.maxVal-self.minVal)
 
@@ -472,6 +474,7 @@ class DTLZ7(ModelBasic):
     self.lives=myModeloptions['Lives']
     assert(self.k == self.n-self.objf+1),"Something's Messed up"
     self.functionDict = {}
+    self.no_eval=0
     for i in xrange(objf-1):
       temp = "f"+str(i+1)
       self.functionDict[temp]="fi"
