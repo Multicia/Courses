@@ -119,10 +119,11 @@ if __name__ == '__main__':
  # model.testgx()
  # for klass in [ZDT1]:
  #   print klass.__name__
- for x in xrange(6):
+ for x in xrange(3,6):
    print "========================================="
    opt = 2**x
    myoptions['Seive']['subsample'] = str(opt)
+   myoptions['Seive']['threshold'] = str(opt)
    multipleRun()
  #testDE()
  #part6()

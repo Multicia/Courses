@@ -676,6 +676,7 @@ class Seive(SearchersBasic): #minimizing
     energy=[]
     try:
       sample_no = int(myoptions['Seive']['subsample'])
+      print sample_no
       samples = random.sample(dictionary[tempIndex],sample_no)
       #print samples
       for x in samples:
