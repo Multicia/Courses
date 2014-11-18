@@ -676,7 +676,6 @@ class Seive(SearchersBasic): #minimizing
     energy=[]
     try:
       sample_no = int(myoptions['Seive']['subsample'])
-      print sample_no
       samples = random.sample(dictionary[tempIndex],sample_no)
       #print samples
       for x in samples:
@@ -749,6 +748,7 @@ class Seive(SearchersBasic): #minimizing
           for neighbour in neighbours:
             #print "Searcher| neighbour: ",neighbour
             result = self.generateNew(m,int(neighbour/100),neighbour%10,dictionary)
+            #print "Searcher| points 
             if(result == True):
               tmean,tiqr = self.energy(m,int(neighbour/100),neighbour%10,dictionary)
               #print "Searcher| tmean,tiqr: ",tmean,tiqr
@@ -760,7 +760,7 @@ class Seive(SearchersBasic): #minimizing
                 nmean=tmean
                 niqr=tiqr
             else:
-              #print "Searcher|NAAAAAAAAAAAAH"
+              print "Searcher|NAAAAAAAAAAAAH"
               pass
           if(nmean<smean or (nmean == smean and nmean<smean)):
             soln=nsoln
@@ -788,6 +788,7 @@ class Seive(SearchersBasic): #minimizing
 
     #print ">>>>>>>>>>>>>>WOW Mean:%f IQR: %f"%(bmean,biqr)
     #print ">>>>>>>>>>>>>>WOW Soultion: ",bsoln
+    if(bsoln[0]==-1 and bsoln[1]==-1): raise Exception("No best solution found!")
     return bsoln
 
   def one(self,m,lst): 
