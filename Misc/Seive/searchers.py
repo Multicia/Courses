@@ -675,10 +675,13 @@ class Seive(SearchersBasic): #minimizing
     #print "energy| TempIndex: " ,tempIndex
     energy=[]
     try:
-      for x in dictionary[tempIndex]:
+      sample_no = int(myoptions['Seive']['subsample'])
+      samples = random.sample(dictionary[tempIndex],sample_no)
+      #print samples
+      for x in samples:
         #if x.obj == [None]*len(objectives(m)):  evalscores+=1
         
-        #print "before energy|x.changed: ",x.scores
+       # print "before energy|x.changed: ",x.scores
         x.scores = score(m,x)
         x.changed = False
         #print "after energy|x.changed: ",x.scores,x.changed

@@ -37,13 +37,13 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 1
-   for klass in [DTLZ5]:#DTLZ7,Osyczka,Schwefel,Fonseca,Viennet,Kursawe,ZDT1,Schaffer
+   r = 5
+   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
      evalCollector=defaultdict(list)
-     for searcher in [Seive,PSO,GA,DE,SA,MaxWalkSat]:
+     for searcher in [Seive]:#,PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -75,6 +75,7 @@ def multipleRun():
      callrdivdemo(eraCollector)
      callrdivdemo(evalCollector)
      callrdivdemo(timeCollector)
+     print myoptions['Seive']
      
 
 def step2():
@@ -118,7 +119,11 @@ if __name__ == '__main__':
  # model.testgx()
  # for klass in [ZDT1]:
  #   print klass.__name__
- multipleRun()
+ for x in xrange(6):
+   print "========================================="
+   opt = 2**x
+   myoptions['Seive']['subsample'] = str(opt)
+   multipleRun()
  #testDE()
  #part6()
  #step2()
