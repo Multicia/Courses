@@ -5,7 +5,6 @@ def intermediate_dot():
   import glob
   files = glob.glob("*.dot")
   for fil in files:
-    print fil
     with open(fil) as f:
       for line in f:
         if "->" in line: 
@@ -21,9 +20,8 @@ def generate_new_dot_file(dictionary):
   f.write('rankdir=LR\n')
   import operator
   max_val = max(dictionary.iteritems(), key=operator.itemgetter(1))[1]
-  print max_val
   for key in dictionary.keys():
-    temp = key +' [penwidth='+str(float(dictionary[key]/max_val)*2)+'];\n'
+    temp = key +' [penwidth='+str(float(dictionary[key]/max_val)*10)+'];\n'
     f.write(temp)
   f.write('}\n')
   f.close()
@@ -31,8 +29,6 @@ def generate_new_dot_file(dictionary):
 def dot_processing():
   inter_data = intermediate_dot()
   generate_new_dot_file(inter_data)
-  import os
-  #os.system('dot -Tpng new_output.dot > new_output.png')
 
 if __name__ == '__main__':
   inter_data = intermediate_dot()

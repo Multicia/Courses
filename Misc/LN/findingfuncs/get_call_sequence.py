@@ -166,10 +166,9 @@ def wrapper_remove_node(dot_file,tfidf_list):
   for item in tfidf_list: 
     try:flist.remove(item)
     except: 
-      print item + " not present in the source code: ",count
+      #print item + " not present in the source code: ",count
       count+=1
-
-
+  if count > 100: return
   for item in flist: remove_node(item,dot_file)
 
 
@@ -258,6 +257,8 @@ if __name__ == '__main__':
   tfidf_list = generate_tfidf_list("library_tfidf.txt")
   wrapper_remove_node("new_output.dot",tfidf_list)
   print "Third Pass: ", count_line("new_output.dot")
+  import os
+  os.system('dot -Tpng new_output.dot > new_output.png')
 
 
   #remove_node("pylab_plot","input1.dot")
