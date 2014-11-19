@@ -43,6 +43,9 @@ pylab_subplot->test;
 test->test2
 }
 </code></pre>
-3. Final graph: [link](https://raw.githubusercontent.com/vivekaxl/Courses/master/Misc/LN/callgraphmanip/input1.png)
+
+3. wrapper_remove_node() -> Given a dot file and a list from tfidf, it would modify the edges in the dot file.
+
+4. Final graph: [link](https://raw.githubusercontent.com/vivekaxl/Courses/master/Misc/LN/callgraphmanip/input1.png)
 
 
