@@ -13,10 +13,11 @@ def processing(lines):
     from nltk import word_tokenize
     from nltk.corpus import stopwords
     import string
-    stop = stopwords.words('english')+list(string.punctuation)
+    punc = list(string.punctuation.replace(".","").replace("_","")) + [". "]
+    stop = stopwords.words('english')+punc
     for i in word_tokenize(line.lower()):
-      for p in string.punctuation: i=i.replace(p,"")
-      if i.isalpha() == False: continue
+      for p in punc: i=i.replace(p,"")
+      if i.isdigit() == True: continue
       if i not in stop and len(i)>2:
         temp.append(i)
     return ' '.join(temp)
@@ -40,7 +41,7 @@ def processing(lines):
    #say(" ")
    #say(len(line))
    #say(" afterbeforestemming ")
-   line = stemming(line)
+   #line = stemming(line)
    #say(" afterstemming ")
    returnLines.append(line)
    file.write("%d: %s \n"%(count,line))
