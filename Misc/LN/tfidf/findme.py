@@ -53,13 +53,13 @@ def filldict(dictL,lines):
       dictL[word].append(i)
   return dictL
       
-def findme(src="data/R-intro.txt"):
+def findme(src):
   def top(rawdict):
     import heapq
     return heapq.nlargest(100,rawdict,key=rawdict.get)
 
   raw = open(src).read()
-  lines = raw.split('.\n\n')
+  lines = raw.decode('utf-8').split('.\n\n')
   print "Number of lines: " + str(len(lines))
   lines = processing(lines)
   d = defaultdict(list)
@@ -91,11 +91,16 @@ def tfidf(d,raw):
     for i in d[uword]:
       words = nowords(raw,i)
       word = occur(d[uword],i)
-      sumv+= evaluate(word,words,para,paras)
+      try:
+        sumv+= evaluate(word,words,para,paras)
+      except: 
+        """ added since sometimes blank spaces crop up!"""
+        print "Something wrong with word: ",uword
+        break
     scoredict[uword]=sumv/para
   return scoredict
 
 def _findme():
-  findme()
+  findme("data/user_guide-0_conv.txt")
   
 if __name__ == '__main__': _findme()

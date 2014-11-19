@@ -5,10 +5,6 @@ test->scipy_linspace;
 scipy_linspace->scipy_sin;
 scipy_sin->scipy_sin;
 scipy_sin->scipy_random;
-scipy_random->len;
-len->acc;
-acc->abs;
-abs->scipy_fft;
 scipy_fft->scipy_fftpack;
 scipy_fftpack->pylab_subplot;
 pylab_subplot->pylab_plot;
@@ -23,4 +19,5 @@ pylab_subplot->pylab_plot;
 pylab_plot->pylab_subplot;
 pylab_subplot->test;
 test->test2
+scipy_random->scipy_fft;
 }

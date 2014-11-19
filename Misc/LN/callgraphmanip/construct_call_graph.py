@@ -92,6 +92,7 @@ def generate_dot_code(python_code):
 
     call_graph = {}
     construct_call_graph(ast_list, call_graph)
+    print call_graph
     #pprint.pprint(call_graph)
 
     dot = []
@@ -99,11 +100,14 @@ def generate_dot_code(python_code):
     dot.append("digraph G {")
     dot.append("rankdir=LR")
     for from_fn, to_fns in call_graph.iteritems():
+        print from_fn, to_fns
         if not to_fns:
             dot.append('%s;' % from_fn)
 
         for to_fn in to_fns:
-            if to_fn not in call_graph: continue
+            if to_fn not in call_graph: 
+              print "Here"
+              continue
             dot.append('%s -> %s;' % (from_fn, to_fn))
     dot.append("}")
 
