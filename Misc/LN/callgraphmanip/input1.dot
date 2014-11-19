@@ -1,23 +1,4 @@
 digraph G {
 rankdir=LR
-test2 -> test;
-test->scipy_linspace;
-scipy_linspace->scipy_sin;
-scipy_sin->scipy_sin;
-scipy_sin->scipy_random;
-scipy_fft->scipy_fftpack;
-scipy_fftpack->pylab_subplot;
-pylab_subplot->pylab_plot;
-pylab_plot->pylab_subplot;
-pylab_subplot->pylab_plot;
-pylab_plot->scipy_log10;
-scipy_log10->pylab_show;
-pylab_show->random_random;
-random_random->test;
-test2->pylab_subplot;
-pylab_subplot->pylab_plot;
-pylab_plot->pylab_subplot;
-pylab_subplot->test;
-test->test2
-scipy_random->scipy_fft;
+
 }

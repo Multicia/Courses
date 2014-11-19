@@ -34,10 +34,11 @@ class RecursiveVisitor(ast.NodeVisitor):
               self.listL.append(str(node.func.value.value.id+"_"+node.func.value.attr))
             except:
               pass
+              print "there"
 
     @recursive
     def generic_visit(self,node):
-        #print(type(node).__name__)
+        print(type(node).__name__)
         pass
 
 class start_end(ast.NodeVisitor):
@@ -61,6 +62,7 @@ def get_call_sequence(input_file,func_name):
   t = ast.parse(f.read())
   y.visit(t)
   for i in y.listL: 
+    print i.name
     if i.name == func_name:
       f1 = open("input1.py","r")
       lines = f1.readlines()
@@ -162,15 +164,78 @@ def wrapper_remove_node(dot_file,tfidf_list):
   for item in tfidf_list: flist.remove(item)
   for item in flist: remove_node(item,dot_file)
 
+
+class v(ast.NodeVisitor):
+  listL=[]
+  def clear(self): self.listL = []
+  def visit_Call(self,node):
+        try:
+          self.listL.append(node.func.id)
+        except:
+          try:
+            self.listL.append(str(node.func.value.id+"_"+node.func.attr))
+          except:
+            try:
+              self.listL.append(str(node.func.value.value.id+"_"+node.func.value.attr))
+            except:
+              pass
+              print "there"
+
+  def generic_visit(self, node):
+    #print ">>>>>>>>>>",type(node).__name__
+    ast.NodeVisitor.generic_visit(self, node)
+
+def temp_code(input_file):
+  f = open(input_file,"r")
+  x = v()
+  t = ast.parse(f.read())
+  x.visit(t)
+  return x.listL
+
+def temp_append_calls_file(source_file):
+  from itertools import tee, izip
+  def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
+
+  returnList = []
+  assert(source_file.split(".")[1] == "py"),"not a py file"
+  call_sub = temp_code(source_file) 
+  if len(call_sub) == 0 : return returnList
+  for cfrom,cto in pairwise(call_sub):
+    temp = cfrom + "->" +cto
+    #print temp
+    returnList.append(temp)
+  return returnList
+
+def get_names(dir_name):
+  import glob,os
+  name = dir_name+"/*.py"
+  filelist = glob.glob(name)
+  return sorted(filelist)
+
 if __name__ == '__main__':
+
+  #TODO: Hacked version: Revision
+  source_files = get_names("Source")
+  for source_file in source_files:
+    calls = temp_code(source_file)
+    new_list = temp_append_calls_file(source_file)
+    new_list_str += ';\n'.join(new_list)
+  print new_list_str
+
+
   #remove_node("pylab_plot","input1.dot")
   #print unique_function_call("input1.dot")
-  wrapper_remove_node("input1.dot",["acc","abs","len"])
+  #wrapper_remove_node("input1.dot",["acc","abs","len"])
+
+  #get_call_sequence("input1.py","blas")
   """
-  #get_call_sequence("test")
   source_file = "input1.py"
   dot_file = generate_call_sequence(source_file)
-  #print "Source File: ",source_file," DOT file: ",dot_file
+  print "Source File: ",source_file," DOT file: ",dot_file
   call_list = read_from_file(dot_file)
   call_list_str = ''.join(call_list)
   list_L = unique_function_call(dot_file)
@@ -183,4 +248,6 @@ if __name__ == '__main__':
   import os
   os.system("cat input1.dot | dot -Tpng > %s.png"%source_file.split(".")[0])
   """
+
+
  

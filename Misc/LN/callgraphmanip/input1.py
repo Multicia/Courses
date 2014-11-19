@@ -1,29 +1,33 @@
-import scipy
-import scipy.fftpack
-import pylab
-import random
-from scipy import pi
-def test(): 
-  t = scipy.linspace(0,120,4000)
-  acc = lambda t: 10*scipy.sin(2*pi*2.0*t) + 5*scipy.sin(2*pi*8.0*t) + 2*scipy.random.random(len(t))
+print(__doc__)
 
-  signal = acc(t)
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.datasets import load_digits
+from sklearn.svm import SVC
+from sklearn.learning_curve import validation_curve
 
-  FFT = abs(scipy.fft(signal))
-  freqs = scipy.fftpack.fftfreq(signal.size, t[1]-t[0])
+digits = load_digits()
+X, y = digits.data, digits.target
 
-  pylab.subplot(211)
-  pylab.plot(t, signal)
-  pylab.subplot(212)
-  pylab.plot(freqs,20*scipy.log10(FFT),'x')
-  pylab.show()
-  r =random.random()
+param_range = np.logspace(-6, -1, 5)
+train_scores, test_scores = validation_curve(
+    SVC(), X, y, param_name="gamma", param_range=param_range,
+    cv=10, scoring="accuracy", n_jobs=1)
+train_scores_mean = np.mean(train_scores, axis=1)
+train_scores_std = np.std(train_scores, axis=1)
+test_scores_mean = np.mean(test_scores, axis=1)
+test_scores_std = np.std(test_scores, axis=1)
 
-def test2():
-  pylab.subplot(211)
-  pylab.plot(t, signal)
-  pylab.subplot(212)
-  test()
-
-if __name__ == '__main__':
-  test2()
+plt.title("Validation Curve with SVM")
+plt.xlabel("$\gamma$")
+plt.ylabel("Score")
+plt.ylim(0.0, 1.1)
+plt.semilogx(param_range, train_scores_mean, label="Training score", color="r")
+plt.fill_between(param_range, train_scores_mean - train_scores_std,
+                 train_scores_mean + train_scores_std, alpha=0.2, color="r")
+plt.semilogx(param_range, test_scores_mean, label="Cross-validation score",
+             color="g")
+plt.fill_between(param_range, test_scores_mean - test_scores_std,
+                 test_scores_mean + test_scores_std, alpha=0.2, color="g")
+plt.legend(loc="best")
+plt.show()

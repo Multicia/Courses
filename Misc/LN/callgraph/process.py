@@ -23,7 +23,7 @@ def generate_new_dot_file(dictionary):
   max_val = max(dictionary.iteritems(), key=operator.itemgetter(1))[1]
   print max_val
   for key in dictionary.keys():
-    temp = key +' [penwidth='+str(float(dictionary[key]/max_val)*2)+'];\n'
+    temp = key +' [penwidth='+str(float(dictionary[key]/max_val)*100)+'];\n'
     f.write(temp)
   f.write('}\n')
   f.close()
