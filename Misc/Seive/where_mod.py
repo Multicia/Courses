@@ -550,15 +550,18 @@ A standard call to WHERE, pruning disabled:
 @go
 """
 
-def whereMain(model):
+def whereMain(model,points=[]):
   
 
   m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
-  for _ in range(max):
-    one = candidate(m)  #Generate candidate
-    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
-    #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
-    pop += [one]         #Store all the candidates in pop
+  if len(points) == 0:
+    for _ in range(max):
+      one = candidate(m)  #Generate candidate
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
+      #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
+      pop += [one]         #Store all the candidates in pop
+  else:
+    pop = points
     
   #print "Length of pop: ",len(pop)
   slots = where0(verbose = True,
