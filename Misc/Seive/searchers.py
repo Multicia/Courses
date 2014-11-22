@@ -2094,7 +2094,7 @@ class Seive2(SearchersBasic): #minimizing
     #print graph.keys()
     #print "Number of points: ",len(graph[maxi])
     for x in graph[maxi]:
-       if(len(dictionary[x])<10):
+       if(len(dictionary[x])<1):
           self.generateNew(model,i,j,dictionary)
           #print "Generate New|======================:" ,len(dictionary[x])
        #temp = random.sample(dictionary[x],min(len(dictionary[x]),15))
@@ -2116,55 +2116,3 @@ class Seive2(SearchersBasic): #minimizing
     for i in dictionary.keys():
       sum+=len(dictionary[i])
     return sum
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
