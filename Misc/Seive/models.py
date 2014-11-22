@@ -190,6 +190,7 @@ class ModelBasic(object):
     energy= np.sum(temp)
     self.no_eval+=1
     #print (energy-self.minVal)/(self.maxVal-self.minVal)
+    #print self.minVal,self.maxVal
     return (energy-self.minVal)/(self.maxVal-self.minVal)
 
 
@@ -508,6 +509,8 @@ class DTLZ7(ModelBasic):
     return (self.objf-summ)
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -515,8 +518,11 @@ class DTLZ7(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 class Osyczka(ModelBasic):
   def __init__(self,minR=0,maxR=10,objf=2,n=6):

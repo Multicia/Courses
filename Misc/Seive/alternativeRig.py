@@ -43,7 +43,10 @@ def multipleRun():
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
      evalCollector=defaultdict(list)
-     for searcher in [Seive3,Seive2,Seive,PSO,GA,DE,SA,MaxWalkSat]:
+     tempC = klass()
+     bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR)
+     print "Baseline Finished: ",bmin,bmax
+     for searcher in [Seive]:#3,Seive2,Seive,DE]:#,PSO,GA,DE,SA,MaxWalkSat]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -52,7 +55,7 @@ def multipleRun():
        historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
        historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
        for _ in range(r):
-         test = searcher(klass(),"display2")
+         test = searcher(klass(),"display2",bmin,bmax)
          print ".", 
          import time
          t1 = time.time()
@@ -74,8 +77,8 @@ def multipleRun():
          #print "Score: %f"%(score)
        print
      callrdivdemo(eraCollector)
-     callrdivdemo(evalCollector)
-     callrdivdemo(timeCollector)
+     #callrdivdemo(evalCollector)
+     #callrdivdemo(timeCollector)
      
 
 def step2():
@@ -119,14 +122,13 @@ if __name__ == '__main__':
  # model.testgx()
  # for klass in [ZDT1]:
  #   print klass.__name__
- """
- for x in xrange(1,4):
-   print "========================================="
-   opt = 2**x
-   myoptions['Seive']['subsample'] = str(opt)
-   myoptions['Seive']['threshold'] = str(opt)
-   multipleRun()
- """
+
+ #for x in xrange(1,8):
+ #  print "========================================="
+ #  opt = 1000*x
+ #  myoptions['Seive']['initialpoints'] = str(opt)
+ #  multipleRun()
+
  multipleRun()
  #testDE()
  #part6()

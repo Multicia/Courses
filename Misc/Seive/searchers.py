@@ -397,9 +397,11 @@ class GA(SearchersBasic):
     return solution,bestScore,self.model
 
 class DE(SearchersBasic):
-  def __init__(self,modelName,displayS):
+  def __init__(self,modelName,displayS,bmin,bmax):
     self.model=modelName
     self.displayStyle=displayS
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
 
   def threeOthers(self,frontier,one):
     #print "threeOthers"
@@ -463,7 +465,7 @@ class DE(SearchersBasic):
     model=self.model
     minR = model.minR
     maxR = model.maxR
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
                for _ in xrange(np)]
     #print frontier
@@ -480,6 +482,7 @@ class DE(SearchersBasic):
       if(minR>energy):
         minR = energy
         solution=x  
+    print minR
     return solution,minR,self.model
 
 class PSO(SearchersBasic):
@@ -574,8 +577,10 @@ class Seive(SearchersBasic): #minimizing
   random.seed(1)
   
 
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
     self.threshold =int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
     self.ncol=8               #number of columns in the chess board
@@ -976,10 +981,10 @@ class Seive(SearchersBasic): #minimizing
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
@@ -989,7 +994,7 @@ class Seive(SearchersBasic): #minimizing
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(min(x,y)+probEx*abs(x-y))
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
         else:
           new = y
         genPoint.append(new)
@@ -1002,13 +1007,14 @@ class Seive(SearchersBasic): #minimizing
     ypoints=self.getpoints(yindex,dictionary)
     import itertools
     listpoints=list(itertools.product(xpoints,ypoints))
-    #print "Length of Listpoints: ",len(listpoints)
     count=0
     while True:
       if(count>min(len(xpoints),maxlimit)):break
       x=self.one(m,listpoints)
-      decision.append(interpolate(x[0],x[1]))
+      temp = interpolate(x[0],x[1])
+      decision.append(temp)
       count+=1
+    
     return decision
 
 
@@ -1031,10 +1037,10 @@ class Seive(SearchersBasic): #minimizing
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
     def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
         return int(index/100),index%10
       assert(len(lx)==len(ly)==len(lz))
@@ -1045,7 +1051,7 @@ class Seive(SearchersBasic): #minimizing
 
         if rand < cr:
           probEx = fmin + (fmax-fmin)*random.random()
-          new = trim(x + probEx*(y-z))
+          new = trim(m,x + probEx*(y-z),i)
         else:
           new = y #Just assign a value for that decision
         genPoint.append(new)
@@ -1056,6 +1062,7 @@ class Seive(SearchersBasic): #minimizing
     xpoints=self.getpoints(xindex,dictionary)
     ypoints=self.getpoints(yindex,dictionary)
     count=0
+    
     while True:
       if(count>min(len(xpoints),maxlimit)):break
       two = self.one(m,xpoints)
@@ -1112,10 +1119,10 @@ class Seive(SearchersBasic): #minimizing
     
     minR = model.minR
     maxR = model.maxR
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     
     dictionary = generate_dictionary()
-    bestSolution = self.searcher(model,dictionary)
+    bestSolution = self.searcher(self.model,dictionary)
     bestSolution = find_best_score(bestSolution,dictionary)
     #self.decisions_check(dictionary)
     #print "Number of points: ",self._checkDictionary(dictionary)
@@ -1133,10 +1140,10 @@ class Seive3(SearchersBasic): #minimizing
 
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
@@ -1146,7 +1153,7 @@ class Seive3(SearchersBasic): #minimizing
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(min(x,y)+probEx*abs(x-y))
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
         else:
           new = y
         genPoint.append(new)
@@ -1188,10 +1195,10 @@ class Seive3(SearchersBasic): #minimizing
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
     def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
         return int(index/100),index%10
       assert(len(lx)==len(ly)==len(lz))
@@ -1202,7 +1209,7 @@ class Seive3(SearchersBasic): #minimizing
 
         if rand < cr:
           probEx = fmin + (fmax-fmin)*random.random()
-          new = trim(x + probEx*(y-z))
+          new = trim(m,x + probEx*(y-z),i)
         else:
           new = y #Just assign a value for that decision
         genPoint.append(new)
@@ -1230,8 +1237,10 @@ class Seive3(SearchersBasic): #minimizing
     return decision
   
 
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
     self.threshold =10#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
     self.ncol=8               #number of columns in the chess board
@@ -1478,10 +1487,10 @@ class Seive3(SearchersBasic): #minimizing
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
@@ -1491,7 +1500,7 @@ class Seive3(SearchersBasic): #minimizing
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(min(x,y)+probEx*abs(x-y))
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
         else:
           new = y
         genPoint.append(new)
@@ -1563,7 +1572,7 @@ class Seive3(SearchersBasic): #minimizing
     model = self.model
     minR = model.minR
     maxR = model.maxR
-    if depth == 0: model.baseline(minR,maxR)
+    #if depth == 0: model.baseline(minR,maxR)
 
     dictionary = generate_dictionary(points)
     #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
@@ -1630,10 +1639,10 @@ class Seive2(SearchersBasic): #minimizing
 
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
@@ -1643,7 +1652,7 @@ class Seive2(SearchersBasic): #minimizing
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(min(x,y)+probEx*abs(x-y))
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
         else:
           new = y
         genPoint.append(new)
@@ -1685,10 +1694,10 @@ class Seive2(SearchersBasic): #minimizing
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
     def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
         return int(index/100),index%10
       assert(len(lx)==len(ly)==len(lz))
@@ -1699,7 +1708,7 @@ class Seive2(SearchersBasic): #minimizing
 
         if rand < cr:
           probEx = fmin + (fmax-fmin)*random.random()
-          new = trim(x + probEx*(y-z))
+          new = trim(m,x + probEx*(y-z),i)
         else:
           new = y #Just assign a value for that decision
         genPoint.append(new)
@@ -1727,10 +1736,12 @@ class Seive2(SearchersBasic): #minimizing
     return decision
   
 
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
-    self.threshold =10#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.threshold =1#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
     self.ncol=8               #number of columns in the chess board
     self.nrow=8               #number of rows in the chess board
     self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
@@ -1975,10 +1986,10 @@ class Seive2(SearchersBasic): #minimizing
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
-      def lo(m)      : return 0.0
-      def hi(m)      : return  1.0
-      def trim(x)  : # trim to legal range
-        return max(lo(x), x%hi(x))
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
@@ -1988,11 +1999,11 @@ class Seive2(SearchersBasic): #minimizing
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(min(x,y)+probEx*abs(x-y))
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
         else:
           new = y
         genPoint.append(new)
-      return genPoint
+      return genPointt
 
     decision=[]
     #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
@@ -2060,7 +2071,7 @@ class Seive2(SearchersBasic): #minimizing
     model = self.model
     minR = model.minR
     maxR = model.maxR
-    if depth == 0: model.baseline(minR,maxR)
+    #if depth == 0: model.baseline(minR,maxR)
 
     dictionary = generate_dictionary(points)
     #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
@@ -2070,7 +2081,7 @@ class Seive2(SearchersBasic): #minimizing
     for i in xrange(1,9):
       for j in xrange(1,9):
         if(thresholdCheck(i*100+j,dictionary)==False):
-          result = self.generateNew(model,i,j,dictionary)
+          result = self.generateNew(self.model,i,j,dictionary)
           if result == False: 
             #print "in middle of desert"
             continue
@@ -2093,24 +2104,68 @@ class Seive2(SearchersBasic): #minimizing
     maxi = max(graph.keys())
     #print graph.keys()
     #print "Number of points: ",len(graph[maxi])
+    count = 0
     for x in graph[maxi]:
-       if(len(dictionary[x])<1):
-          self.generateNew(model,i,j,dictionary)
-          #print "Generate New|======================:" ,len(dictionary[x])
-       #temp = random.sample(dictionary[x],min(len(dictionary[x]),15))
        for y in dictionary[x]:
          temp2 = score(model,y) 
-         #print temp2
+         count += 1
          if temp2 < high:
            high = temp2
            bsoln = y
-       #if(depth <3):
-       #  rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
-       #  print high,sc,
-       #  high = high if sc > high else sc
-         
+    print count     
     return bsoln.dec,high,model
+  """
+  def new_interpolate(self,m,dictionary,xindex):
+    xpoints=self.getpoints(xindex,dictionary)
+    two = self.one(m,xpoints)
+    three = self.one(m,xpoints)
+    four = self.one(m,xpoints) 
 
+
+
+  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m)      : return m.maxR[index]
+      def trim(x,i)  : # trim to legal range
+        return max(lo(x,i), x%hi(x,i))
+      def indexConvert(index):
+        return int(index/100),index%10
+      assert(len(lx)==len(ly)==len(lz))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z = lx[i],ly[i],lz[i]
+        rand = random.random()
+
+        if rand < cr:
+          probEx = fmin + (fmax-fmin)*random.random()
+          new = trim(x + probEx*(y-z),i)
+        else:
+          new = y #Just assign a value for that decision
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #TODO: need to put an assert saying checking whether extrapolation is actually possible
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = extrapolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+  """
   def _checkDictionary(self,dictionary):
     sum=0
     for i in dictionary.keys():
