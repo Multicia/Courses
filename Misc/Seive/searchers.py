@@ -472,6 +472,11 @@ class DE(SearchersBasic):
     for i in xrange(repeat):
       #print i,
       total,n,frontier = self.update(f,cf,frontier)
+
+      #for zz in frontier:
+      #  print "%2.2f "%self.model.evaluate(zz),
+      #print 
+
       #if(total/n < epsilon):
       #  break;
       self.model.evalBetter()
@@ -481,8 +486,7 @@ class DE(SearchersBasic):
       energy = self.model.evaluate(x)
       if(minR>energy):
         minR = energy
-        solution=x  
-    print minR
+        solution=x 
     return solution,minR,self.model
 
 class PSO(SearchersBasic):
@@ -980,7 +984,7 @@ class Seive(SearchersBasic): #minimizing
     print interpolateCheck(xblock,yblock)
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1036,7 +1040,7 @@ class Seive(SearchersBasic): #minimizing
 
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
+    def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1139,7 +1143,7 @@ class Seive3(SearchersBasic): #minimizing
 
 
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1194,9 +1198,9 @@ class Seive3(SearchersBasic): #minimizing
 
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
+    def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
-      def hi(m)      : return m.maxR[index]
+      def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
         return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
@@ -1242,7 +1246,7 @@ class Seive3(SearchersBasic): #minimizing
     self.model.minVal = bmin
     self.model.maxVal = bmax
     self.displayStyle=displayS
-    self.threshold =10#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.threshold =20#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
     self.ncol=8               #number of columns in the chess board
     self.nrow=8               #number of rows in the chess board
     self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
@@ -1486,7 +1490,7 @@ class Seive3(SearchersBasic): #minimizing
     print interpolateCheck(xblock,yblock)
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1638,7 +1642,7 @@ class Seive2(SearchersBasic): #minimizing
 
 
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1693,7 +1697,7 @@ class Seive2(SearchersBasic): #minimizing
 
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
+    def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
       def hi(m)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1985,7 +1989,7 @@ class Seive2(SearchersBasic): #minimizing
     print interpolateCheck(xblock,yblock)
     """
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=1,fmin=0,fmax=1):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
