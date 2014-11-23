@@ -2106,66 +2106,48 @@ class Seive2(SearchersBasic): #minimizing
     #print "Number of points: ",len(graph[maxi])
     count = 0
     for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
        for y in dictionary[x]:
          temp2 = score(model,y) 
          count += 1
          if temp2 < high:
            high = temp2
            bsoln = y
-    print count     
+    #print count     
     return bsoln.dec,high,model
-  """
-  def new_interpolate(self,m,dictionary,xindex):
-    xpoints=self.getpoints(xindex,dictionary)
+
+  def getpoints(self,index,dictionary):
+    tempL = []
+    for x in dictionary[index]:tempL.append(x.dec)
+    return tempL
+
+  #new_interpolate
+  def n_i(self,m,dictionary,index):
+
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      return max(lo(m,i), x%hi(m,i))
+    genPoint=[]
+    row = index/100
+    col = index%10
+    xpoints=self.getpoints(index,dictionary)
     two = self.one(m,xpoints)
     three = self.one(m,xpoints)
     four = self.one(m,xpoints) 
+    
+    assert(len(two)==len(three)),"Something's wrong!"
+    
+    for i in xrange(len(two)):
+      x,y,z=two[i],three[i],four[i]
+      new = trim(m,x+0.1*abs(z-y),i)
+      genPoint.append(new)
+    dictionary[index].append(self.generateSlot(m,genPoint,row,col))
+    return genPoint
+   
 
-
-
-  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def extrapolate(lx,ly,lz,cr=1,fmin=0.9,fmax=2):
-      def lo(m,index)      : return m.minR[index]
-      def hi(m)      : return m.maxR[index]
-      def trim(x,i)  : # trim to legal range
-        return max(lo(x,i), x%hi(x,i))
-      def indexConvert(index):
-        return int(index/100),index%10
-      assert(len(lx)==len(ly)==len(lz))
-      genPoint=[]
-      for i in xrange(len(lx)):
-        x,y,z = lx[i],ly[i],lz[i]
-        rand = random.random()
-
-        if rand < cr:
-          probEx = fmin + (fmax-fmin)*random.random()
-          new = trim(x + probEx*(y-z),i)
-        else:
-          new = y #Just assign a value for that decision
-        genPoint.append(new)
-      return genPoint
-
-    decision=[]
-    #TODO: need to put an assert saying checking whether extrapolation is actually possible
-    xpoints=self.getpoints(xindex,dictionary)
-    ypoints=self.getpoints(yindex,dictionary)
-    count=0
-    while True:
-      if(count>min(len(xpoints),maxlimit)):break
-      two = self.one(m,xpoints)
-      index2,index3=0,0
-      while(index2 == index3): #just making sure that the indexes are not the same
-        index2=random.randint(0,len(ypoints)-1)
-        index3=random.randint(0,len(ypoints)-1)
-
-      three=ypoints[index2]
-      four=ypoints[index3]
-      temp = extrapolate(two,three,four)
-      #decision.append(extrapolate(two,three,four))
-      decision.append(temp)
-      count+=1
-    return decision
-  """
   def _checkDictionary(self,dictionary):
     sum=0
     for i in dictionary.keys():
