@@ -10,12 +10,13 @@ def processing(lines):
   returnLines =[]
   def beforestemming(line):
     temp=[]
-    from nltk import word_tokenize
+    from nltk.tokenize import RegexpTokenizer
     from nltk.corpus import stopwords
     import string
     punc = list(string.punctuation.replace(".","").replace("_","")) + [". "]
     stop = stopwords.words('english')+punc
-    for i in word_tokenize(line.lower()):
+    tokenizer = RegexpTokenizer(r'\w+')
+    for i in tokenizer.tokenize(line.lower()):
       for p in punc: i=i.replace(p,"")
       if i.isdigit() == True: continue
       if i not in stop and len(i)>2:
