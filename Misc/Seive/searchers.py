@@ -2015,7 +2015,7 @@ class Seive2(SearchersBasic): #minimizing
         else:
           new = y
         genPoint.append(new)
-      return genPointt
+      return genPoint
 
     decision=[]
     #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
