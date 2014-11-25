@@ -91,7 +91,9 @@ def unique_function_call(input_file):
   f = open(input_file,"r")
   calls = set()
   for line in f:
-    line = line.replace(" ","").replace("\n","").replace(";","")
+    try: line = line.replace(" ","").replace("\n","").replace(";","").split("[")[0]
+    except: pass
+    
     #if line == "digraphG{" or line == "}" or line == "rankdir=LR": pass
     if "None" in line:pass
     elif "{" in line: pass
@@ -99,7 +101,8 @@ def unique_function_call(input_file):
     elif "}" in line:pass
     elif "->" not in line: calls.add(line)
     else:
-      func1,func2=line.split("->")
+      try:func1,func2=line.split("->")
+      except: continue
       calls.add(func1)
       calls.add(func2)
   f.close()
@@ -129,48 +132,108 @@ def append_calls_file(calls,source_file):
 def remove_node(node_name,dot_file):
   """Removes """
   def modify_file(node_name,dot_file,add_str):
+    if add_str == "}\n": 
+      print "string empty"
+      return
     f = open(dot_file,"r")
     lines = f.readlines()
     f.close()
+    #print node_name
     f = open(dot_file,"w")
     for line in lines:
       if node_name in line: continue
       elif "}" in line: f.write(add_str)
-      else: f.write(line)
+      else: 
+        #print ">>>>>>>>>>>>>>>>>>>>>>> ",line 
+        f.write(line)
     f.close() 
-  
+
+  def product(lista,listb):
+    temp = []
+    if len(lista) == 0 and len(listb) == 0: return temp
+    elif len(lista) == 0: 
+      return [ x for x in listb]
+    elif len(listb) == 0: 
+      return [ x for x in lista]
+    else:
+      import itertools
+      return list(itertools.product(lista,listb))
+
   def combine_funcs(to_fns,frm_fns):
     ret_str = ""
     import itertools
-    tempL = list(itertools.product(to_fns,frm_fns))
-    for item in tempL:ret_str += item[0] + "->" + item[1] +";\n"
+    #print "========================",to_fns,frm_fns
+    tempL = product(to_fns,frm_fns)
+    print "Length of to_fns: ",len(to_fns)
+    print to_fns
+    print "Length of frm_fns: ",len(frm_fns)
+    print frm_fns
+    print "Length of combine: ",len(tempL)
+    if len(tempL) > 0:
+      for item in tempL:
+        #print item
+        if type(item) is tuple:
+          #print "there"
+          ret_str += item[0] + "->" + item[1] +";\n"
+        else:
+          #print "Single: ",item
+          ret_str += item + ";\n"
     return ret_str + "}\n"
 
   listL = read_from_file(dot_file)  
-  to_fns = []
-  frm_fns = []
+  to_fns = set()
+  frm_fns = set()
   for item in listL:
     item = item.replace(";\n","")
     if "->" not in item: continue
-    to_fn,frm_fn = item.split("->")
-    if(to_fn == frm_fn): continue  #cases where there is a self loop
-    if(to_fn == node_name): frm_fns.append(frm_fn)
-    if(frm_fn == node_name): to_fns.append(to_fn)
+    try:
+      temp = item.split("[")[0]
+      to_fn = temp.split("->")[0].replace(" ","")
+      frm_fn = temp.split("->")[1].replace(" ","")
+    except:
+      #print item 
+      continue
+
+    #if to_fn == "fetch_20newsgroups": print "blah"
+
+    if to_fn == node_name: 
+        #print "to_fn: ",to_fn, frm_fn, node_name
+        frm_fns.add(frm_fn)
+    if frm_fn == node_name: 
+        #print "frm_fn: ",to_fn, frm_fn, node_name 
+        to_fns.add(to_fn)
+  print "========================================================="
+  print "Name: ",node_name, " to fns: ", to_fns, " from fns: ",frm_fns
   modify_file(node_name,dot_file,combine_funcs(to_fns,frm_fns))
+  print "========================================================="
 
 
 def wrapper_remove_node(dot_file,tfidf_list):
+  def remove_list(flist,item):
+    for i in flist: 
+      #if (i in item or item in i):
+      if(set(i.split("_")).issubset(item.split("_")) == True):
+        flist.remove(i)
+        print "found: ",i,item
+        break
+    return flist
+
   assert(dot_file.split(".")[1] == "dot"),"not a dot file"
   flist = unique_function_call(dot_file)
+  print "Before: There are ",len(flist), " unique functions" 
+  
   count=1
   for item in tfidf_list: 
-    try:flist.remove(item)
-    except: 
-      #print item + " not present in the source code: ",count
-      count+=1
+    #try:
+      #print item.replace(".","_")
+    flist = remove_list(flist,item.replace(".","_"))      
+    #except: 
+    #  print item + " not present in the source code: ",count
+    #  count+=1
   if count > 100: return
-  for item in flist: remove_node(item,dot_file)
-
+  print "After: There are ",len(flist), " unique functions" 
+  for item in flist:
+    remove_node(item,dot_file)
 
 class v(ast.NodeVisitor):
   listL=[]
@@ -252,10 +315,11 @@ if __name__ == '__main__':
   f.close()
   print "First Pass: ", count_line("input1.dot")
   print "dot file processing...."
-  dot_processing()
+  dot_processing("input1.dot")
   print "Second Pass: ", count_line("new_output.dot")
   tfidf_list = generate_tfidf_list("library_tfidf.txt")
   wrapper_remove_node("new_output.dot",tfidf_list)
+  dot_processing("new_output.dot","penwidth")
   print "Third Pass: ", count_line("new_output.dot")
   import os
   os.system('dot -Tpng new_output.dot > new_output.png')
