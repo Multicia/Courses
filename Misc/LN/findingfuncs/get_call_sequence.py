@@ -190,6 +190,7 @@ def remove_node(node_name,dot_file):
       temp = item.split("[")[0]
       to_fn = temp.split("->")[0].replace(" ","")
       frm_fn = temp.split("->")[1].replace(" ","")
+      if to_fn == frm_fn: continue
     except:
       #print item 
       continue

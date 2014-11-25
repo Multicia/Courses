@@ -21,7 +21,7 @@ def generate_new_dot_file(dictionary,style):
     if "print" in key: continue
     if style == "penwidth":
       temp = key.replace("\n","") 
-      temp += ' [penwidth='+str(float(dictionary[key]/max_val)*5)+'];\n'
+      temp += ' [penwidth='+str(float(dictionary[key]/max_val)*2)+'];\n'
     else: temp = key + ";\n"
     f.write(temp)
   f.write('}\n')

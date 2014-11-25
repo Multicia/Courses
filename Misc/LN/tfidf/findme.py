@@ -15,7 +15,7 @@ def processing(lines):
     import string
     punc = list(string.punctuation.replace(".","").replace("_","")) + [". "]
     stop = stopwords.words('english')+punc
-    tokenizer = RegexpTokenizer(r'\w+')
+    tokenizer = RegexpTokenizer(r'(\w+\.)(\w+\.?)*([a-zA-Z])+\(?\)?')
     for i in tokenizer.tokenize(line.lower()):
       for p in punc: i=i.replace(p,"")
       if i.isdigit() == True: continue
@@ -58,17 +58,16 @@ def filldict(dictL,lines):
 def findme(src):
   def top(rawdict):
     import heapq
-    return heapq.nlargest(100,rawdict,key=rawdict.get)
+    return heapq.nlargest(len(rawdict.keys()),rawdict,key=rawdict.get)
 
   raw = open(src).read()
   lines = raw.decode('utf-8').split('.\n\n')
-  print "Number of lines: " + str(len(lines))
+  #print "Number of lines: " + str(len(lines))
   lines = processing(lines)
   d = defaultdict(list)
   d =filldict(d,lines)
   scoredict = tfidf(d,raw)
   print len(scoredict.keys())
-  print scoredict['work']
   temp = top(scoredict)
   for t in temp:
     print "Word: ",t,", Score: ",scoredict[t],", List: ",len(set(d[t])),", Reps: ",len(d[t])
@@ -83,13 +82,13 @@ def tfidf(d,raw):
     return (word/words)*(math.log(paras/para))
   paras = len(raw.split('.\n\n'))
   uwords = d.keys()
-  print "TFIFD: Number of Unique words: ",len(uwords)
+  #print "TFIFD: Number of Unique words: ",len(uwords)
   count=0
   for uword in uwords:
     para = len(set(d[uword]))
     sumv=0 
     count+=1
-    if(count%10 == 0): say('.'),
+    #if(count%10 == 0): say('.'),
     for i in d[uword]:
       words = nowords(raw,i)
       word = occur(d[uword],i)

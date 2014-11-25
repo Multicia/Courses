@@ -1,0 +1,695 @@
+First Pass:  3616
+dot file processing....
+Second Pass:  125
+Before: There are  90  unique functions
+found:  load_iris sklearn_datasets_load_iris
+found:  datasets_load_digits sklearn_datasets_load_digits
+found:   fetch_20newsgroups___doc
+found:  train_test_split sklearn_cross_validation_train_test_split
+found:  range range_n_outliers_size
+found:  dict sklearn_decomposition_dict_learning
+After: There are  84  unique functions
+=========================================================
+Name:  nudge_dataset  to fns:  set(['np_asarray'])  from fns:  set(['np_min'])
+Length of to_fns:  1
+set(['np_asarray'])
+Length of frm_fns:  1
+set(['np_min'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  svm_SVC  to fns:  set(['SelectKBest'])  from fns:  set(['make_pipeline'])
+Length of to_fns:  1
+set(['SelectKBest'])
+Length of frm_fns:  1
+set(['make_pipeline'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  np_min  to fns:  set(['np_asarray'])  from fns:  set(['np_max'])
+Length of to_fns:  1
+set(['np_asarray'])
+Length of frm_fns:  1
+set(['np_max'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_text  to fns:  set(['zip'])  from fns:  set(['plt_show', 'plt_showlogging_basicConfig'])
+Length of to_fns:  1
+set(['zip'])
+Length of frm_fns:  2
+set(['plt_show', 'plt_showlogging_basicConfig'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  plt_show  to fns:  set(['plt_subplots_adjust', 'zip'])  from fns:  set(['logging_basicConfig'])
+Length of to_fns:  2
+set(['plt_subplots_adjust', 'zip'])
+Length of frm_fns:  1
+set(['logging_basicConfig'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  sys_exit  to fns:  set(['op_error'])  from fns:  set([])
+Length of to_fns:  1
+set(['op_error'])
+Length of frm_fns:  0
+set([])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  op_parse_args  to fns:  set(['op_add_option'])  from fns:  set(['len'])
+Length of to_fns:  1
+set(['op_add_option'])
+Length of frm_fns:  1
+set(['len'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  samples_generator_make_classification  to fns:  set(['anova_svm_predict'])  from fns:  set(['SelectKBest'])
+Length of to_fns:  1
+set(['anova_svm_predict'])
+Length of frm_fns:  1
+set(['SelectKBest'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  re_findall  to fns:  set(['tok_lower'])  from fns:  set(['defaultdict'])
+Length of to_fns:  1
+set(['tok_lower'])
+Length of frm_fns:  1
+set(['defaultdict'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  tok_lower  to fns:  set(['len'])  from fns:  set(['defaultdict'])
+Length of to_fns:  1
+set(['len'])
+Length of frm_fns:  1
+set(['defaultdict'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  SVC  to fns:  set(['FeatureUnion'])  from fns:  set(['svm_fit'])
+Length of to_fns:  1
+set(['FeatureUnion'])
+Length of frm_fns:  1
+set(['svm_fit'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  sorted  to fns:  set(['grid_search_best_estimator_'])  from fns:  set([])
+Length of to_fns:  1
+set(['grid_search_best_estimator_'])
+Length of frm_fns:  0
+set([])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  MiniBatchKMeans  to fns:  set([])  from fns:  set(['KMeans'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['KMeans'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  LinearSVC  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  plt_xticks  to fns:  set(['plt_imshow'])  from fns:  set(['plt_yticks'])
+Length of to_fns:  1
+set(['plt_imshow'])
+Length of frm_fns:  1
+set(['plt_yticks'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  classifier_fit  to fns:  set(['Pipeline'])  from fns:  set(['linear_model_LogisticRegression'])
+Length of to_fns:  1
+set(['Pipeline'])
+Length of frm_fns:  1
+set(['linear_model_LogisticRegression'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  LinearSVC_fit  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  RidgeClassifier  to fns:  set([])  from fns:  set(['Perceptron'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['Perceptron'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  lsa_fit_transform  to fns:  set(['make_pipeline'])  from fns:  set([])
+Length of to_fns:  1
+set(['make_pipeline'])
+Length of frm_fns:  0
+set([])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  Perceptron  to fns:  set([])  from fns:  set(['PassiveAggressiveClassifier'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['PassiveAggressiveClassifier'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  clf_predict  to fns:  set(['time'])  from fns:  set(['time'])
+Length of to_fns:  1
+set(['time'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  ch2_fit_transform  to fns:  set(['SelectKBest'])  from fns:  set(['ch2_transform'])
+Length of to_fns:  1
+set(['SelectKBest'])
+Length of frm_fns:  1
+set(['ch2_transform'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  PassiveAggressiveClassifier  to fns:  set([])  from fns:  set(['KNeighborsClassifier'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['KNeighborsClassifier'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  KMeans  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  clf_fit  to fns:  set(['time', 'GridSearchCV'])  from fns:  set(['time'])
+Length of to_fns:  2
+set(['time', 'GridSearchCV'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  PCA  to fns:  set(['load_iris'])  from fns:  set(['SelectKBest'])
+Length of to_fns:  1
+set(['load_iris'])
+Length of frm_fns:  1
+set(['SelectKBest'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  SelectKBest  to fns:  set(['load_iris', 'anova_svm_predict', 'time'])  from fns:  set(['FeatureUnion', 'ch2_transform', 'make_pipeline'])
+Length of to_fns:  3
+set(['load_iris', 'anova_svm_predict', 'time'])
+Length of frm_fns:  3
+set(['FeatureUnion', 'ch2_transform', 'make_pipeline'])
+Length of combine:  9
+=========================================================
+=========================================================
+Name:  self_transformer_  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  sum  to fns:  set(['fetch_20newsgroups'])  from fns:  set(['size_mb'])
+Length of to_fns:  1
+set(['fetch_20newsgroups'])
+Length of frm_fns:  1
+set(['size_mb'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_subplot  to fns:  set(['enumerate'])  from fns:  set(['plt_imshow'])
+Length of to_fns:  1
+set(['enumerate'])
+Length of frm_fns:  1
+set(['plt_imshow'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  grid_search_fit  to fns:  set(['time', 'GridSearchCV'])  from fns:  set(['load_iris'])
+Length of to_fns:  2
+set(['time', 'GridSearchCV'])
+Length of frm_fns:  1
+set(['load_iris'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  make_pipeline  to fns:  set(['time', 'load_iris', 'HashingVectorizer', 'anova_svm_predict', 'TruncatedSVD'])  from fns:  set(['anova_svm_fit', 'HashingVectorizer'])
+Length of to_fns:  5
+set(['time', 'load_iris', 'HashingVectorizer', 'anova_svm_predict', 'TruncatedSVD'])
+Length of frm_fns:  2
+set(['anova_svm_fit', 'HashingVectorizer'])
+Length of combine:  10
+=========================================================
+=========================================================
+Name:  defaultdict  to fns:  set(['len'])  from fns:  set(['tokens'])
+Length of to_fns:  1
+set(['len'])
+Length of frm_fns:  1
+set(['tokens'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  FeatureUnion  to fns:  set(['time', 'anova_svm_predict', 'load_iris'])  from fns:  set(['svm_fit'])
+Length of to_fns:  3
+set(['time', 'anova_svm_predict', 'load_iris'])
+Length of frm_fns:  1
+set(['svm_fit'])
+Length of combine:  3
+=========================================================
+=========================================================
+Name:  GridSearchCV  to fns:  set(['Pipeline', 'dict'])  from fns:  set(['load_iris', 'time'])
+Length of to_fns:  2
+set(['Pipeline', 'dict'])
+Length of frm_fns:  2
+set(['load_iris', 'time'])
+Length of combine:  4
+=========================================================
+=========================================================
+Name:  len  to fns:  set(['op_add_option', 'datasets_load_digits'])  from fns:  set(['tokens', 'digits_images', 'op_error', 'np_asarray'])
+Length of to_fns:  2
+set(['op_add_option', 'datasets_load_digits'])
+Length of frm_fns:  4
+set(['tokens', 'digits_images', 'op_error', 'np_asarray'])
+Length of combine:  8
+=========================================================
+=========================================================
+Name:  plt_yticks  to fns:  set(['plt_imshow', 'plt_barh'])  from fns:  set(['plt_suptitle', 'plt_legend'])
+Length of to_fns:  2
+set(['plt_imshow', 'plt_barh'])
+Length of frm_fns:  2
+set(['plt_suptitle', 'plt_legend'])
+Length of combine:  4
+=========================================================
+=========================================================
+Name:  fetch_20newsgroups  to fns:  set([])  from fns:  set(['size_mb'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['size_mb'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_imshow  to fns:  set(['enumerate'])  from fns:  set(['plt_suptitle', 'plt_legend'])
+Length of to_fns:  1
+set(['enumerate'])
+Length of frm_fns:  2
+set(['plt_suptitle', 'plt_legend'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  svm_fit  to fns:  set(['load_iris', 'anova_svm_predict', 'time'])  from fns:  set(['Pipeline'])
+Length of to_fns:  3
+set(['load_iris', 'anova_svm_predict', 'time'])
+Length of frm_fns:  1
+set(['Pipeline'])
+Length of combine:  3
+=========================================================
+=========================================================
+Name:  KNeighborsClassifier  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  np_max  to fns:  set(['np_array', 'np_asarray'])  from fns:  set(['np_array', 'plt_figure', 'train_test_split'])
+Length of to_fns:  2
+set(['np_array', 'np_asarray'])
+Length of frm_fns:  3
+set(['np_array', 'plt_figure', 'train_test_split'])
+Length of combine:  6
+=========================================================
+=========================================================
+Name:  np_array  to fns:  set(['range', 'np_asarray'])  from fns:  set(['plt_figure', 'train_test_split'])
+Length of to_fns:  2
+set(['range', 'np_asarray'])
+Length of frm_fns:  2
+set(['plt_figure', 'train_test_split'])
+Length of combine:  4
+=========================================================
+=========================================================
+Name:  logistic_classifier_fit  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  results_append  to fns:  set([])  from fns:  set(['np_arange'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['np_arange'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_title  to fns:  set(['plt_figure'])  from fns:  set(['plt_barh'])
+Length of to_fns:  1
+set(['plt_figure'])
+Length of frm_fns:  1
+set(['plt_barh'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  np_argsort  to fns:  set(['enumerate'])  from fns:  set([])
+Length of to_fns:  1
+set(['enumerate'])
+Length of frm_fns:  0
+set([])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  km_fit  to fns:  set(['time'])  from fns:  set([])
+Length of to_fns:  1
+set(['time'])
+Length of frm_fns:  0
+set([])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  enumerate  to fns:  set(['plt_figure'])  from fns:  set(['plt_suptitle', 'plt_legend'])
+Length of to_fns:  1
+set(['plt_figure'])
+Length of frm_fns:  2
+set(['plt_suptitle', 'plt_legend'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  linear_model_LogisticRegression  to fns:  set(['Pipeline', 'train_test_split'])  from fns:  set(['BernoulliRBM'])
+Length of to_fns:  2
+set(['Pipeline', 'train_test_split'])
+Length of frm_fns:  1
+set(['BernoulliRBM'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  TruncatedSVD  to fns:  set(['time'])  from fns:  set(['HashingVectorizer'])
+Length of to_fns:  1
+set(['time'])
+Length of frm_fns:  1
+set(['HashingVectorizer'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  grid_search_best_estimator_  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  zip  to fns:  set([])  from fns:  set(['logging_basicConfig'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['logging_basicConfig'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  vectorizer_get_feature_names  to fns:  set(['km_cluster_centers_'])  from fns:  set(['range'])
+Length of to_fns:  1
+set(['km_cluster_centers_'])
+Length of frm_fns:  1
+set(['range'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  vectorizer_transform  to fns:  set(['HashingVectorizer', 'time'])  from fns:  set(['TfidfVectorizer', 'time'])
+Length of to_fns:  2
+set(['HashingVectorizer', 'time'])
+Length of frm_fns:  2
+set(['TfidfVectorizer', 'time'])
+Length of combine:  4
+=========================================================
+=========================================================
+Name:  np_concatenate  to fns:  set([])  from fns:  set(['datasets_load_digits'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['datasets_load_digits'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_legend  to fns:  set(['plt_figure', 'plt_barh'])  from fns:  set([])
+Length of to_fns:  2
+set(['plt_figure', 'plt_barh'])
+Length of frm_fns:  0
+set([])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  hasher_transform  to fns:  set(['FeatureHasher'])  from fns:  set(['time'])
+Length of to_fns:  1
+set(['FeatureHasher'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  OptionParser  to fns:  set(['logging_basicConfig'])  from fns:  set(['op_add_option'])
+Length of to_fns:  1
+set(['logging_basicConfig'])
+Length of frm_fns:  1
+set(['op_add_option'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  Pipeline  to fns:  set(['anova_svm_predict', 'time', 'BernoulliRBM', 'load_iris'])  from fns:  set(['time', 'dict', 'BernoulliRBM', 'load_iris'])
+Length of to_fns:  4
+set(['anova_svm_predict', 'time', 'BernoulliRBM', 'load_iris'])
+Length of frm_fns:  4
+set(['time', 'dict', 'BernoulliRBM', 'load_iris'])
+Length of combine:  16
+=========================================================
+=========================================================
+Name:  tokens  to fns:  set(['op_add_option', 'datasets_load_digits'])  from fns:  set([])
+Length of to_fns:  2
+set(['op_add_option', 'datasets_load_digits'])
+Length of frm_fns:  0
+set([])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  op_error  to fns:  set(['op_add_option', 'datasets_load_digits'])  from fns:  set([])
+Length of to_fns:  2
+set(['op_add_option', 'datasets_load_digits'])
+Length of frm_fns:  0
+set([])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  TfidfVectorizer  to fns:  set(['HashingVectorizer', 'time'])  from fns:  set(['vectorizer_fit_transform'])
+Length of to_fns:  2
+set(['HashingVectorizer', 'time'])
+Length of frm_fns:  1
+set(['vectorizer_fit_transform'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  np_arange  to fns:  set([])  from fns:  set(['range'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['range'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  ch2_transform  to fns:  set(['time', 'anova_svm_predict', 'load_iris'])  from fns:  set([])
+Length of to_fns:  3
+set(['time', 'anova_svm_predict', 'load_iris'])
+Length of frm_fns:  0
+set([])
+Length of combine:  3
+=========================================================
+=========================================================
+Name:  logging_basicConfig  to fns:  set([])  from fns:  set(['op_add_option'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['op_add_option'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  vectorizer_fit_transform  to fns:  set(['DictVectorizer', 'HashingVectorizer', 'time'])  from fns:  set(['time'])
+Length of to_fns:  3
+set(['DictVectorizer', 'HashingVectorizer', 'time'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  3
+=========================================================
+=========================================================
+Name:  FeatureHasher  to fns:  set(['time'])  from fns:  set(['time'])
+Length of to_fns:  1
+set(['time'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_suptitle  to fns:  set(['plt_figure', 'plt_barh'])  from fns:  set([])
+Length of to_fns:  2
+set(['plt_figure', 'plt_barh'])
+Length of frm_fns:  0
+set([])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  DictVectorizer  to fns:  set(['time'])  from fns:  set(['time'])
+Length of to_fns:  1
+set(['time'])
+Length of frm_fns:  1
+set(['time'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  plt_figure  to fns:  set(['range', 'np_asarray'])  from fns:  set(['plt_barh'])
+Length of to_fns:  2
+set(['range', 'np_asarray'])
+Length of frm_fns:  1
+set(['plt_barh'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  anova_svm_fit  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  size_mb  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  plt_subplots_adjust  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  anova_svm_predict  to fns:  set([])  from fns:  set(['dict', 'time', 'HashingVectorizer', 'BernoulliRBM', 'load_iris'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  5
+set(['dict', 'time', 'HashingVectorizer', 'BernoulliRBM', 'load_iris'])
+Length of combine:  5
+=========================================================
+=========================================================
+Name:  BernoulliRBM  to fns:  set(['load_iris', 'train_test_split', 'time'])  from fns:  set(['load_iris', 'dict', 'time'])
+Length of to_fns:  3
+set(['load_iris', 'train_test_split', 'time'])
+Length of frm_fns:  3
+set(['load_iris', 'dict', 'time'])
+Length of combine:  9
+=========================================================
+=========================================================
+Name:  LinearSVC_predict  to fns:  set([])  from fns:  set([])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  0
+set([])
+Length of combine:  0
+string empty
+=========================================================
+=========================================================
+Name:  km_cluster_centers_  to fns:  set([])  from fns:  set(['range'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['range'])
+Length of combine:  1
+=========================================================
+=========================================================
+Name:  time  to fns:  set(['HashingVectorizer', 'train_test_split', 'dict', 'load_iris'])  from fns:  set(['dict', 'HashingVectorizer', 'load_iris'])
+Length of to_fns:  4
+set(['HashingVectorizer', 'train_test_split', 'dict', 'load_iris'])
+Length of frm_fns:  3
+set(['dict', 'HashingVectorizer', 'load_iris'])
+Length of combine:  12
+=========================================================
+=========================================================
+Name:  digits_images  to fns:  set(['op_add_option', 'datasets_load_digits'])  from fns:  set(['train_test_split'])
+Length of to_fns:  2
+set(['op_add_option', 'datasets_load_digits'])
+Length of frm_fns:  1
+set(['train_test_split'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  plt_barh  to fns:  set(['range', 'np_asarray'])  from fns:  set([])
+Length of to_fns:  2
+set(['range', 'np_asarray'])
+Length of frm_fns:  0
+set([])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  np_asarray  to fns:  set(['op_add_option', 'datasets_load_digits'])  from fns:  set(['train_test_split'])
+Length of to_fns:  2
+set(['op_add_option', 'datasets_load_digits'])
+Length of frm_fns:  1
+set(['train_test_split'])
+Length of combine:  2
+=========================================================
+=========================================================
+Name:  HashingVectorizer  to fns:  set(['dict', 'train_test_split', 'load_iris'])  from fns:  set(['dict', 'load_iris'])
+Length of to_fns:  3
+set(['dict', 'train_test_split', 'load_iris'])
+Length of frm_fns:  2
+set(['dict', 'load_iris'])
+Length of combine:  6
+=========================================================
+=========================================================
+Name:  op_add_option  to fns:  set([])  from fns:  set(['train_test_split'])
+Length of to_fns:  0
+set([])
+Length of frm_fns:  1
+set(['train_test_split'])
+Length of combine:  1
+=========================================================
+Third Pass:  12
