@@ -28,8 +28,10 @@ class MaxWalkSat(SearchersBasic):
   minR=0
   maxR=0
   random.seed(40)
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
 
       
@@ -50,7 +52,7 @@ class MaxWalkSat(SearchersBasic):
 
     #print "Value of p: %f"%probLocalSearch
    # model = Fonseca()
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     #print model.maxVal,model.minVal
     
     for i in range(0,maxTries): #Outer Loop
@@ -116,8 +118,10 @@ class SA(SearchersBasic): #minimizing
   minR=0
   maxR=0
   random.seed(1)
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
 
 
@@ -137,7 +141,7 @@ class SA(SearchersBasic): #minimizing
     #print "Model used: %s"%(model.info())
     minR = model.minR
     maxR = model.maxR
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
 
     s = [minR[z] + (maxR[z] - minR[z])*random.random() for z in range(0,model.n)]
@@ -195,8 +199,10 @@ class GA(SearchersBasic):
   maxR=0
   population={}
   random.seed(1)
-  def __init__(self,modelName,displayS):
-    self.model=modelName
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.displayStyle=displayS
     self.crossoverRate = float(myoptions['GA']['crossOverRate'])
     self.mutationRate = 1/self.model.n
@@ -350,7 +356,7 @@ class GA(SearchersBasic):
     #print "Model used: %s"%(model.info())
     minR = model.minR
     maxR = model.maxR
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
     #print "MaxVal: %f MinVal: %f"%(model.maxVal, model.minVal)
     #print "n: %d"%model.n
     self.initialPopulation()
@@ -490,11 +496,13 @@ class DE(SearchersBasic):
     return solution,minR,self.model
 
 class PSO(SearchersBasic):
-  def __init__(self,modelName,displayS):
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
     self.v = []
     self.p = []
     self.lb = []
-    self.model=modelName
     self.gb = [self.model.minR[i] + random.random()*(self.model.maxR[i]-self.model.minR[i]) \
     for i in xrange(self.model.n)]
     self.eb=self.model.evaluate(self.gb)
@@ -550,7 +558,7 @@ class PSO(SearchersBasic):
     maxR = model.maxR
     phi = phi1+phi2
     self.K = 2/(abs(2 - (phi) -math.sqrt(phi **2) -4*phi))
-    model.baseline(minR,maxR)
+    #model.baseline(minR,maxR)
 
     for i in xrange(Repeat):
       #if(i%998):print "boom"     

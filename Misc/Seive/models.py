@@ -684,6 +684,8 @@ class DTLZ1(ModelBasic):
     return 100 * ( abs(listpoints[-1]) +summ)
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -691,8 +693,11 @@ class DTLZ1(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 
 class DTLZ2(ModelBasic):
@@ -729,6 +734,8 @@ class DTLZ2(ModelBasic):
     return sum([ (x-0.5)**2 for x in listpoints])
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -736,8 +743,11 @@ class DTLZ2(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 
 class DTLZ3(ModelBasic):
@@ -774,6 +784,8 @@ class DTLZ3(ModelBasic):
     return 100 * (len(listpoints) + sum([ (x-0.5)**2 -math.cos(20*math.pi*(x-0.5)) for x in listpoints]))
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -781,8 +793,11 @@ class DTLZ3(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 class DTLZ4(ModelBasic):
   def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10,alpha=100):
@@ -819,6 +834,8 @@ class DTLZ4(ModelBasic):
     return sum([ (x-0.5)**2 for x in listpoints])
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -826,8 +843,11 @@ class DTLZ4(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 
 class DTLZ5(ModelBasic):
@@ -867,6 +887,8 @@ class DTLZ5(ModelBasic):
     return sum([ (x-0.5)**2 for x in listpoints])
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -874,10 +896,11 @@ class DTLZ5(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-        #print result,i
-      self.returnMax(result)
-      self.returnMin(result)
-
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 class DTLZ6(ModelBasic):
   def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
@@ -916,6 +939,8 @@ class DTLZ6(ModelBasic):
     return sum([ x**0.1 for x in listpoints])
    
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -923,7 +948,8 @@ class DTLZ6(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-        #print result,i
-      self.returnMax(result)
-      self.returnMin(result)
-
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
