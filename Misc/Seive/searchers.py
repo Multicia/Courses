@@ -448,23 +448,27 @@ class DE(SearchersBasic):
     return solution
 
   def update(self,f,cf,frontier,total=0.0,n=0):
+    def better(old,new):
+      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
+        if old[i] >= new[i]: continue
+        else: return False
+      return True
     #print "update %d"%len(frontier)
     model=self.model
     newF = []
     total,n=0,0
     for x in frontier:
       #print "update: %d"%n
-      s = model.evaluate(x)[-1]
+      s = model.evaluate(x)[:-1]
       new = self.extrapolate(frontier,x,f,cf)
       #print new
-      newe=model.evaluate(new)[-1]
-      if(newe<s):
+      newe=model.evaluate(new)[:-1]
+      if better(s,newe) == True:
         newF.append(new)
       else:
         newF.append(x)
-      total+=min(newe,s)
-      n+=1
-    return total,n,newF
+    return newF
       
   def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01):
     #print "evaluate"
@@ -477,7 +481,7 @@ class DE(SearchersBasic):
     #print frontier
     for i in xrange(repeat):
       #print i,
-      total,n,frontier = self.update(f,cf,frontier)
+      frontier = self.update(f,cf,frontier)
 
       #for zz in frontier:
       #  print "%2.2f "%self.model.evaluate(zz),
@@ -3313,7 +3317,7 @@ class Seive5(SearchersBasic): #minimizing
   def run_de(self,model,f,cf,frontier,xb,yb,repeat=100):
     def better(old,new):
       assert(len(old)==len(new)),"MOEAD| Length mismatch"
-      for i in xrange(old-1): #Since the score is return as [values of all objectives and energy at the end]
+      for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
         if old[i] >= new[i]: continue
         else: return False
       return True
@@ -3324,21 +3328,20 @@ class Seive5(SearchersBasic): #minimizing
       total,n=0,0
       for x in frontier:
         #print "update: %d"%n
-        s = score(model,x)[-1]
+        s = score(model,x)
         new = self.extrapolate(model,frontier,x,f,cf,xb,yb)
         #print new
-        newe=score(model,new)[-1]
+        newe=score(model,new)
         if better(s,newe) == True:
           newF.append(new)
         else:
           newF.append(x)
-        total+=min(newe,s)
         n+=1
-      return total,n,newF  
+      return newF  
     #print repeat
     for _ in xrange(repeat):
       #print ".",
-      total,n,frontier = de(model,f,cf,frontier,xb,yb)
+      frontier = de(model,f,cf,frontier,xb,yb)
     minR=9e10
     for x in frontier:
       #print x
@@ -3392,7 +3395,7 @@ class Seive5(SearchersBasic): #minimizing
     return sum
 
 
-class MOEAD(Seive4):
+class MOEAD(Seive5):
   
   def evaluate(self,points=[],depth=0,repeat=100,f=0.75,cf=0.3):
     def generate_dictionary(points=[]):  
