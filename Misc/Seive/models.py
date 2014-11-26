@@ -188,12 +188,10 @@ class ModelBasic(object):
     self.addWrapper(temp) 
     #print temp
     energy= np.sum(temp)
+    temp.append((energy-self.minVal)/(self.maxVal-self.minVal))
     self.no_eval+=1
-    #print (energy-self.minVal)/(self.maxVal-self.minVal)
-    #print self.minVal,self.maxVal
-    return (energy-self.minVal)/(self.maxVal-self.minVal)
 
-
+    return temp
 
   def  neighbour(self,minN,maxN,c):
     return minN[c] + (maxN[c]-minN[c])*random.random()

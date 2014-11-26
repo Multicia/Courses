@@ -46,7 +46,9 @@ def multipleRun():
      tempC = klass()
      import time
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
-     bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR)
+     #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
+     bmin = -303.17691991
+     bmax = 500.522746125
      print "Baseline Finished: ",bmin,bmax
      for searcher in [MOEAD,DE]:#Seive5,Seive4,Seive3,Seive2,Seive,DE]:#PSO,GA,DE,SA,MaxWalkSat]:#Seive2,Seive3,Seive,DE]:
 

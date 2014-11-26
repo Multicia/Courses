@@ -454,10 +454,10 @@ class DE(SearchersBasic):
     total,n=0,0
     for x in frontier:
       #print "update: %d"%n
-      s = model.evaluate(x)
+      s = model.evaluate(x)[-1]
       new = self.extrapolate(frontier,x,f,cf)
       #print new
-      newe=model.evaluate(new)
+      newe=model.evaluate(new)[-1]
       if(newe<s):
         newF.append(new)
       else:
@@ -489,7 +489,7 @@ class DE(SearchersBasic):
     minR=9e10
     for x in frontier:
       #print x
-      energy = self.model.evaluate(x)
+      energy = self.model.evaluate(x)[-1]
       if(minR>energy):
         minR = energy
         solution=x 
@@ -1598,7 +1598,7 @@ class Seive3(SearchersBasic): #minimizing
           if result == False: 
             #print "in middle of desert"
             continue
-        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
         
        # print matrix[i-1][j-1],
@@ -1623,7 +1623,7 @@ class Seive3(SearchersBasic): #minimizing
           #print "Generate New|======================:" ,len(dictionary[x])
        #temp = random.sample(dictionary[x],min(len(dictionary[x]),15))
        for y in dictionary[x]:
-         temp2 = score(model,y) 
+         temp2 = score(model,y)[-1]
          #print temp2
          if temp2 < high:
            high = temp2
@@ -2097,7 +2097,7 @@ class Seive2(SearchersBasic): #minimizing
           if result == False: 
             #print "in middle of desert"
             continue
-        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
         
        # print matrix[i-1][j-1],
@@ -2122,7 +2122,7 @@ class Seive2(SearchersBasic): #minimizing
        if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
        #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
        for y in dictionary[x]:
-         temp2 = score(model,y) 
+         temp2 = score(model,y)[-1]
          count += 1
          if temp2 < high:
            high = temp2
@@ -2624,7 +2624,7 @@ class Seive4(SearchersBasic): #minimizing
           if result == False: 
             #print "in middle of desert"
             continue
-        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
         
        # print matrix[i-1][j-1],
@@ -2704,10 +2704,12 @@ class Seive4(SearchersBasic): #minimizing
       total,n=0,0
       for x in frontier:
         #print "update: %d"%n
-        s = score(model,x)
+        s = score(model,x)[-1]
+        #print "CHECKKKKKKKED1|: ",s
         new = self.extrapolate(model,frontier,x,f,cf,xb,yb)
         #print new
-        newe=score(model,new)
+        #print "CHECKKKKKKKKKKKED| ",score(model,new)
+        newe=score(model,new)[-1]
         if(newe<s):
           newF.append(new)
         else:
@@ -2722,7 +2724,7 @@ class Seive4(SearchersBasic): #minimizing
     minR=9e10
     for x in frontier:
       #print x
-      energy = score(model,x)
+      energy = score(model,x)[-1]
       if(minR>energy):
         minR = energy
         solution=x 
@@ -3213,7 +3215,7 @@ class Seive5(SearchersBasic): #minimizing
     def select_min(model,dictionary,index):
       minval = 1e9
       for _ in xrange(10):
-         temp = score(model,self.one(model,dictionary[index]))
+         temp = score(model,self.one(model,dictionary[index]))[-1]
          if temp < minval: minval = temp
       return temp
 
@@ -3309,17 +3311,24 @@ class Seive5(SearchersBasic): #minimizing
     sys.stdout.flush()
     return self.generateSlot(model,solution,xb,yb)
   def run_de(self,model,f,cf,frontier,xb,yb,repeat=100):
+    def better(old,new):
+      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      for i in xrange(old-1): #Since the score is return as [values of all objectives and energy at the end]
+        if old[i] >= new[i]: continue
+        else: return False
+      return True
+          
     def de(model,c,cf,frontier,xb,yb):
       model=self.model
       newF = []
       total,n=0,0
       for x in frontier:
         #print "update: %d"%n
-        s = score(model,x)
+        s = score(model,x)[-1]
         new = self.extrapolate(model,frontier,x,f,cf,xb,yb)
         #print new
-        newe=score(model,new)
-        if(newe<s):
+        newe=score(model,new)[-1]
+        if better(s,newe) == True:
           newF.append(new)
         else:
           newF.append(x)
@@ -3333,7 +3342,7 @@ class Seive5(SearchersBasic): #minimizing
     minR=9e10
     for x in frontier:
       #print x
-      energy = score(model,x)
+      energy = score(model,x)[-1]
       if(minR>energy):
         minR = energy
         solution=x 
@@ -3408,7 +3417,7 @@ class MOEAD(Seive4):
     def select_min(model,dictionary,index):
       minval = 1e9
       for _ in xrange(10):
-         temp = score(model,self.one(model,dictionary[index]))
+         temp = score(model,self.one(model,dictionary[index]))[-1]
          if temp < minval: minval = temp
       return temp
 
