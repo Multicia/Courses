@@ -3381,3 +3381,71 @@ class Seive5(SearchersBasic): #minimizing
     for i in dictionary.keys():
       sum+=len(dictionary[i])
     return sum
+
+
+class MOEAD(Seive4):
+  
+  def evaluate(self,points=[],depth=0,repeat=100,f=0.75,cf=0.3):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>myoptions["MOEAD"]["threshold"]):return True
+        else:return False
+      except:
+        return False
+    def select_min(model,dictionary,index):
+      minval = 1e9
+      for _ in xrange(10):
+         temp = score(model,self.one(model,dictionary[index]))
+         if temp < minval: minval = temp
+      return temp
+
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+
+    dictionary = generate_dictionary(points)
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            print "in middle of desert"
+            continue
+
+        
+    high = 1e6
+    bsoln = None
+
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       frontier = dictionary[i*100+j][:]
+       if len(frontier) < 10: 
+         #print "Before: ",len(frontier)
+         for _ in xrange(20):
+           frontier.append(self.n_i(model,frontier,x))
+         #print "After: ",len(frontier)
+       solution,minE = self.run_de(model,f,cf,frontier,x/100,x%10)
+       if minE < high:
+         high = minE
+         bsoln = solution
+    #print count     
+    return bsoln.dec,high,model
+

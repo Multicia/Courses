@@ -38,11 +38,7 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 def multipleRun():
    from collections import defaultdict
    r = 5
-<<<<<<< HEAD
-   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
-=======
-   for klass in [DTLZ7]:#DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:#DTLZ1,
->>>>>>> fdd63a8e6da30c8509173c681d77171f84a0a54d
+   for klass in [DTLZ1]:#,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
@@ -52,11 +48,8 @@ def multipleRun():
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
      bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR)
      print "Baseline Finished: ",bmin,bmax
-<<<<<<< HEAD
-     for searcher in [Seive5,Seive4,Seive3,Seive2,Seive,DE]:#PSO,GA,DE,SA,MaxWalkSat]:#Seive2,Seive3,Seive,DE]:
-=======
-     for searcher in [PSO,GA,DE,SA,MaxWalkSat,Seive2,Seive3,Seive,DE]:
->>>>>>> fdd63a8e6da30c8509173c681d77171f84a0a54d
+     for searcher in [MOEAD,DE]:#Seive5,Seive4,Seive3,Seive2,Seive,DE]:#PSO,GA,DE,SA,MaxWalkSat]:#Seive2,Seive3,Seive,DE]:
+
        n = 0.0
        listTimeTaken = []
        listScores = []
