@@ -442,9 +442,6 @@ class DE(SearchersBasic):
         solution.append(self.trim(x + f*(y-z),d))
       else:
         solution.append(one[d]) 
-    #print "blah"
-    import sys
-    sys.stdout.flush()
     return solution
 
   def update(self,f,cf,frontier,total=0.0,n=0):
@@ -3460,4 +3457,91 @@ class MOEAD(Seive5):
          bsoln = solution
     #print count     
     return bsoln.dec,high,model
+
+class Seive2MG(Seive2):
+  def evaluate(self,depth=0,repeat=100):
+    minR = 1e6
+    listL,high,model = self.evaluate_wrapper()
+    for _ in xrange(repeat):
+      #say("#")
+      if(minR > high): minR = high
+      listL,high,model = self.evaluate_wrapper(listL)
+    return listL,high,model 
+
+  def evaluate_wrapper(self,points=[]):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+    def dicttolist(dictionary):
+      listL = []
+      for key in dictionary.keys():
+        for item in dictionary[key]:
+          item.xblock = -1
+          item.yblock = -1
+          listL.append(item)
+      return listL
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+    dictionary = generate_dictionary(points)
+    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2MG:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    #print count     
+    return dicttolist(dictionary),high,model
 
