@@ -11,6 +11,7 @@ sys.dont_write_bytecode = True
 
 #say = Utilities().say
 
+
 class SearchersBasic():
   tempList=[]
   def display(self,score,printChar=''):
@@ -477,7 +478,6 @@ class DE(SearchersBasic):
                for _ in xrange(np)]
     #print frontier
     for i in xrange(repeat):
-      #print i,
       frontier = self.update(f,cf,frontier)
 
       #for zz in frontier:
@@ -3459,12 +3459,14 @@ class MOEAD(Seive5):
     return bsoln.dec,high,model
 
 class Seive2MG(Seive2):
-  def evaluate(self,depth=0,repeat=100):
+  def evaluate(self,depth=0,repeat=100,lives=10):
     minR = 1e6
     listL,high,model = self.evaluate_wrapper()
     for _ in xrange(repeat):
       #say("#")
-      if(minR > high): minR = high
+      if(minR >= high): minR = high
+      else: lives-=1
+      if lives == 0: break
       listL,high,model = self.evaluate_wrapper(listL)
     return listL,high,model 
 

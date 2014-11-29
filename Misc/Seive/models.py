@@ -5,9 +5,14 @@ import math
 import numpy as np
 from utilities import *
 from options import *
+sys.path.insert(0, './pom3')
+from pom3 import *
 sys.dont_write_bytecode = True
 
 sqrt=math.sqrt
+def say(x): 
+  "Print something with no trailing new line."
+  sys.stdout.write(str(x)); sys.stdout.flush()
 
 class Log(): #only 1 attribute can be stored here
   def __init__(self):
@@ -948,6 +953,67 @@ class DTLZ6(ModelBasic):
         result+=float(getattr(self, callName)(solution,i+1))
       #self.returnMax(result)
       #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
+
+class POM3(ModelBasic):
+  def __init__(self,minR=0,maxR=1,objf=3,n=9):
+    self.minR=[0.1,0.82,0.02,0.4,0.0,1.0,0,0,1.0] #classA
+    self.maxR=[0.9,1.26,0.1,0.7,1.0,50.0,4,4,44.0]
+    self.n=n
+    self.minVal=1e6
+    self.maxVal=-1e6
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
+    self.lives=myModeloptions['Lives']
+    self.functionDict = {}
+    self.no_eval=0
+    self.result = []
+    self.p3 = pom3()
+    for i in xrange(objf):
+      temp = "f"+str(i+1)
+      self.functionDict[temp]="fi"
+
+
+  def fi(self,listpoints,num):
+    if num == 1:
+    	assert(len(self.result) == 0),"result was not cleaned"
+    	self.result = self.p3.simulate(listpoints)
+    	assert(len(self.result) == self.objf),"length is wrong"
+    	#print self.result[0],
+    	return self.result[0]
+    elif num == 2:
+    	assert(len(self.result) == self.objf),"There is something wrong"
+    	#print self.result[1],
+    	return self.result[1]
+    elif num == 3:
+    	assert(len(self.result) == self.objf),"There is something wrong"
+    	temp = self.result[2]
+    	self.result = []
+    	#print temp,
+    	return temp
+    else:
+    	assert False
+
+
+   
+  def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
+    for x in range(0,1000):
+      if x % 100 == 0: 
+      	say("#")
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      #print ": ",result
       emin = emin if emin < result else result
       emax = emax if emax > result else result
     return emin,emax
