@@ -82,9 +82,13 @@ def multipleRun():
          evalCollector[searcher.__name__]=list_eval
          #print "Score: %f"%(score)
        print
+     print eraCollector
+     print evalCollector
+     print timeCollector
+     print "=========================================================="
      callrdivdemo(eraCollector)
      callrdivdemo(evalCollector)
-     #callrdivdemo(timeCollector)
+     callrdivdemo(timeCollector)
      
 
 def step2():
