@@ -7,6 +7,7 @@ from utilities import *
 from options import *
 sys.path.insert(0, './pom3')
 from pom3 import *
+from model import *
 sys.dont_write_bytecode = True
 
 sqrt=math.sqrt
@@ -1017,3 +1018,110 @@ class POM3(ModelBasic):
       emin = emin if emin < result else result
       emax = emax if emax > result else result
     return emin,emax
+
+
+class XOMO(ModelBasic):
+  def __init__(self,minR=0,maxR=1,objf=4,n=26):
+    self.minR=[1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,3,1,1,1,2,1,1,2,3,2] #classA
+    self.maxR=[6,5,6,6,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,5,1000,5,6,6,6,5]
+    self.n=n
+    self.minVal=1e6
+    self.maxVal=-1e6
+    self.objf=objf
+    self.past = [Log() for count in xrange(objf)]
+    self.present = [Log() for count in xrange(objf)]
+    self.lives=myModeloptions['Lives']
+    self.functionDict = {}
+    self.no_eval=0
+    self.result = []
+    for i in xrange(objf):
+      temp = "f"+str(i+1)
+      self.functionDict[temp]="fi"
+
+    modelName='xomoall'
+    m = Model(modelName) 
+    c = m.oo()
+    scaleFactors=c.scaleFactors
+    effortMultipliers=c.effortMultipliers
+    defectRemovers=c.defectRemovers
+    headers = scaleFactors+effortMultipliers+defectRemovers+['kloc']
+    bounds={h:(c.all[h].min, c.all[h].max) 
+         for h in headers}
+    a=c.x()['b']; b=c.all['b'].y(a)
+ 
+    def restructure(x):
+      print len(x)
+      return {headers[i]: x[i] for i in xrange(len(headers))}
+ 
+    def sumSfs(x,out=0,reset=False):
+      #scaleFactors = [12,10,9,4,15] 
+      for i in scaleFactors:
+        out += x[i]
+      return out
+
+    def prodEms(x,out=1,reset=False):
+      #effortMultipliers = [5,14,2,8,17,21,19,13,18,25,7,23,1,3,16,24,11]
+      for i in effortMultipliers:
+        out *= x[i] #changed_nave
+      return out
+ 
+    def Sum(x): 
+      return sumSfs(x, reset=True)
+    def prod(x): 
+      return c.prodEms(x, reset=True)
+    def exp(x): 
+      return b + 0.01 * Sum(x)
+ 
+    self.effort  = lambda x: c.effort_calc(x, 
+                                   a=a, b=b, exp=exp(x), 
+                                   sum=Sum(x), prod=prod(x))
+    self.months  = lambda x: c.month_calc(x, 
+                                  self.effort(x), sum=Sum(x), 
+                                  prod=prod(x))
+    self.defects = lambda x: c.defect_calc(x)
+    self.risks   = lambda x: c.risk_calc(x)
+
+  def list2dict(self,listp):
+    rd = {}
+    key = ['aa','sced','cplx','site','resl','acap','etat','rely','data','prec','pmat','tool','flex','pcon','aexp','team','stor','docu','plex','pcap','kloc','ltex','pr','ruse','time','pvol']
+    assert(len(listp) == len(key)),"Something is wrong"
+    for i in xrange(len(key)): rd[key[i]] = listp[i]
+    return rd
+
+  def fi(self,listpoints,num):
+
+    if num == 1:
+      rd = self.list2dict(listpoints)
+      return self.effort(rd)
+    elif num == 2:
+      rd = self.list2dict(listpoints)
+      return self.months(rd)
+    elif num == 3:
+      rd = self.list2dict(listpoints)
+      return self.defects(rd)
+    elif num == 4:
+      rd = self.list2dict(listpoints)
+      return self.risks(rd)
+    else:
+      assert False
+
+
+   
+  def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
+    for x in range(0,90000):
+      if x % 10000 == 0: say("#")
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      #print ": ",result
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
+
