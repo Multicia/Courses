@@ -58,6 +58,7 @@ def multipleRun():
        random.seed(6)
        historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
        historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
+       print searcher.__name__,
        for _ in range(r):
          test = searcher(klass(),"display2",bmin,bmax)
          print ".", 
