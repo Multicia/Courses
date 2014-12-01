@@ -238,10 +238,20 @@ class Fonseca(ModelBasic):
     return "Fonseca~"
 
   def baseline(self,minR,maxR):
-    for x in range(0,100000):
-      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,3)]
-      self.returnMax(self.f1(solution)+ self.f2(solution))
-      self.returnMin(self.f1(solution)+ self.f2(solution))
+    emin = 1e6
+    emax = -1e6
+    for x in range(0,90000):
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 
 class Kursawe(ModelBasic):
@@ -278,10 +288,20 @@ class Kursawe(ModelBasic):
     return "Kursawe~"
 
   def baseline(self,minR,maxR):
-    for x in range(0,50000):
-      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,3)]
-      self.returnMax(self.f1(solution)+ self.f2(solution))
-      self.returnMin(self.f1(solution)+ self.f2(solution))
+    emin = 1e6
+    emax = -1e6
+    for x in range(0,90000):
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 class ZDT1(ModelBasic):
   maxVal=-10000
@@ -318,10 +338,20 @@ class ZDT1(ModelBasic):
 
  
   def baseline(self,minR=0,maxR=1):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
-      solution = [(minR[z] + random.random()*(maxR[z]-minR[z])) for z in range(0,30)]
-      self.returnMax(self.f1(solution)+ self.f2(solution))
-      self.returnMin(self.f2(solution)+ self.f2(solution))
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
   def info(self):
     return "ZDT1~"
@@ -407,10 +437,20 @@ class ZDT3(ModelBasic):
     return self.gx(listpoint)*self.hx(listpoint)
 
   def baseline(self,minR,maxR):
-    for x in range(0,180000):
-      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,30)]
-      self.returnMax(self.f1(solution)+ self.f2(solution))
-      self.returnMin(self.f1(solution)+ self.f2(solution))
+    emin = 1e6
+    emax = -1e6
+    for x in range(0,90000):
+      solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      result=0
+      for i in xrange(self.objf):
+        temp="f"+str(i+1)
+        callName = self.functionDict[temp]
+        result+=float(getattr(self, callName)(solution,i+1))
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
   def info(self):
     return "ZDT3~"
@@ -600,6 +640,8 @@ class Osyczka(ModelBasic):
     return np.sum([x**2 for x in lp])
   
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -607,8 +649,11 @@ class Osyczka(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 class Schwefel(ModelBasic):
   def __init__(self,minR=-math.pi,maxR=math.pi,objf=1,n=10):
@@ -640,6 +685,8 @@ class Schwefel(ModelBasic):
     return np.sum([self.A[n][j]*math.sin(s) + self.B[n][j]*math.cos(s) for j,s in enumerate(x)])
 
   def baseline(self,minR,maxR):
+    emin = 1e6
+    emax = -1e6
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
       result=0
@@ -647,8 +694,11 @@ class Schwefel(ModelBasic):
         temp="f"+str(i+1)
         callName = self.functionDict[temp]
         result+=float(getattr(self, callName)(solution,i+1))
-      self.returnMax(result)
-      self.returnMin(result)
+      #self.returnMax(result)
+      #self.returnMin(result)
+      emin = emin if emin < result else result
+      emax = emax if emax > result else result
+    return emin,emax
 
 
 class DTLZ1(ModelBasic):

@@ -2841,7 +2841,7 @@ class Seive5(SearchersBasic): #minimizing
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
     def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
-      def hi(m)      : return m.maxR[index]
+      def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
         return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
