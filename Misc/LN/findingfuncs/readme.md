@@ -27,4 +27,17 @@ TODO:
 - Need to make smarter function matching.
 - Make a graph for each class in the library such as Classification, regression etc. This would make the graphs manageable and easy to read. 
 
+Dr. Menzies:
+=========
+1.  can you do things with color to indicate the ratio of in and out arcs. e.g. the FEWER the in arcs, the more green and the FEWER the out arcs the more red (so we tend to start at green things and tend to end on red things)
+
+2.  300 functions and only, er <12 appear in the graph? say what?
+
+3.  so this is the frequency of co-references terms in the doc? what about co-referenced terms in some code?
+
+
+Report 2014-12-03
+============
+Colors added as Fedback1
+
 
