@@ -38,6 +38,6 @@ Dr. Menzies:
 
 Report 2014-12-03
 ============
-Colors added as Fedback1
+Colors added as Fedback1 [graph](https://github.com/vivekaxl/Courses/blob/master/Misc/LN/findingfuncs/new_output.png)
 
 
