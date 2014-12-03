@@ -1,6 +1,6 @@
 digraph G {
 rankdir=LR
-load_boston->load_boston [penwidth=0.5];
+load_boston[label="load_boston", shape="egg" style="radial" fillcolor="green;0.753595:red"]make_circles[label="make_circles", shape="egg" style="radial" fillcolor="green;0.995074:red"]np_concatenate[label="np_concatenate", shape="egg" style="radial" fillcolor="green;0.500025:red"]fetch_olivetti_faces[label="fetch_olivetti_faces", shape="egg" style="radial" fillcolor="green;0.516999:red"]range[label="range", shape="egg" style="radial" fillcolor="green;0.555086:red"]dict[label="dict", shape="egg" style="radial" fillcolor="green;0.503830:red"]roc_curve[label="roc_curve", shape="egg" style="radial" fillcolor="green;0.507045:red"]fetch_20newsgroups[label="fetch_20newsgroups", shape="egg" style="radial" fillcolor="green;0.500025:red"]train_test_split[label="train_test_split", shape="egg" style="radial" fillcolor="green;0.535998:red"]confusion_matrix[label="confusion_matrix", shape="egg" style="radial" fillcolor="green;0.030958:red"]linalg_norm[label="linalg_norm", shape="egg" style="radial" fillcolor="green;0.148440:red"]permutation_test_score[label="permutation_test_score", shape="egg" style="radial" fillcolor="green;0.550308:red"]make_moons[label="make_moons", shape="egg" style="radial" fillcolor="green;0.009713:red"]load_boston->load_boston [penwidth=0.5];
 range->load_boston [penwidth=0.541666666667];
 permutation_test_score->make_moons [penwidth=0.5];
 linalg_norm->make_moons [penwidth=0.208333333333];

@@ -320,7 +320,7 @@ if __name__ == '__main__':
   print "Second Pass: ", count_line("new_output.dot")
   tfidf_list = generate_tfidf_list("library_tfidf.txt")
   wrapper_remove_node("new_output.dot",tfidf_list)
-  dot_processing("new_output.dot","penwidth")
+  dot_processing("new_output.dot","penwidth",True)
   print "Third Pass: ", count_line("new_output.dot")
   import os
   os.system('dot -Tpng new_output.dot > new_output.png')
