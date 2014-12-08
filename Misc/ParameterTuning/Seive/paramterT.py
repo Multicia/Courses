@@ -58,17 +58,27 @@ def multipleRun(options):
    option_update(options)
    say("multiplerun")
    from collections import defaultdict
-   r = 3
+   r = 5
+   baseline = []
+   baseline.append([-303.17691991,500.522746125])
+   baseline.append([4.06082691338e-10,5.24824391265])
+   baseline.append([6.03588276411e-08,3384.71586742])
+   baseline.append([0.000606326964862,6.39822222861])
+   baseline.append([-0.460063434302,0.699105156066])
+   baseline.append([-6.41985071636,9.89897692242])
+   baseline.append([58.8397982131,153.496919892])
    median_scores = []
-   for klass in [DTLZ1]:#,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
+   count = 0
+   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
      #print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      tempC = klass()
      import time
      #print ("Date: %s"%time.strftime("%d/%m/%Y"))
      #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
-     bmin = -266.409
-     bmax = 632.653
+     bmin = baseline[count][0]
+     bmax = baseline[count][1]
+     count += 1
      #print "Baseline Finished: ",bmin,bmax
 
      for searcher in [Seive4]:
@@ -145,30 +155,25 @@ def update(minR,maxR,f,cf,frontier,total=0.0,n=0):
         newF.append(x)
     return newF
 
-def evaluate(minR,maxR,repeat=3,np=20,f=0.75,cf=0.3):
+def evaluate(minR,maxR,repeat=30,np=20,f=0.75,cf=0.3):
     frontier = [[minR[i]+random.random()*(maxR[i]-minR[i]) for i in xrange(len(minR))]for _ in xrange(np)]
     #print frontier
     for i in xrange(repeat):
       frontier = update(minR,maxR,f,cf,frontier)
       print "#######"
 
-    temp_minR = 9e10
-    for x in frontier:
-      energy = multipleRun(x)
-      if(minR>energy):
-        minR = energy
-        solution=x 
-    return solution
-
+    return frontier
 
 
 def paramenter_tuning():
   np = 20
   minR=[64,1,1,0.1,0.1,1] #classA
   maxR=[5000,30,30,1,0.3,20]  
-  return evaluate(minR,maxR)
+  result = evaluate(minR,maxR)
+  for x in result:
+    print multipleRun(x)
 
-print paramenter_tuning()
+paramenter_tuning()
 
 
 

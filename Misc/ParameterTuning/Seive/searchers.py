@@ -2509,7 +2509,7 @@ class Seive4(SearchersBasic): #minimizing
 
   #There are three points and I am trying to extrapolate. Need to pass two cell numbers
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def extrapolate(lx,ly,lz,cr=int(myoptions['Seive4']['cr']),fmin=0.9,fmax=2):
+    def extrapolate(lx,ly,lz,cr=int(myoptions['Seive4']['cf']),fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
       def hi(m)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
