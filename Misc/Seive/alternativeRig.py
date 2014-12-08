@@ -49,7 +49,7 @@ def multipleRun():
      bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      print "Baseline Finished: ",bmin,bmax
 
-     for searcher in [Seive,MOEAD,DE]:
+     for searcher in [Seive26,Seive25,Seive24,Seive2,DE]:#,MOEAD,DE]:
 
        n = 0.0
        listTimeTaken = []
@@ -73,21 +73,21 @@ def multipleRun():
            historylo[x]=min(model.past[x].historylo,historylo[x])
            sys.stdout.flush()
          timeTaken = (time.time() - t1) * 1000
-         listTimeTaken.append(timeTaken)
+         #listTimeTaken.append(timeTaken)
          list_eval.append(model.no_eval)
          listScores.append(score)
-         timeCollector[searcher.__name__]=listTimeTaken
+         #timeCollector[searcher.__name__]=listTimeTaken
          eraCollector[searcher.__name__]=listScores
          evalCollector[searcher.__name__]=list_eval
          #print "Score: %f"%(score)
        print
      print eraCollector
      print evalCollector
-     print timeCollector
+     #print timeCollector
      print "=========================================================="
      callrdivdemo(eraCollector)
      callrdivdemo(evalCollector)
-     callrdivdemo(timeCollector)
+     #callrdivdemo(timeCollector)
      
 
 def step2():

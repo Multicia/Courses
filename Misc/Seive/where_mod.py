@@ -550,7 +550,7 @@ A standard call to WHERE, pruning disabled:
 @go
 """
 
-def whereMain(model,points=[]):
+def whereMain(model,points=[],depth=3):
   
 
   m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
@@ -566,7 +566,9 @@ def whereMain(model,points=[]):
   #print "Length of pop: ",len(pop)
   slots = where0(verbose = True,
                minSize = max**0.5,
-               prune   = False) #removed wriggle
+               prune   = False,
+               depthMax = depth) #removed wriggle
+  #print "Deapth Max: ",slots.depthMax
   points = where(m, pop, slots)
   #print "Length of points: ",len(points)
   return points

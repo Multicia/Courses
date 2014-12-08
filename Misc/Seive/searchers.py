@@ -952,7 +952,10 @@ class Seive(SearchersBasic): #minimizing
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!" 
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -974,7 +977,10 @@ class Seive(SearchersBasic): #minimizing
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -1458,7 +1464,10 @@ class Seive3(SearchersBasic): #minimizing
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -1480,7 +1489,10 @@ class Seive3(SearchersBasic): #minimizing
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!" 
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -1708,7 +1720,7 @@ class Seive2(SearchersBasic): #minimizing
   def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
     def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
       def lo(m,index)      : return m.minR[index]
-      def hi(m)      : return m.maxR[index]
+      def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
         return max(lo(m,i), x%hi(m,i))
       def indexConvert(index):
@@ -1957,7 +1969,10 @@ class Seive2(SearchersBasic): #minimizing
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -1979,7 +1994,10 @@ class Seive2(SearchersBasic): #minimizing
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -2166,6 +2184,264 @@ class Seive2(SearchersBasic): #minimizing
     for i in dictionary.keys():
       sum+=len(dictionary[i])
     return sum
+
+class Seive24(Seive2):
+
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold =1#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.ncol=16              #number of columns in the chess board
+    self.nrow=16               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
+
+  def evaluate(self,points=[],depth=4):
+    def generate_dictionary(points=[],depth=4):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points,depth) #checked: working well
+      tmax = 2**depth+1
+      for i in range(1,tmax):
+        for j in range(1,tmax):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+    dictionary = generate_dictionary(points)
+    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(2**depth)] for x in range(2**depth)]
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    print "Maxi: ",maxi
+    print "Number of cells with : ",len(graph[maxi])
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    #print count     
+    return bsoln.dec,high,model
+
+class Seive25(Seive2):
+
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold =1#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.ncol=32              #number of columns in the chess board
+    self.nrow=32               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
+
+  def evaluate(self,points=[],depth=5):
+    def generate_dictionary(points=[],depth=5):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points,depth) #checked: working well
+      tmax = 2**depth+1
+      for i in range(1,tmax):
+        for j in range(1,tmax):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+    dictionary = generate_dictionary(points)
+    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(2**depth)] for x in range(2**depth)]
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    print "Maxi: ",maxi
+    print "Number of cells with : ",len(graph[maxi])
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    #print count     
+    return bsoln.dec,high,model
+
+class Seive26(Seive2):
+
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold =1#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.ncol=64              #number of columns in the chess board
+    self.nrow=64               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
+
+  def evaluate(self,points=[],depth=6):
+    def generate_dictionary(points=[],depth=6):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points,depth) #checked: working well
+      tmax = 2**depth+1
+      for i in range(1,tmax):
+        for j in range(1,tmax):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+    dictionary = generate_dictionary(points)
+    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(2**depth)] for x in range(2**depth)]
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,(2**depth)+1):
+      for j in xrange(1,(2**depth)+1):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    print "Maxi: ",maxi
+    print "Number of cells with : ",len(graph[maxi])
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    #print count     
+    return bsoln.dec,high,model
 
 
 
@@ -2484,7 +2760,10 @@ class Seive4(SearchersBasic): #minimizing
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -2506,7 +2785,10 @@ class Seive4(SearchersBasic): #minimizing
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -3090,7 +3372,10 @@ class Seive5(SearchersBasic): #minimizing
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!" 
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
@@ -3112,7 +3397,10 @@ class Seive5(SearchersBasic): #minimizing
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=6464
+
+),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
