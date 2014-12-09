@@ -173,8 +173,8 @@ rank ,         name ,    med   ,  iqr
 ```
 2. a12 effect size test and cliff delta
 
-The Results are (link)[https://github.com/vivekaxl/Courses/blob/master/Misc/Seive/More/a12_cliffD_Results.txt]
+The Results are [link](https://github.com/vivekaxl/Courses/blob/master/Misc/Seive/More/a12_cliffD_Results.txt)
 
 I am not able to understand the cliff delta results. Most of the results seems to be 1, which means the distributions are different. 
 
-3. Where changes (link)[https://github.com/vivekaxl/Courses/blob/master/Misc/Seive/where_tm.py]. If both the versions of algorithm comes up with same clusters then I feel the scores shouldn't change. Checked it on DTLZX..results didn't change.
+3. Where changes [link](https://github.com/vivekaxl/Courses/blob/master/Misc/Seive/where_tm.py). If both the versions of algorithm comes up with same clusters then I feel the scores shouldn't change. Checked it on DTLZX..results didn't change.
