@@ -123,33 +123,44 @@ following takes only _O(2N)_ distance calculations:
 from numpy import *
 from options import *
 
-def fastmap(m,data,func):
+def fastmap(m,data):
   "Divide data into two using distance to two distant items."
+  func1 = lambda a,b,c: (a*a + c*c - b*b)/(2*c)
+  func2 = lambda a,b,c: (abs(a**2-((a*a + c*c - b*b)/(2*c))**2))**0.5
+
   one  = any(data)             # 1) pick anything
   west = furthest(m,one,data)  # 2) west is as far as you can go from anything
   east = furthest(m,west,data) # 3) east is as far as you can go from west
   c    = dist(m,west,east)
   # now find everyone's distance
-  xsum, lst = 0.0,[]
-  file = open("test.txt","w+")
+  xsum,ysum = 0.0,0.0
+  lst = []
+  #file = open("test.txt","w+")
   for one in data:
     a = dist(m,one,west)
     b = dist(m,one,east)
-    try:
-      x=func(a,b,c)
-    except:
-        continue
+    #try:
+    x = func1(a,b,c)
+    y = func2(a,b,c)
+    #except:
+    #    print 'continue'
+    #    continue
     #x = (a*a + c*c - b*b)/(2*c) # cosine rule
     xsum += x
-    lst  += [(x,one)]
+    ysum += y
+    lst  += [(x,y,one)]
   # now cut data according to the mean distance
-  cut, wests, easts = xsum/len(data), [], []
-  for x,one in lst:
-    where = wests if x < cut else easts 
+  cutx, wests, easts = xsum/len(data), [], []
+  cuty, norths, souths = ysum/len(data), [], []
+  #print "Length of the list: ",len(lst)
+  for x,y,one in lst: 
+    #print "Values >>>>>>>>>>",x,y,cutx,cuty
+    if x < cutx and y < cuty: where = wests
+    elif x > cutx and y < cuty: where = easts
+    elif x < cutx and y > cuty: where = norths
+    elif x > cutx and y > cuty: where = souths
     where += [one]
-#   print ">>>>>>>>>>>>>",
-#   print wests,west, easts,east
-  return wests,west, easts,east
+  return wests,easts,norths,souths
 """
 
 In the above:
@@ -276,7 +287,7 @@ def where0(**other):
                wriggle = 0.2,    # min difference of 'better'
                prune   = True,   # pruning enabled?
                b4      = '|.. ', # indent string
-               verbose = False,  # show trace info?
+               verbose = True,  # show trace info?
                hedges  = 0.38    # strict=0.38,relax=0.17
    ).override(other)
 """
@@ -287,43 +298,50 @@ multiple solutions.
 """
 def where(m,data,slots=where0()):
   out = []
-  where1(m,data,slots,0,out,lambda a,b,c: (a*a + c*c - b*b)/(2*c),"x")
+  where1(m,data,slots,0,out)
   tempdata=[]
   for x in out:
     tempdata +=x
-  out = []
-  where1(m,data,slots,0,out,lambda a,b,c: (a**2-((a*a + c*c - b*b)/(2*c))**2)**0.5,"y")
-  tempdata=[]
-  for x in out:
-    tempdata +=x
+  
   return tempdata
+mapping ={ 1:11,2:12,5:13,6:14,17:15,18:16,21:17,22:18,
+           3:21,4:22,7:23,8:24,19:25,20:26,23:27,24:28,
+           9:31,10:32,13:33,14:34,25:35,26:36,29:37,30:38,
+           11:41,12:42,15:43,16:44,27:45,28:46,31:47,32:48,
+           33:51,34:52,37:53,38:54,49:55,50:56,53:57,54:58,
+           35:61,36:62,39:63,40:64,51:65,52:66,55:67,56:68,
+           41:71,42:72,45:73,46:74,57:75,58:76,61:77,62:78,
+           43:81,44:82,47:83,48:84,59:85,60:86,63:87,64:88
+}
 
-def where1(m, data, slots, lvl, out,func,var):
+def where1(m, data, slots, lvl, out):
   def tooDeep(): return lvl >= slots.depthMax
   def tooFew() : return len(data) < slots.minSize
   def show(suffix): 
     if slots.verbose: 
       print slots.b4*lvl + str(len(data)) + suffix
   #print " >>>>>>>>>>>>>>>>>>>>>> %f %f"%(lvl,slots.depthMax)
-  #print "Where1----------------------->"
   if tooDeep() or tooFew():
     #show(".")
-    #print " >>>>>>>>>>>>>>>>>>> %f "%lvl
-    if(var == "x"):
-      for x in data:
-        x.xblock=len(out)+1
-    else:
-      for x in data:
-        x.yblock=len(out)+1
+    #print "++++++++++++++++++",slots.minSize
+    #print "++++++++++++++++++",len(data)
+    for x in data:
+      x.num = len(out)+1
+      #print mapping[x.num]
+      x.xblock = mapping[x.num]/10
+      x.yblock = mapping[x.num]%10
+    #print " >>>>>>>>>>>>>>>>>>> %f "%(len(out)+1)
+    #print data
     out += [data]
   else:
     #show("")
-    wests,west, easts,east = fastmap(m,data,func) #wests: All the points to the left of the means, easts: All the points to the right of the means 
-    goLeft, goRight = maybePrune(m,slots,lvl,west,east) #goLeft,goRight is always True
-    if goLeft: 
-      where1(m, wests, slots, lvl+1, out,func,var)
-    if goRight: 
-      where1(m, easts, slots, lvl+1, out,func,var)
+    #print "There", lvl
+    wests,easts,norths,souths = fastmap(m,data) #wests: All the points to the left of the means, easts: All the points to the right of the means 
+    #goLeft, goRight = maybePrune(m,slots,lvl,west,east) #goLeft,goRight is always True
+    where1(m, wests, slots, lvl+1, out)
+    where1(m, easts, slots, lvl+1, out)
+    where1(m, norths, slots, lvl+1, out)
+    where1(m, souths, slots, lvl+1, out)
 """
 
 Is this useful? Well, in the following experiment, I
@@ -457,10 +475,10 @@ In practice, you would **start** here to build hooks from WHERE into your model
 (which is the **m** passed in to these functions).
 
 """
-#def decisions(m) : return [0,1,2,3,4]
-#def objectives(m): return [0,1,2,3]
-def lo(m,x)      : return m.minR[x]
-def hi(m,x)      : return  m.maxR[x]
+#def decisions() : return [0,1,2,3,4]
+#def objectives(): return [0,1,2,3]
+def lo(m,x)      : return 0#m.minR[x]
+def hi(m,x)      : return  1#m.maxR[x]
 #def w(m,o)       : return 
 def score(m, individual): #model
   if individual.changed == False: 
@@ -490,6 +508,7 @@ def candidate(m):
             scores=1e6, 
             xblock=-1, #sam
             yblock=-1,  #sam
+            num = -1,   #sam
             x=-1,
             y=-1,
             obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
@@ -551,7 +570,7 @@ A standard call to WHERE, pruning disabled:
 @go
 """
 
-def whereMain(model,points=[],depth=3):
+def whereMain2(model,points=[],depth=3):
   
 
   m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
@@ -604,3 +623,27 @@ def _whereTiming():
     t1 =  timing(lambda : where(m, pop, slots),10)
     t2 =  timing(lambda : allPairs(pop),10)
     print max,t1,t2, int(100*t2/t1)
+
+def wheredemo(model,points=[],depth=3):
+  #print "wheredemo"
+  m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']),[],Num()
+  #print "Max: ",max
+  if len(points) == 0:
+    for _ in range(max):
+      one = candidate(m)  #Generate candidate
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
+      #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
+      pop += [one]         #Store all the candidates in pop
+  else:
+    pop = points
+    
+  #print "Length of pop: ",len(pop)
+  slots = where0(verbose = True,
+               minSize = 10,#,max**0.5,
+               prune   = False) #removed wriggle
+  #print "Deapth Max: ",slots.depthMax
+  points = where(m, pop, slots)
+  #print "Length of points: ",len(points)
+  return points
+
+#wheredemo()

@@ -49,8 +49,7 @@ def multipleRun():
      bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      print "Baseline Finished: ",bmin,bmax
 
-     for searcher in [Seive26,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
-
+     for searcher in [Seive2,Seive2_TM]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -81,8 +80,8 @@ def multipleRun():
          evalCollector[searcher.__name__]=list_eval
          #print "Score: %f"%(score)
        print
-     print eraCollector
-     print evalCollector
+     #print eraCollector
+     #print evalCollector
      #print timeCollector
      print "=========================================================="
      callrdivdemo(eraCollector)
