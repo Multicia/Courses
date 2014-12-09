@@ -255,9 +255,10 @@ def POM3_eval(func):
 stat_test = [a12slow,cliffdelta]
 fnc_lst =  [dtlz7_score, dtlz7_eval, dtlz6_score, dtlz6_eval, dtlz5_score,dtlz5_eval, dtlz1_score, dtlz1_eval, fonseca_score, fonseca_eval, Kursawe_score, Kursawe_eval, ZDT1_score, ZDT1_eval, ZDT3_score, ZDT3_eval, Osyczka_score, Osyczka_eval, Schwefel_score, Schwefel_eval, XOMO_score, XOMO_eval, POM3_score, POM3_eval]
 for test in stat_test:
-  print test.__name__
   count = 0
   for fnc in fnc_lst:
+    print test.__name__,
+    print fnc.__name__
     fnc(test)
     count += 1
     if count % 2 == 0: print
