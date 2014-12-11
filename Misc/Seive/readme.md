@@ -201,7 +201,6 @@ rank ,         name ,    med   ,  iqr
    1 ,           DE ,    2010000  ,     0 (               |             *),20100.00, 20100.00, 20100.00, 20100.00, 20100.00
 
 ```
-
 4. Changed the initial generation of points. Now I first generate 100 points and then polate (extra and inter with probability 0.5) and create another 900 points. Doesn't seem to make much diffence but intutively this makes more sense.
 
 ```
@@ -217,5 +216,4 @@ rank ,         name ,    med   ,  iqr
    2 ,     Baseline ,    100000  ,     0 (   *           |              ),1000.00, 1000.00, 1000.00, 1000.00, 1000.00
    3 ,       Seive3 ,    531100  ,  205700 (              -|----     *--- ),3211.00, 4429.00, 5581.00, 5690.00, 6451.00
 ```
-
 5. Merged changes (i) added binary domination while comparing points of the objectives, (ii) added early termination

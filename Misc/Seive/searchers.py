@@ -4479,3 +4479,160 @@ class Seive2MG(Seive2):
     #print count     
     return dicttolist(dictionary),high,model
 
+class Seive2_T1(Seive3):
+  def generateSlot(self,m,decision=[]):
+    if len(decision) == 0: d = [some(m,d) for d in xrange(m.n)]
+    else: d = decision[:]
+    newpoint=Slots(changed = True,
+            scores=1e6, 
+            xblock=-1, #sam
+            yblock=-1,  #sam
+            x=-1,
+            y=-1,
+            obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
+            dec = [some(m,d) for d in xrange(m.n)])
+
+    scores(m,newpoint)
+    #print "Decision: ",newpoint.dec
+    #print "Objectives: ",newpoint.obj
+    return newpoint
+
+
+  def polate(m,lx,ly,lz,fmin,fmax):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      return max(lo(m,i), x%hi(m,i))
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    assert(len(lx)==len(ly)==len(lz))
+    cr=0.3
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
+
+      if rand < cr:
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(m,x + probEx*(y-z),i)
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    return genPoint
+
+
+  def tgenerate(m,pop):
+    for _ in xrange(1000):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = generateSlot(m,cand)
+      #print one.dec
+      pop += [one]
+
+  def evaluate(self,points=[],depth=0):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",self.threshold
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+
+    dictionary = generate_dictionary(points)
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result,dictionary = self.generateNew(model,i,j,dictionary)
+          if result == False: 
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        #print "%0.3f"%matrix[i-1][j-1],
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+      #print
+    
+    #print graph[8]
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    #print "Depth: ",depth,
+    #print "Points: ",len(graph[maxi]),
+    #print "Maxi: ",maxi
+    #import time
+    #time.sleep(3)
+    for x in graph[maxi]:
+       #print "The cell is: ",x," depth is: ",depth
+       if depth == int(myoptions['Seive3']['depth']):
+         for i in xrange(0,5):
+           y = any(dictionary[x])
+           #print y
+           temp2 = score(model,y)[-1]
+           if temp2 < high:
+             high = temp2
+             bsoln = y
+             #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+             #print bsoln.dec
+
+           #print temp2,high,bsoln.dec
+           #print
+       
+       if(depth < int(myoptions['Seive3']['depth'])):
+         #print "RECURSE"
+         #print "Cell No: ",x,x/100,x%10
+         #print "Before: ",len(dictionary[x])
+         neighbourhood = []
+         neigh = self.listofneighbours(int(x/100),x%10)
+         print neigh
+         for x in neigh: 
+          print len(dictionary[x])
+          neighbourhood.extend(dictionary[x])
+         print len(neighbourhood)
+         raise Exception("I know python!")
+         result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+         #print "After: ",len(dictionary[x])
+         rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+         #print high,sc
+         if sc < high:
+           high = sc 
+           bsoln = rsoln
+           #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+           #print bsoln.dec
+
+    #print bsoln.dec     W
+    return bsoln,high,model
