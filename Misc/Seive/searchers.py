@@ -3614,24 +3614,23 @@ class Seive4(SearchersBasic): #minimizing
       newF = []
       total,n=0,0
       for x in frontier:
-        #print "update: %d"%n
         s = score(model,x)[-1]
-        #print "CHECKKKKKKKED1|: ",s
         new = self.extrapolate(model,frontier,x,f,cf,xb,yb)
-        #print new
-        #print "CHECKKKKKKKKKKKED| ",score(model,new)
         newe=score(model,new)[-1]
         if(newe<s):
           newF.append(new)
+          n+=1
         else:
           newF.append(x)
         total+=min(newe,s)
-        n+=1
       return total,n,newF  
     #print repeat
     for _ in xrange(repeat):
       #print ".",
       total,n,frontier = de(model,f,cf,frontier,xb,yb)
+      if n == 0:
+        break
+
     minR=9e10
     for x in frontier:
       #print x
