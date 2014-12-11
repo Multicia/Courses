@@ -217,3 +217,5 @@ rank ,         name ,    med   ,  iqr
    2 ,     Baseline ,    100000  ,     0 (   *           |              ),1000.00, 1000.00, 1000.00, 1000.00, 1000.00
    3 ,       Seive3 ,    531100  ,  205700 (              -|----     *--- ),3211.00, 4429.00, 5581.00, 5690.00, 6451.00
 ```
+
+5. Merged changes (i) added binary domination while comparing points of the objectives, (ii) added early termination

@@ -3608,28 +3608,45 @@ class Seive4(SearchersBasic): #minimizing
     import sys
     sys.stdout.flush()
     return self.generateSlot(model,solution,xb,yb)
+
   def run_de(self,model,f,cf,frontier,xb,yb,repeat=100):
+    def better(old,new):
+      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
+        if old[i] >= new[i]: continue
+        else: return False
+      return True
+          
     def de(model,c,cf,frontier,xb,yb):
       model=self.model
       newF = []
       total,n=0,0
       for x in frontier:
-        s = score(model,x)[-1]
+        #print "update: %d"%n
+        s = score(model,x)
         new = self.extrapolate(model,frontier,x,f,cf,xb,yb)
-        newe=score(model,new)[-1]
-        if(newe<s):
+        #print new
+        newe=score(model,new)
+        if better(s,newe) == True:
           newF.append(new)
           n+=1
         else:
           newF.append(x)
-        total+=min(newe,s)
-      return total,n,newF  
+        
+      return newF,n  
     #print repeat
     for _ in xrange(repeat):
       #print ".",
-      total,n,frontier = de(model,f,cf,frontier,xb,yb)
-      if n == 0:
-        break
+      frontier,n = de(model,f,cf,frontier,xb,yb)
+      if n == 0: break
+    minR=9e10
+    for x in frontier:
+      #print x
+      energy = score(model,x)[-1]
+      if(minR>energy):
+        minR = energy
+        solution=x 
+    return solution,minR 
 
     minR=9e10
     for x in frontier:
