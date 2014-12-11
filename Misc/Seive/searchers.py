@@ -954,7 +954,7 @@ class Seive(SearchersBasic): #minimizing
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
+          assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!" 
           dictionary[convert(xblock,yblock)]=[]
@@ -979,7 +979,7 @@ class Seive(SearchersBasic): #minimizing
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
@@ -1154,8 +1154,18 @@ class Seive3(SearchersBasic): #minimizing
   model = None
   minR=0
   maxR=0
-  random.seed(1)
 
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold = int(myoptions['Seive3']['threshold'])         
+    self.ncol=8               #number of columns in the chess board
+    self.nrow=8               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive3']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive3']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
 
 
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
@@ -1186,7 +1196,6 @@ class Seive3(SearchersBasic): #minimizing
     ypoints=self.getpoints(yindex,dictionary)
     import itertools
     listpoints=list(itertools.product(xpoints,ypoints))
-    #print "Length of Listpoints: ",len(listpoints)
     count=0
     while True:
       if(count>min(len(xpoints),maxlimit)):break
@@ -1206,7 +1215,7 @@ class Seive3(SearchersBasic): #minimizing
             obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
             dec = [some(m,d) for d in xrange(m.n)])
 
-    scores(m,newpoint)
+    #scores(m,newpoint)
     #print "Decision: ",newpoint.dec
     #print "Objectives: ",newpoint.obj
     return newpoint
@@ -1257,17 +1266,7 @@ class Seive3(SearchersBasic): #minimizing
     return decision
   
 
-  def __init__(self,modelName,displayS,bmin,bmax):
-    self.model = modelName
-    self.model.minVal = bmin
-    self.model.maxVal = bmax
-    self.displayStyle=displayS
-    self.threshold =20#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
-    self.ncol=8               #number of columns in the chess board
-    self.nrow=8               #number of rows in the chess board
-    self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
-    self.extermaxlimit=int(myoptions['Seive']['extermaxlimit'])     #Max number of points that can be created by extrapolation
-    self.evalscores=0
+
   def convert(self,x,y): return (x*100)+y
   def rowno(self,x): return int(x/100)
   def colmno(self,x): return x%10 
@@ -1445,62 +1444,84 @@ class Seive3(SearchersBasic): #minimizing
       return returnList
   
     newpoints=[]
-    #print "generateNew| Flag: ",flag
+    if flag == True:
+      #print "Cell No inside: ",xblock,yblock
+      if convert(xblock,yblock) in dictionary: pass
+      else:
+        assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+        assert(convert(xblock,yblock)<=808),"Something's wrong!"
+      decisions=[]
+      listInter=interpolateCheck(xblock,yblock)
+      #print "generateNew|Interpolation Check: ",listInter
+      if(len(listInter)!=0):
+        assert(len(listInter)%2==0),"listInter%2 not 0"
+        for i in xrange(int(len(listInter)/2)):
+          #print "FLAG is True!"
+          decisions.extend(self.wrapperInterpolate(m,listInter[i*2],\
+          listInter[(i*2)+1],1000,dictionary))
+      else:
+        print "generateNew| Interpolation failed"
+      listExter = extrapolateCheck(xblock,yblock)
+      #print "generateNew|Extrapolation Check: ",listInter
+      if(len(listExter)==0):
+        print "generateNew| Extrapolation failed"
+      else:
+        #print "FLAG is True!"
+        decisions.extend(self.wrapperextrapolate(m,listExter[2*i],\
+        listExter[(2*i)+1],1000,dictionary))
+      old = len(dictionary[convert(xblock,yblock)])
+      
+      for decision in decisions:dictionary[convert(xblock,yblock)].\
+      append(self.generateSlot(m,decision,xblock,yblock))
+      new = len(dictionary[convert(xblock,yblock)])
+      #print "generateNew|Flag:True| Number of new points generated: ", (new-old) 
+      return True,dictionary   
+
+
     #print "generateNew| convert: ",convert(xblock,yblock)
     #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
     #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
     if(thresholdCheck(convert(xblock,yblock))==False):
       #print "generateNew| Cell is relatively sparse: Might need to generate new points"
       listInter=interpolateCheck(xblock,yblock)
-      #print "generateNew|listInter: ",listInter
+      #print "generateNew|Interpolation Check: ",listInter
       if(len(listInter)!=0):
         decisions=[]
         assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
         for i in xrange(int(len(listInter)/2)):
-          if flag == False:
-            print "FLAG IS FLASE"
             decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
-          else:
-            print "FLAG is True!"
-            decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],100,dictionary))
-          #print "generateNew| Decisions Length: ",len(decisions)
-        #print "generateNew| Decisions: ",decisions
+
         if convert(xblock,yblock) in dictionary: pass
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
-
-),"Something's wrong!"
+          assert(convert(xblock,yblock)<=808),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
         #print "generateNew| Interpolation works!"
         new = self._checkDictionary(dictionary)
         #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
-        return True
+        return True,dictionary
       else:
         #print "generateNew| Interpolation failed!"
         decisions=[]
         listExter = extrapolateCheck(xblock,yblock)
+        #print "generateNew|Extrapolation Check: ",listInter
         if(len(listExter)==0):
-          #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
-          return False
+          print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          return False,dictionary
         else:
           assert(len(listExter)%2==0),"listExter%2 not 0"
           for i in xrange(int(len(listExter)/2)):
-            if flag == False:
               decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],int(self.extermaxlimit)/len(listExter),dictionary))
-            else:
-              print "FLAG is True!"
-              decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],100,dictionary))
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!" 
             dictionary[convert(xblock,yblock)]=[]
@@ -1509,17 +1530,15 @@ class Seive3(SearchersBasic): #minimizing
           new = self._checkDictionary(dictionary)
           #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
           #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
-          return True
+          return True,dictionary
     else:
       listExter = extrapolateCheck(xblock,yblock)
       if(len(listExter) == 0):
         print "generateNew| Lot of points but middle of a desert"
-        return False #A lot of points but right in the middle of a deseart
+        return False,dictionary #A lot of points but right in the middle of a deseart
       else:
-        return True
-    """
-    print interpolateCheck(xblock,yblock)
-    """
+        return True,dictionary
+
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
     def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
       def lo(m,index)      : return m.minR[index]
@@ -1598,7 +1617,7 @@ class Seive3(SearchersBasic): #minimizing
 
     def thresholdCheck(index,dictionary):
       try:
-        #print "Threshold Check: ",index
+        #print "Threshold Check: ",self.threshold
         if(len(dictionary[index])>self.threshold):return True
         else:return False
       except:
@@ -1610,16 +1629,16 @@ class Seive3(SearchersBasic): #minimizing
     #if depth == 0: model.baseline(minR,maxR)
 
     dictionary = generate_dictionary(points)
-    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
     for i in xrange(1,9):
       for j in xrange(1,9):
         if(thresholdCheck(i*100+j,dictionary)==False):
-          result = self.generateNew(model,i,j,dictionary)
+          result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
-            #print "in middle of desert"
+            print "in middle of desert"
             continue
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
@@ -1628,37 +1647,56 @@ class Seive3(SearchersBasic): #minimizing
       #print
     for i in xrange(1,9):
       for j in xrange(1,9):
+        #print "%0.3f"%matrix[i-1][j-1],
         sumn=0
         s = matrix[i-1][j-1]
         neigh = self.listofneighbours(i,j)
         sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
-        
+      #print
+    
+    #print graph[8]
     high = 1e6
     bsoln = None
     maxi = max(graph.keys())
-    #print graph.keys()
-    #print "Number of points: ",len(graph[maxi])
+    print "Depth: ",depth,
+    print "Points: ",len(graph[maxi]),
+    print "Maxi: ",maxi
+    #import time
+    #time.sleep(3)
     for x in graph[maxi]:
-       if(len(dictionary[x])<10):
-          self.generateNew(model,i,j,dictionary)
-          #print "Generate New|======================:" ,len(dictionary[x])
-       #temp = random.sample(dictionary[x],min(len(dictionary[x]),15))
-       for y in dictionary[x]:
-         temp2 = score(model,y)[-1]
-         #print temp2
-         if temp2 < high:
-           high = temp2
-           bsoln = y
-       if(depth <3):
-         print "RECURSE"
-         self.generateNew(model,i,j,dictionary,flag=True)
+       #print "The cell is: ",x," depth is: ",depth
+       if depth == int(myoptions['Seive3']['depth']):
+         for i in xrange(0,5):
+           y = any(dictionary[x])
+           #print y
+           temp2 = score(model,y)[-1]
+           if temp2 < high:
+             high = temp2
+             bsoln = y
+             #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+             #print bsoln.dec
+
+           #print temp2,high,bsoln.dec
+           #print
+       
+       if(depth < int(myoptions['Seive3']['depth'])):
+         #print "RECURSE"
+         #print "Cell No: ",x,x/100,x%10
+         #print "Before: ",len(dictionary[x])
+         result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+         #print "After: ",len(dictionary[x])
          rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
-         #print high,sc,
-         high = high if sc > high else sc
-         
-    return bsoln.dec,high,model
+         #print high,sc
+         if sc < high:
+           high = sc 
+           bsoln = rsoln
+           #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+           #print bsoln.dec
+
+    #print bsoln.dec     
+    return bsoln,high,model
 
   def _checkDictionary(self,dictionary):
     sum=0
@@ -1962,42 +2000,42 @@ class Seive2_TM(SearchersBasic): #minimizing
   
     newpoints=[]
     #print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
-    #print "generateNew| convert: ",convert(xblock,yblock)
-    #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
-    #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
+    ##print "generateNew| convert: ",convert(xblock,yblock)
+    ##print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+    ##print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
     if(thresholdCheck(convert(xblock,yblock))==False):
-      #print "generateNew| Cell is relatively sparse: Might need to generate new points"
+      ##print "generateNew| Cell is relatively sparse: Might need to generate new points"
       listInter=interpolateCheck(xblock,yblock)
-      #print "generateNew|listInter: ",listInter
+      ##print "generateNew|listInter: ",listInter
       if(len(listInter)!=0):
         decisions=[]
         assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
         for i in xrange(int(len(listInter)/2)):
           decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
-          #print "generateNew| Decisions Length: ",len(decisions)
-        #print "generateNew| Decisions: ",decisions
+          ##print "generateNew| Decisions Length: ",len(decisions)
+        ##print "generateNew| Decisions: ",decisions
         if convert(xblock,yblock) in dictionary: pass
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
+          assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
-        #print "generateNew| Interpolation works!"
+        ##print "generateNew| Interpolation works!"
         new = self._checkDictionary(dictionary)
-        #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
+        ##print "generateNew|Interpolation| Number of new points generated: ", (new-old)
         return True
       else:
-        #print "generateNew| Interpolation failed!"
+        ##print "generateNew| Interpolation failed!"
         decisions=[]
         listExter = extrapolateCheck(xblock,yblock)
         if(len(listExter)==0):
-          #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          ##print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
           return False
         else:
           assert(len(listExter)%2==0),"listExter%2 not 0"
@@ -2007,20 +2045,20 @@ class Seive2_TM(SearchersBasic): #minimizing
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
           old = self._checkDictionary(dictionary)
           for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
           new = self._checkDictionary(dictionary)
-          #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
-          #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
+          ##print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+          ##print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
           return True
     else:
       listExter = extrapolateCheck(xblock,yblock)
       if(len(listExter) == 0):
-        #print "generateNew| Lot of points but middle of a desert"
+        ##print "generateNew| Lot of points but middle of a desert"
         return False #A lot of points but right in the middle of a deseart
       else:
         return True
@@ -2497,34 +2535,34 @@ class Seive2(SearchersBasic): #minimizing
       return returnList
   
     newpoints=[]
-    #print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
-    #print "generateNew| convert: ",convert(xblock,yblock)
-    #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
-    #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
+    ##print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
+    ##print "generateNew| convert: ",convert(xblock,yblock)
+    ##print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+    ##print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
     if(thresholdCheck(convert(xblock,yblock))==False):
-      #print "generateNew| Cell is relatively sparse: Might need to generate new points"
+      ##print "generateNew| Cell is relatively sparse: Might need to generate new points"
       listInter=interpolateCheck(xblock,yblock)
-      #print "generateNew|listInter: ",listInter
+      ##print "generateNew|listInter: ",listInter
       if(len(listInter)!=0):
         decisions=[]
         assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
         for i in xrange(int(len(listInter)/2)):
           decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
-          #print "generateNew| Decisions Length: ",len(decisions)
-        #print "generateNew| Decisions: ",decisions
+          ##print "generateNew| Decisions Length: ",len(decisions)
+        ##print "generateNew| Decisions: ",decisions
         if convert(xblock,yblock) in dictionary: pass
         else:
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
+          assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
         old = self._checkDictionary(dictionary)
         for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
-        #print "generateNew| Interpolation works!"
+        ##print "generateNew| Interpolation works!"
         new = self._checkDictionary(dictionary)
         #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
         return True
@@ -2543,7 +2581,7 @@ class Seive2(SearchersBasic): #minimizing
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
@@ -3315,7 +3353,7 @@ class Seive4(SearchersBasic): #minimizing
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
+          assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
           dictionary[convert(xblock,yblock)]=[]
@@ -3340,7 +3378,7 @@ class Seive4(SearchersBasic): #minimizing
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]
@@ -3927,7 +3965,7 @@ class Seive5(SearchersBasic): #minimizing
           #print convert(xblock,yblock)
           assert(convert(xblock,yblock)>=101),"Something's wrong!" 
           #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-          assert(convert(xblock,yblock)<=6464
+          assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!" 
           dictionary[convert(xblock,yblock)]=[]
@@ -3952,7 +3990,7 @@ class Seive5(SearchersBasic): #minimizing
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
             #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
-            assert(convert(xblock,yblock)<=6464
+            assert(convert(xblock,yblock)<=808
 
 ),"Something's wrong!"
             dictionary[convert(xblock,yblock)]=[]

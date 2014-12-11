@@ -176,3 +176,28 @@ The Results are [link](https://github.com/vivekaxl/Courses/blob/master/Misc/Seiv
 I am not able to understand the cliff delta results. Most of the results seems to be 1, which means the distributions are different. 
 
 3. Where changes [link](https://github.com/vivekaxl/Courses/blob/master/Misc/Seive/where_tm.py). If both the versions of algorithm comes up with same clusters then I feel the scores shouldn't change. Checked it on DTLZX..results didn't change.
+
+Report 12-11-2014
+=================
+
+1. Found a bug in Seive3. I didn't change the threshold and that might be the reason it is not working as I had expected it to. Changed it.
+
+2. Can't go beyond the depth = 2, number of evaluation explodes.
+
+3. Results for Seive3 (modified version)
+```
+==========================================================
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,           DE ,    -185  ,     0 (    *          |              ),-1.85, -1.85, -1.53, -1.44, -1.44
+   1 ,       Seive3 ,       5  ,     0 (               |           *  ), 0.05,  0.05,  0.19,  0.24,  0.24
+   1 ,       Seive2 ,      28  ,     0 (               |             *), 0.29,  0.29,  0.32,  0.34,  0.34
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,       Seive2 ,    19700  ,     0 (*              |              ),197.00, 197.00, 211.00, 227.00, 227.00
+   1 ,       Seive3 ,    421700  ,     0 (       *       |              ),4217.00, 4217.00, 5117.00, 5526.00, 5526.00
+   1 ,           DE ,    2010000  ,     0 (               |             *),20100.00, 20100.00, 20100.00, 20100.00, 20100.00
+
+```
