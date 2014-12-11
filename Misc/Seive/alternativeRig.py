@@ -49,7 +49,7 @@ def multipleRun():
      bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      print "Baseline Finished: ",bmin,bmax
 
-     for searcher in [Seive2,Seive2_TM]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+     for searcher in [Seive2,Seive3]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []

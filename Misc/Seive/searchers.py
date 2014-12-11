@@ -1328,7 +1328,7 @@ class Seive3(SearchersBasic): #minimizing
     if(self.rowno(x)==1): return self.convert(nrow,self.colmno(x))
     else: return x-100 
 
-  def generateNew(self,m,xblock,yblock,dictionary):
+  def generateNew(self,m,xblock,yblock,dictionary,flag = False):
     convert = self.convert
     rowno = self.rowno
     colmno = self.colmno 
@@ -1445,7 +1445,7 @@ class Seive3(SearchersBasic): #minimizing
       return returnList
   
     newpoints=[]
-    #print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
+    #print "generateNew| Flag: ",flag
     #print "generateNew| convert: ",convert(xblock,yblock)
     #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
     #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
@@ -1458,7 +1458,12 @@ class Seive3(SearchersBasic): #minimizing
         assert(len(listInter)%2==0),"listInter%2 not 0"
       #print thresholdCheck(xb),thresholdCheck(yb)
         for i in xrange(int(len(listInter)/2)):
-          decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
+          if flag == False:
+            print "FLAG IS FLASE"
+            decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
+          else:
+            print "FLAG is True!"
+            decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],100,dictionary))
           #print "generateNew| Decisions Length: ",len(decisions)
         #print "generateNew| Decisions: ",decisions
         if convert(xblock,yblock) in dictionary: pass
@@ -1486,7 +1491,11 @@ class Seive3(SearchersBasic): #minimizing
         else:
           assert(len(listExter)%2==0),"listExter%2 not 0"
           for i in xrange(int(len(listExter)/2)):
-            decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],int(self.extermaxlimit)/len(listExter),dictionary))
+            if flag == False:
+              decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],int(self.extermaxlimit)/len(listExter),dictionary))
+            else:
+              print "FLAG is True!"
+              decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],100,dictionary))
           if convert(xblock,yblock) in dictionary: pass
           else: 
             assert(convert(xblock,yblock)>=101),"Something's wrong!" 
@@ -1504,7 +1513,7 @@ class Seive3(SearchersBasic): #minimizing
     else:
       listExter = extrapolateCheck(xblock,yblock)
       if(len(listExter) == 0):
-        #print "generateNew| Lot of points but middle of a desert"
+        print "generateNew| Lot of points but middle of a desert"
         return False #A lot of points but right in the middle of a deseart
       else:
         return True
@@ -1643,6 +1652,8 @@ class Seive3(SearchersBasic): #minimizing
            high = temp2
            bsoln = y
        if(depth <3):
+         print "RECURSE"
+         self.generateNew(model,i,j,dictionary,flag=True)
          rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
          #print high,sc,
          high = high if sc > high else sc
