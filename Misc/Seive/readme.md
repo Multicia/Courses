@@ -201,3 +201,19 @@ rank ,         name ,    med   ,  iqr
    1 ,           DE ,    2010000  ,     0 (               |             *),20100.00, 20100.00, 20100.00, 20100.00, 20100.00
 
 ```
+
+4. Changed the initial generation of points. Now I first generate 100 points and then polate (extra and inter with probability 0.5) and create another 900 points. Doesn't seem to make much diffence but intutively this makes more sense.
+
+```
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,       Seive3 ,      21  ,    15 (        -------|    * ---     ), 0.08,  0.18,  0.23,  0.25,  0.30
+   1 ,     Baseline ,      24  ,     4 (               |     * ---    ), 0.22,  0.22,  0.25,  0.27,  0.31
+   2 ,       Seive2 ,      31  ,     3 (               |      ---- *- ), 0.26,  0.31,  0.32,  0.34,  0.35
+
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,       Seive2 ,    23500  ,  2900 (*              |              ),227.00, 232.00, 236.00, 280.00, 379.00
+   2 ,     Baseline ,    100000  ,     0 (   *           |              ),1000.00, 1000.00, 1000.00, 1000.00, 1000.00
+   3 ,       Seive3 ,    531100  ,  205700 (              -|----     *--- ),3211.00, 4429.00, 5581.00, 5690.00, 6451.00
+```

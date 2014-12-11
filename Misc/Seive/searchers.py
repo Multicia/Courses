@@ -1150,6 +1150,42 @@ class Seive(SearchersBasic): #minimizing
 
    
 
+class Baseline(SearchersBasic):
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+
+  def evaluate(self,points=[],depth=0):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+    
+    high = 1e6
+    bsoln = None
+    model = self.model
+    s = [] 
+    dictionary = generate_dictionary(points)
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        try:
+          for x in dictionary[i*100+j]:
+            temp2 = score(model,x)[-1]
+            if temp2 < high:
+               high = temp2
+               bsoln = x
+        except: pass
+    return bsoln,high,model
+
 class Seive3(SearchersBasic): #minimizing
   model = None
   minR=0
@@ -1459,13 +1495,13 @@ class Seive3(SearchersBasic): #minimizing
           #print "FLAG is True!"
           decisions.extend(self.wrapperInterpolate(m,listInter[i*2],\
           listInter[(i*2)+1],1000,dictionary))
-      else:
-        print "generateNew| Interpolation failed"
+      #else:
+        #print "generateNew| Interpolation failed"
       listExter = extrapolateCheck(xblock,yblock)
       #print "generateNew|Extrapolation Check: ",listInter
-      if(len(listExter)==0):
-        print "generateNew| Extrapolation failed"
-      else:
+      if(len(listExter)!=0):
+        #print "generateNew| Extrapolation failed"
+      #else:
         #print "FLAG is True!"
         decisions.extend(self.wrapperextrapolate(m,listExter[2*i],\
         listExter[(2*i)+1],1000,dictionary))
@@ -1511,7 +1547,7 @@ class Seive3(SearchersBasic): #minimizing
         listExter = extrapolateCheck(xblock,yblock)
         #print "generateNew|Extrapolation Check: ",listInter
         if(len(listExter)==0):
-          print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
           return False,dictionary
         else:
           assert(len(listExter)%2==0),"listExter%2 not 0"
@@ -1534,7 +1570,7 @@ class Seive3(SearchersBasic): #minimizing
     else:
       listExter = extrapolateCheck(xblock,yblock)
       if(len(listExter) == 0):
-        print "generateNew| Lot of points but middle of a desert"
+        #print "generateNew| Lot of points but middle of a desert"
         return False,dictionary #A lot of points but right in the middle of a deseart
       else:
         return True,dictionary
@@ -1638,7 +1674,7 @@ class Seive3(SearchersBasic): #minimizing
         if(thresholdCheck(i*100+j,dictionary)==False):
           result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
-            print "in middle of desert"
+            #print "in middle of desert"
             continue
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
@@ -1660,9 +1696,9 @@ class Seive3(SearchersBasic): #minimizing
     high = 1e6
     bsoln = None
     maxi = max(graph.keys())
-    print "Depth: ",depth,
-    print "Points: ",len(graph[maxi]),
-    print "Maxi: ",maxi
+    #print "Depth: ",depth,
+    #print "Points: ",len(graph[maxi]),
+    #print "Maxi: ",maxi
     #import time
     #time.sleep(3)
     for x in graph[maxi]:
@@ -1695,7 +1731,7 @@ class Seive3(SearchersBasic): #minimizing
            #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
            #print bsoln.dec
 
-    #print bsoln.dec     
+    #print bsoln.dec     W
     return bsoln,high,model
 
   def _checkDictionary(self,dictionary):

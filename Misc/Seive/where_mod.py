@@ -484,8 +484,9 @@ def some(m,x) :
   "with variable x of model m, pick one value at random" 
   return lo(m,x) + by(hi(m,x) - lo(m,x))
 
-def candidate(m):
+def candidate(m,d=[]):
   "Return an unscored individual."
+  if len(d) == 0: d = [some(m,d) for d in xrange(m.n)]
   return Slots(changed = True,
             scores=1e6, 
             xblock=-1, #sam
@@ -493,7 +494,7 @@ def candidate(m):
             x=-1,
             y=-1,
             obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
-            dec = [some(m,d) for d in xrange(m.n)])
+            dec = d)
 
 def scores(m,t):
   "Score an individual."
@@ -550,17 +551,54 @@ def _distances():
 A standard call to WHERE, pruning disabled:
 @go
 """
+def polate(m,lx,ly,lz,fmin,fmax):
+  def lo(m,index)      : return m.minR[index]
+  def hi(m,index)      : return m.maxR[index]
+  def trim(m,x,i)  : # trim to legal range
+    return max(lo(m,i), x%hi(m,i))
+  def indexConvert(index):
+    return int(index/100),index%10
+
+  assert(len(lx)==len(ly)==len(lz))
+  cr=0.3
+  genPoint=[]
+  for i in xrange(len(lx)):
+    x,y,z = lx[i],ly[i],lz[i]
+    rand = random.random()
+
+    if rand < cr:
+      probEx = fmin + (fmax-fmin)*random.random()
+      new = trim(m,x + probEx*(y-z),i)
+    else:
+      new = y #Just assign a value for that decision
+    genPoint.append(new)
+  return genPoint
 
 def whereMain(model,points=[],depth=3):
-  
+  def one(lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ] 
 
   m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
   if len(points) == 0:
-    for _ in range(max):
+    for _ in range(int(max/10)):
       one = candidate(m)  #Generate candidate
       #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
       #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
       pop += [one]         #Store all the candidates in pop
+    for _ in range(int(0.9 * max)):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = candidate(m,cand)
+      #print one.dec
+      pop += [one]
+      #print len(pop)
+      #raise Exception("I know python!")
   else:
     pop = points
     
