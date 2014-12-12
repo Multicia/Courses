@@ -4569,7 +4569,7 @@ class Seive2_T1(Seive3):
     maxR = model.maxR
 
     dictionary = generate_dictionary(points)
-    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
@@ -4589,19 +4589,19 @@ class Seive2_T1(Seive3):
       for j in xrange(1,9):
         sumn=0
         s = matrix[i-1][j-1]
-        print "%0.3f"%s,
+        #print "%0.3f"%s,
         neigh = self.listofneighbours(i,j)
         sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
-      print
+      #print
     
     #print graph[8]
     high = 1e6
     bsoln = None
     maxi = max(graph.keys())
     #print "Depth: ",depth,
-    print "Hot Spots: ",len(graph[maxi]),
+    #print "Hot Spots: ",len(graph[maxi]),
     #print "Maxi: ",maxi
     #import time
     #time.sleep(3)
@@ -4609,7 +4609,7 @@ class Seive2_T1(Seive3):
     lcombine = []
     temp = set()
     for item in graph[maxi]:
-      print "Item ",item
+      #print "Item ",item
       temp.add(item)
       for i in self.listofneighbours(int(item/100),int(item%10)):
         temp.add(i)
@@ -4617,9 +4617,9 @@ class Seive2_T1(Seive3):
 
     for index in temp: lcombine.extend(dictionary[index])
 
-    print len(lcombine)
+    #print len(lcombine)
     lcombine.extend(self.tgenerate(model,lcombine))
-    print len(lcombine)
+    #print len(lcombine)
 
     if depth == int(myoptions['Seive2_T1']['depth']):
       for _ in xrange(20):
