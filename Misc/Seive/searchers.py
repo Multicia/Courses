@@ -4480,15 +4480,15 @@ class Seive2MG(Seive2):
     return dicttolist(dictionary),high,model
 
 class Seive2_T1(Seive3):
-  def generateSlot(self,m,decision=[]):
+  def generateSlot(self,m,decision=[],x=-1,y=-1):
     if len(decision) == 0: d = [some(m,d) for d in xrange(m.n)]
     else: d = decision[:]
     newpoint=Slots(changed = True,
             scores=1e6, 
             xblock=-1, #sam
             yblock=-1,  #sam
-            x=-1,
-            y=-1,
+            x=x,
+            y=y,
             obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
             dec = [some(m,d) for d in xrange(m.n)])
 
@@ -4522,20 +4522,22 @@ class Seive2_T1(Seive3):
     return genPoint
 
 
-  def tgenerate(m,pop):
-    for _ in xrange(1000):
+  def tgenerate(self,m,pop):
+    for _ in xrange(100):
       temp = random.random()
       o = any(pop)
       t = any(pop)
       th = any(pop)
       if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
       else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
-      one = generateSlot(m,cand)
+      one = self.generateSlot(m,cand)
       #print one.dec
       pop += [one]
+    return pop
 
   def evaluate(self,points=[],depth=0):
     def generate_dictionary(points=[]):  
+      print "Generate: ",len(points)
       dictionary = {}
       chess_board = whereMain(self.model,points) #checked: working well
       for i in range(1,9):
@@ -4549,18 +4551,25 @@ class Seive2_T1(Seive3):
 
     def thresholdCheck(index,dictionary):
       try:
-        #print "Threshold Check: ",self.threshold
-        if(len(dictionary[index])>self.threshold):return True
+        #print "Threshold Check: ",len(dictionary[index])
+        if(len(dictionary[index]) >= self.threshold):return True
         else:return False
       except:
         return False
+
+    def areneighbours(blocka,blockb):
+      def overlap(a, b):
+        return bool(set(a) & set(b))
+      na = self.listofneighbours(int(blocka/100),blocka%10)
+      nb = self.listofneighbours(int(blockb/100),blockb%10)
+      return overlap(na,nb) 
 
     model = self.model
     minR = model.minR
     maxR = model.maxR
 
     dictionary = generate_dictionary(points)
-    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
@@ -4578,61 +4587,54 @@ class Seive2_T1(Seive3):
       #print
     for i in xrange(1,9):
       for j in xrange(1,9):
-        #print "%0.3f"%matrix[i-1][j-1],
         sumn=0
         s = matrix[i-1][j-1]
+        print "%0.3f"%s,
         neigh = self.listofneighbours(i,j)
         sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
-      #print
+      print
     
     #print graph[8]
     high = 1e6
     bsoln = None
     maxi = max(graph.keys())
     #print "Depth: ",depth,
-    #print "Points: ",len(graph[maxi]),
+    print "Hot Spots: ",len(graph[maxi]),
     #print "Maxi: ",maxi
     #import time
     #time.sleep(3)
-    for x in graph[maxi]:
-       #print "The cell is: ",x," depth is: ",depth
-       if depth == int(myoptions['Seive3']['depth']):
-         for i in xrange(0,5):
-           y = any(dictionary[x])
-           #print y
-           temp2 = score(model,y)[-1]
-           if temp2 < high:
-             high = temp2
-             bsoln = y
-             #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
-             #print bsoln.dec
 
-           #print temp2,high,bsoln.dec
-           #print
-       
-       if(depth < int(myoptions['Seive3']['depth'])):
-         #print "RECURSE"
-         #print "Cell No: ",x,x/100,x%10
-         #print "Before: ",len(dictionary[x])
-         neighbourhood = []
-         neigh = self.listofneighbours(int(x/100),x%10)
-         print neigh
-         for x in neigh: 
-          print len(dictionary[x])
-          neighbourhood.extend(dictionary[x])
-         print len(neighbourhood)
-         raise Exception("I know python!")
-         result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
-         #print "After: ",len(dictionary[x])
-         rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
-         #print high,sc
-         if sc < high:
-           high = sc 
-           bsoln = rsoln
-           #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-           #print bsoln.dec
+    lcombine = []
+    temp = set()
+    for item in graph[maxi]:
+      print "Item ",item
+      temp.add(item)
+      for i in self.listofneighbours(int(item/100),int(item%10)):
+        temp.add(i)
+    
+
+    for index in temp: lcombine.extend(dictionary[index])
+
+    print len(lcombine)
+    lcombine.extend(self.tgenerate(model,lcombine))
+    print len(lcombine)
+
+    if depth == int(myoptions['Seive2_T1']['depth']):
+      for _ in xrange(20):
+        y = any(lcombine)
+        temp2 = score(model,y)[-1]
+        if temp2 < high:
+         high = temp2
+         bsoln = y
+
+    if(depth < int(myoptions['Seive2_T1']['depth'])):
+      rsoln,sc,model = self.evaluate(lcombine,depth+1)
+      if sc < high:
+        high = sc 
+        bsoln = rsoln
+      #raise Exception("I know python!")
 
     #print bsoln.dec     W
     return bsoln,high,model

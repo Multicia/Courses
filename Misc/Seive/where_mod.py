@@ -600,7 +600,7 @@ def whereMain(model,points=[],depth=3):
       #print len(pop)
       #raise Exception("I know python!")
   else:
-    pop = points
+    pop = points[:]
     
   #print "Length of pop: ",len(pop)
   slots = where0(verbose = True,
