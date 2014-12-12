@@ -186,8 +186,6 @@ Report 12-11-2014
 
 3. Results for Seive3 (modified version)
 ```
-==========================================================
-
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
    1 ,           DE ,    -185  ,     0 (    *          |              ),-1.85, -1.85, -1.53, -1.44, -1.44
@@ -199,10 +197,8 @@ rank ,         name ,    med   ,  iqr
    1 ,       Seive2 ,    19700  ,     0 (*              |              ),197.00, 197.00, 211.00, 227.00, 227.00
    1 ,       Seive3 ,    421700  ,     0 (       *       |              ),4217.00, 4217.00, 5117.00, 5526.00, 5526.00
    1 ,           DE ,    2010000  ,     0 (               |             *),20100.00, 20100.00, 20100.00, 20100.00, 20100.00
-
 ```
 4. Changed the initial generation of points. Now I first generate 100 points and then polate (extra and inter with probability 0.5) and create another 900 points. Doesn't seem to make much diffence but intutively this makes more sense.
-
 ```
 rank ,         name ,    med   ,  iqr 
 ----------------------------------------------------
