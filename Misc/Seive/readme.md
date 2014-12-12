@@ -217,3 +217,13 @@ rank ,         name ,    med   ,  iqr
    3 ,       Seive3 ,    531100  ,  205700 (              -|----     *--- ),3211.00, 4429.00, 5581.00, 5690.00, 6451.00
 ```
 5. Merged changes (i) added binary domination while comparing points of the objectives, (ii) added early termination
+6. Tried using all the neighbours to create the population for the next generation. But with this algorithm we are using almost all the cells of the grid. This makes the algorithm highly inefficient.
+```
+rank ,         name ,    med   ,  iqr 
+----------------------------------------------------
+   1 ,       Seive3 ,      27  ,     0 (*              |              ), 0.27,  0.27,  0.27,  0.27,  0.27
+   1 ,     Baseline ,      31  ,     0 (          *    |              ), 0.31,  0.31,  0.31,  0.31,  0.31
+   1 ,       Seive2 ,      33  ,     0 (               |   *          ), 0.33,  0.33,  0.33,  0.33,  0.33
+   1 ,    Seive2_T1 ,      37  ,     0 (               |             *), 0.37,  0.37,  0.37,  0.37,  0.37
+
+```
