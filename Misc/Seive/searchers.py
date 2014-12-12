@@ -1179,12 +1179,9 @@ class Baseline(SearchersBasic):
       for j in xrange(1,9):
         try:
           for x in dictionary[i*100+j]:
-            temp2 = score(model,x)[-1]
-            if temp2 < high:
-               high = temp2
-               bsoln = x
+            s.append(score(model,x)[-1])
         except: pass
-    return bsoln,high,model
+    return s
 
 class Seive3(SearchersBasic): #minimizing
   model = None
@@ -3635,10 +3632,12 @@ class Seive4(SearchersBasic): #minimizing
         
       return newF,n  
     #print repeat
-    for _ in xrange(repeat):
+    for indez in xrange(repeat):
       #print ".",
       frontier,n = de(model,f,cf,frontier,xb,yb)
-      if n == 0: break
+      if n == 0: 
+        print "Early Stop: ",indez
+        break
     minR=9e10
     for x in frontier:
       #print x
