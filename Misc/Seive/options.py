@@ -2,7 +2,10 @@ from __future__ import division
 import sys
 sys.dont_write_bytecode = True
 
-myoptions = {'MaxWalkSat':{'maxTries':'50','maxChanges':'2000','threshold':'0.001','probLocalSearch':'0.25'},'SA':{'kmax':'1000','emax':'0'},'GA':{'crossOverRate':'0.6','mutationRate':'0.1','elitism':'50','generation':'20'},'DE':{'repeat':100,'np':1000,'f':0.75,'cf':0.3},'PSO':{'N':30,'W':1,'phi1':1.3,'phi2':2.7,'repeat':1000,'threshold':'0.001'},'Seive':{'tries':'20','repeat':'6','intermaxlimit':'35','extermaxlimit':'35','threshold':'15','initialpoints':'1000','lives':'4','subsample':'10'}
+myoptions = {'MaxWalkSat':{'maxTries':'50','maxChanges':'2000','threshold':'0.001','probLocalSearch':'0.25'},'SA':{'kmax':'1000','emax':'0'},
+'GA':{'crossOverRate':'0.6','mutationRate':'0.1','elitism':'50','generation':'20'},'DE':{'repeat':100,'np':1000,'f':0.75,'cf':0.3},
+'PSO':{'N':30,'W':1,'phi1':1.3,'phi2':2.7,'repeat':1000,'threshold':'0.001'},
+'Seive':{'tries':'20','repeat':'6','intermaxlimit':'35','extermaxlimit':'35','threshold':'15','initialpoints':'1000','lives':'4','subsample':'10'}
 ,'MOEAD':{'threshold':20},
 'Seive3':{'intermaxlimit':'10','extermaxlimit':'10','threshold':'1','depth':'2'},
 'Seive2_T1':{'intermaxlimit':'10','extermaxlimit':'10','threshold':'1','depth':'1'}}

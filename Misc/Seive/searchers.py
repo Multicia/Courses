@@ -3632,12 +3632,14 @@ class Seive4(SearchersBasic): #minimizing
         
       return newF,n  
     #print repeat
+    lives = int(myoptions['Seive']['lives'])
     for indez in xrange(repeat):
       #print ".",
       frontier,n = de(model,f,cf,frontier,xb,yb)
       if n == 0: 
-        print "Early Stop: ",indez
-        break
+        print "Early Stop: ",indez,lives
+        lives -= 1
+        if lives == 0: break
     minR=9e10
     for x in frontier:
       #print x
