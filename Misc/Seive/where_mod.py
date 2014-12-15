@@ -587,7 +587,7 @@ def whereMain(model,points=[],depth=3):
       #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
       #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
       pop += [one]         #Store all the candidates in pop
-    for _ in range(int(0.9 * max)):
+    for _ in range(200):#int(0.9 * max)):
       temp = random.random()
       o = any(pop)
       t = any(pop)
@@ -599,6 +599,46 @@ def whereMain(model,points=[],depth=3):
       pop += [one]
       #print len(pop)
       #raise Exception("I know python!")
+  else:
+    pop = points[:]
+    
+  #print "Length of pop: ",len(pop)
+  slots = where0(verbose = True,
+               minSize = max**0.5,
+               prune   = False,
+               depthMax = depth) #removed wriggle
+  #print "Deapth Max: ",slots.depthMax
+  points = where(m, pop, slots)
+  #print "Length of points: ",len(points)
+  return points
+
+
+
+def whereMain_mod(model,points=[],depth=3):
+  def one(lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ] 
+
+  m, max, pop, kept = model,int(myoptions['Seive2_V50']['initialpoints']), [], Num()
+  if len(points) == 0:
+    for _ in range(int(max/10)):
+      one = candidate(m)  #Generate candidate
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
+      #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
+      pop += [one]         #Store all the candidates in pop
+    for _ in range(int(0.9 * max)):
+      #temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      #if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = candidate(m,cand)
+      #
+      pop += [one]
+      #raise Exception("I know python!")
+   #print len(pop)
   else:
     pop = points[:]
     

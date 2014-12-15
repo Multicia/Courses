@@ -8,6 +8,7 @@ myoptions = {'MaxWalkSat':{'maxTries':'50','maxChanges':'2000','threshold':'0.00
 'Seive':{'tries':'20','repeat':'6','intermaxlimit':'35','extermaxlimit':'35','threshold':'15','initialpoints':'1000','lives':'4','subsample':'10'}
 ,'MOEAD':{'threshold':20},
 'Seive3':{'intermaxlimit':'10','extermaxlimit':'10','threshold':'1','depth':'2'},
-'Seive2_T1':{'intermaxlimit':'10','extermaxlimit':'10','threshold':'1','depth':'1'}}
+'Seive2_T1':{'intermaxlimit':'10','extermaxlimit':'10','threshold':'1','depth':'1'},
+'Seive2_V50':{'initialpoints':'1000','depth':'2'}}
 myModeloptions = {'Lives': 4,'a12':0.56}
 myModelobjf = {'Viennet':3,'Schaffer':2, 'Fonseca':2, 'Kursawe':2, 'ZDT1':2,'ZDT3':2,'DTLZ7':20,'Schwefel':1,'Osyczka':2,'DTLZ1':20,'DTLZ2':10,'DTLZ3':10,'DTLZ4':10,'DTLZ5':10,'DTLZ6':10,'POM3':3,'XOMO':4}
