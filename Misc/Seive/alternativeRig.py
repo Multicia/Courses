@@ -38,7 +38,7 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 def multipleRun():
    from collections import defaultdict
    r = 5
-   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
+   for klass in [DTLZ1]:#,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
@@ -46,9 +46,9 @@ def multipleRun():
      tempC = klass()
      import time
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
-     bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
-     #bmin = -303.1769
-     #bmax = 500.5227
+     #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
+     bmin = -303.1769
+     bmax = 500.5227
      print "Baseline Finished: ",bmin,bmax
      
      for searcher in [Seive2_V50,Seive3]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
