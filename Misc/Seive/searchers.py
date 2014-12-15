@@ -4705,7 +4705,7 @@ class Seive2_V50(Seive3):
 
   def fastmap(self,model,data):
     "Divide data into two using distance to two distant items."
-    print ">>>>>>>>>>>>>>>>>>.FastMap"
+    #print ">>>>>>>>>>>>>>>>>>.FastMap"
     one  = any(data)             # 1) pick anything
     west = furthest(model,one,data)  # 2) west is as far as you can go from anything
     east = furthest(model,west,data) # 3) east is as far as you can go from west
@@ -4714,8 +4714,8 @@ class Seive2_V50(Seive3):
     xsum, lst = 0.0,[]
     ws = score(model,west)[-1]
     es = score(model,east)[-1]
-    print "West: ",ws
-    print "East: ",es
+    #print "West: ",ws
+    #print "East: ",es
     for one in data:
       a = dist(model,one,west)
       b = dist(model,one,east)
@@ -4828,7 +4828,7 @@ class Seive2_V50(Seive3):
          #self.intermaxlimit = 10
          #result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
 
-        # print "Length1: ",len(dictionary[x])
+         #print "Length1: ",len(dictionary[x])
          lst = self.fastmap(model,dictionary[x])
          #print "Length2: ",len(lst)
          #print lst

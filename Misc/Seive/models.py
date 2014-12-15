@@ -506,7 +506,7 @@ class Viennet(ModelBasic):
       self.returnMin(self.f1(solution)+ self.f2(solution)+self.f3(solution))
 
 class DTLZ7(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=20,n=39,k=20):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
@@ -755,7 +755,7 @@ class DTLZ1(ModelBasic):
 
 
 class DTLZ2(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
@@ -805,7 +805,7 @@ class DTLZ2(ModelBasic):
 
 
 class DTLZ3(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
@@ -854,7 +854,7 @@ class DTLZ3(ModelBasic):
     return emin,emax
 
 class DTLZ4(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10,alpha=100):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16,alpha=100):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
@@ -905,7 +905,7 @@ class DTLZ4(ModelBasic):
 
 
 class DTLZ5(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
@@ -957,7 +957,7 @@ class DTLZ5(ModelBasic):
     return emin,emax
 
 class DTLZ6(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=10,n=19,k=10):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
