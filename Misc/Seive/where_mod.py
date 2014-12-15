@@ -622,11 +622,12 @@ def whereMain_mod(model,points=[],depth=3):
 
   m, max, pop, kept = model,int(myoptions['Seive2_V50']['initialpoints']), [], Num()
   if len(points) == 0:
-    for _ in range(int(max/10)):
+    for _ in range(max):
       one = candidate(m)  #Generate candidate
       #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
       #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
       pop += [one]         #Store all the candidates in pop
+    """   
     for _ in range(int(0.9 * max)):
       #temp = random.random()
       o = any(pop)
@@ -638,6 +639,7 @@ def whereMain_mod(model,points=[],depth=3):
       #
       pop += [one]
       #raise Exception("I know python!")
+    """
    #print len(pop)
   else:
     pop = points[:]

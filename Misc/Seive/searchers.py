@@ -4623,7 +4623,7 @@ class Seive2_T1(Seive3):
     for index in temp: lcombine.extend(dictionary[index])
 
     #print len(lcombine)
-    lcombine.extend(self.tgenerate(model,lcombine))
+    self.tgenerate(model,lcombine)
     #print len(lcombine)
 
     if depth == int(myoptions['Seive2_T1']['depth']):
@@ -4658,7 +4658,7 @@ class Seive2_V50(Seive3):
             obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
             dec = [some(m,d) for d in xrange(m.n)])
 
-    scores(m,newpoint)
+    #scores(m,newpoint)
     #print "Decision: ",newpoint.dec
     #print "Objectives: ",newpoint.obj
     return newpoint
@@ -4689,7 +4689,7 @@ class Seive2_V50(Seive3):
 
 
   def tgenerate(self,m,pop):
-    for _ in xrange(100):
+    for _ in xrange(40):
       temp = random.random()
       o = any(pop)
       t = any(pop)
@@ -4700,7 +4700,9 @@ class Seive2_V50(Seive3):
       #print one.dec
       pop += [one]
     return pop
-  
+
+
+
   def fastmap(self,model,data):
     "Divide data into two using distance to two distant items."
     print ">>>>>>>>>>>>>>>>>>.FastMap"
@@ -4722,24 +4724,24 @@ class Seive2_V50(Seive3):
       lst  += [(x,one)]
     # now cut data according to the mean distance
     if ws > es:
-      cut, wests, easts = c/2, [], []
+      cut, wests, easts = xsum/len(data), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return easts
     else:
-      cut, wests, easts = (xsum*1)/(len(data)*5), [], []
+      cut, wests, easts = xsum/len(data), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return wests
 
 
+
   def evaluate(self,points=[],depth=0):
     def generate_dictionary(points=[]):  
-      print "Generate: ",len(points)
       dictionary = {}
-      chess_board = whereMain_mod(self.model,points) #checked: working well
+      chess_board = whereMain(self.model,points) #checked: working well
       for i in range(1,9):
         for j in range(1,9):
           temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
@@ -4751,25 +4753,19 @@ class Seive2_V50(Seive3):
 
     def thresholdCheck(index,dictionary):
       try:
-        #print "Threshold Check: ",len(dictionary[index])
-        if(len(dictionary[index]) >= self.threshold):return True
+        #print "Threshold Check: ",self.threshold
+        if(len(dictionary[index])>self.threshold):return True
         else:return False
       except:
         return False
 
-    def areneighbours(blocka,blockb):
-      def overlap(a, b):
-        return bool(set(a) & set(b))
-      na = self.listofneighbours(int(blocka/100),blocka%10)
-      nb = self.listofneighbours(int(blockb/100),blockb%10)
-      return overlap(na,nb) 
-
     model = self.model
     minR = model.minR
     maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
 
     dictionary = generate_dictionary(points)
-    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
@@ -4779,63 +4775,70 @@ class Seive2_V50(Seive3):
           result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
             #print "in middle of desert"
-            continue          
+            continue
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
 
-
-         
+        
        # print matrix[i-1][j-1],
-      #print 
+      #print
     for i in xrange(1,9):
       for j in xrange(1,9):
+        #print "%0.3f"%matrix[i-1][j-1],
         sumn=0
         s = matrix[i-1][j-1]
-        #print "%0.3f"%s,
         neigh = self.listofneighbours(i,j)
         sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
       #print
     
-    
-    #raise Exception("I know python!")
-
-
     #print graph[8]
     high = 1e6
     bsoln = None
     maxi = max(graph.keys())
     #print "Depth: ",depth,
-    #print "Hot Spots: ",len(graph[maxi]),
+    #print "Points: ",len(graph[maxi]),
     #print "Maxi: ",maxi
     #import time
     #time.sleep(3)
-
-    lcomb = []
-    for item in graph[maxi]:
-      lcomb.extend(dictionary[item])
-
     for x in graph[maxi]:
-      #print "The cell is: ",x," depth is: ",depth
-      if depth == int(myoptions['Seive2_V50']['depth']):
-        for i in xrange(0,5):
-          y = any(lcomb)
-          temp2 = score(model,y)[-1]
-          if temp2 < high:
-            high = temp2
-            bsoln = y
+       #print "The cell is: ",x," depth is: ",depth
+       if depth == int(myoptions['Seive2_V50']['depth']):
+         for i in xrange(0,5):
+           y = any(dictionary[x])
+           #print y
+           temp2 = score(model,y)[-1]
+           if temp2 < high:
+             high = temp2
+             bsoln = y
+             #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+             #print bsoln.dec
+
+           #print temp2,high,bsoln.dec
+           #print
        
-      if(depth < int(myoptions['Seive2_V50']['depth'])):
-        print "There"
-        print "Before: ",len(lcomb)
-        lcombine = list(self.fastmap(model,lcomb))
-        print "After: ",len(lcombine)
-        lcombine.extend(self.tgenerate(model,lcombine))
-        #raise Exception("I know python!")
-        rsoln,sc,model = self.evaluate(lcombine,depth+1)
-        if sc < high:
-          high = sc 
-          bsoln = rsoln
+       if(depth < int(myoptions['Seive2_V50']['depth'])):
+         #print "RECURSE"
+         #print "Cell No: ",x,x/100,x%10
+         #print "Before: ",len(dictionary[x])
+         #lst = []
+         self.tgenerate(model,dictionary[x]) #TODO: I don't really know how this works
+         #print "After: ",len(dictionary[x])
+         #self.extermaxlimit = 10
+         #self.intermaxlimit = 10
+         #result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+
+        # print "Length1: ",len(dictionary[x])
+         lst = self.fastmap(model,dictionary[x])
+         #print "Length2: ",len(lst)
+         #print lst
+         rsoln,sc,model = self.evaluate(lst,depth+1)
+         #print high,sc
+         if sc < high:
+           high = sc 
+           bsoln = rsoln
+           #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+           #print bsoln.dec
 
     #print bsoln.dec     W
     return bsoln,high,model

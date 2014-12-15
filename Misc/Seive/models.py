@@ -702,7 +702,7 @@ class Schwefel(ModelBasic):
 
 
 class DTLZ1(ModelBasic):
-  def __init__(self,minR=0,maxR=1,objf=20,n=24,k=5):
+  def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):
     self.minR=[minR for _ in xrange(n)]
     self.maxR=[maxR for _ in xrange(n)]
     self.n=n
