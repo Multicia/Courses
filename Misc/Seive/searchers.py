@@ -3494,7 +3494,7 @@ class Seive4(SearchersBasic): #minimizing
       return (0 + random.random()*(h-l))
     return lst[int(any(0,len(lst) - 1)) ]
 
-  def evaluate(self,points=[],depth=0,repeat=100,f=0.75,cf=0.3):
+  def evaluate(self,points=[],depth=0,repeat=100,f=0.75,cf=1):
     def generate_dictionary(points=[]):  
       dictionary = {}
       chess_board = whereMain(self.model,points) #checked: working well
@@ -3592,12 +3592,14 @@ class Seive4(SearchersBasic): #minimizing
 
   def extrapolate(self,model,frontier,one,f,cf,xb,yb):
     #print "Extrapolate"
+    
     two,three,four = self.threeOthers(frontier,one)
     #print two,three,four
     solution=[]
     for d in xrange(self.model.n):
       x,y,z=two.dec[d],three.dec[d],four.dec[d]
       if(random.random() < cf):
+        print cf
         solution.append(self.trim(x + f*(y-z),d))
       else:
         solution.append(one.dec[d]) 
@@ -4576,12 +4578,14 @@ class Seive2_T1(Seive3):
     matrix = [[0 for x in range(8)] for x in range(8)]
     for i in xrange(1,9):
       for j in xrange(1,9):
-        if(thresholdCheck(i*100+j,dictionary)==False):
+        if(thresholdCheck((i*100)+j,dictionary)==False):
           result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
             #print "in middle of desert"
             continue
+        print "\t%d"%len(dictionary[(i*100)+j]),
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+      print
 
         
        # print matrix[i-1][j-1],
