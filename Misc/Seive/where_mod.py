@@ -582,23 +582,10 @@ def whereMain(model,points=[],depth=3):
 
   m, max, pop, kept = model,int(myoptions['Seive']['initialpoints']), [], Num()
   if len(points) == 0:
-    for _ in range(int(max/10)):
+    #print "Bang"
+    for _ in range(max):
       one = candidate(m)  #Generate candidate
-      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>^^^^^^^^^^^^^^^^^ %f"%one.xblock
-      #kept + scores(m,one) #Store the scores in kept, mu: mean, m2: variance
       pop += [one]         #Store all the candidates in pop
-    for _ in range(200):#int(0.9 * max)):
-      temp = random.random()
-      o = any(pop)
-      t = any(pop)
-      th = any(pop)
-      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
-      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
-      one = candidate(m,cand)
-      #print one.dec
-      pop += [one]
-      #print len(pop)
-      #raise Exception("I know python!")
   else:
     pop = points[:]
     
