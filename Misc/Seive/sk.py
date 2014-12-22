@@ -63,7 +63,7 @@ def pairs(lst):
     yield last,i
     last = i
 
-def xtile(lst,lo=0,hi=100,width=50,
+def xtile(lst,lo=0,hi=100,width=80,
              chops=[0.1 ,0.3,0.5,0.7,0.9],
              marks=["-" ," "," ","-"," "],
              bar="|",star="*",show=" %3.0f"):
@@ -128,11 +128,11 @@ class Num:
   def __add__(i,j):
     return Num(i.name + j.name,i.all + j.all)
   def quartiles(i):
-    def p(x) : return int(100*g(xs[x]))
+    def p(x) : return float(g(xs[x]))
     i.median()
     xs = i.all
     n  = int(len(xs)*0.25)
-    return p(n) , p(2*n) , p(3*n)
+    return p(n) , p(int(len(xs)*0.5)) , p(3*n)
   def median(i):
     if not i._median:
       i.all = sorted(i.all)
@@ -486,13 +486,13 @@ def rdivDemo(data):
   lo, hi = all[0], all[-1]
   line = "----------------------------------------------------"
   last = None
-  print  ('%4s , %12s ,    %s   , %4s ' % \
+  print  ('%4s , %12s ,    %5s   , %5s ' % \
                ('rank', 'name', 'med', 'iqr'))+ "\n"+ line
   for _,__,x in sorted(ranks):
     q1,q2,q3 = x.quartiles()
-    print  ('%4s , %12s ,    %4s  ,  %4s ' % \
-                 (x.rank+1, x.name, q2, q3 - q1))  + \
-              xtile(x.all,lo=lo,hi=hi,width=30,show="%5.2f")
+    print  ('%4s , %12s ,    %g  ,  %5g \t' % \
+                 (x.rank+1, x.name, float(q2), float(q3 - q1)))  + \
+              xtile(x.all,lo=lo,hi=hi,width=40,show="%5.2f")
     last = x.rank 
 """
 
