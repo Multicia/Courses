@@ -1158,29 +1158,17 @@ class Baseline(SearchersBasic):
     self.displayStyle=displayS
 
   def evaluate(self,points=[],depth=0):
-    def generate_dictionary(points=[]):  
-      dictionary = {}
-      chess_board = whereMain(self.model,points) #checked: working well
-      for i in range(1,9):
-        for j in range(1,9):
-          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
-          if(len(temp)!=0):
-            index=temp[0].xblock*100+temp[0].yblock
-            dictionary[index] = temp
-            assert(len(temp)==len(dictionary[index])),"something"
-      return dictionary
-    
-    high = 1e6
-    bsoln = None
-    model = self.model
+    def lo(m,x)      : return m.minR[x]
+    def hi(m,x)      : return  m.maxR[x]
+    def some(m,x):
+      return lo(m,x) + random.random()*(hi(m,x) - lo(m,x))
+
     s = [] 
-    dictionary = generate_dictionary(points)
-    for i in xrange(1,9):
-      for j in xrange(1,9):
-        try:
-          for x in dictionary[i*100+j]:
-            s.append(score(model,x)[-1])
-        except: pass
+    m = self.model
+    for _ in xrange(1000):
+      tempSoln = [some(m,d) for d in xrange(m.n)]
+      scre = m.evaluate(tempSoln)[-1]
+      s.append(scre)
     return s
 
 class Seive3(SearchersBasic): #minimizing
@@ -5316,10 +5304,12 @@ class Seive2_V50_1(Seive3):
          #print "Points: ",len(dictionary[x])
          #print len(dictionary[x])
          if len(dictionary[x]) >= 2:
-           lst = self.fastmap(model,dictionary[x])
+           lst = self.tgenerate(model,dictionary[x])
+           lst = self.fastmap(model,lst)
            lst = self.mutate(model,lst)
-         else: lst = dictionary[x]
-         lst = self.tgenerate(model,lst)
+         else: 
+            lst = self.tgenerate(model,dictionary[x])
+
          rsoln,sc,model = self.evaluate(lst,depth+1)
          if sc < high:
            high = sc 
