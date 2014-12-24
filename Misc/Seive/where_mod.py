@@ -587,6 +587,7 @@ def whereMain(model,points=[],depth=3):
       one = candidate(m)  #Generate candidate
       pop += [one]         #Store all the candidates in pop
   else:
+    max = len(points)
     pop = points[:]
     
   #print "Length of pop: ",len(pop)

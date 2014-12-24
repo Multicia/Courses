@@ -486,7 +486,7 @@ def rdivDemo(data):
   lo, hi = all[0], all[-1]
   line = "----------------------------------------------------"
   last = None
-  print  ('%4s , %12s ,    %5s   , %5s ' % \
+  print  ('\t%4s , \t%12s ,    \t%5s   , \t%5s ' % \
                ('rank', 'name', 'med', 'iqr'))+ "\n"+ line
   for _,__,x in sorted(ranks):
     q1,q2,q3 = x.quartiles()

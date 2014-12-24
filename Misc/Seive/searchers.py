@@ -1188,7 +1188,7 @@ class Seive3(SearchersBasic): #minimizing
     self.extermaxlimit=int(myoptions['Seive3']['extermaxlimit'])     #Max number of points that can be created by extrapolation
     self.evalscores=0
   def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
-    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
+    def interpolate(lx,ly,lz,cr=0.3,fmin=0.1,fmax=0.5):
       def lo(m,index)      : return m.minR[index]
       def hi(m,index)      : return m.maxR[index]
       def trim(m,x,i)  : # trim to legal range
@@ -1196,18 +1196,18 @@ class Seive3(SearchersBasic): #minimizing
       assert(len(lx)==len(ly))
       genPoint=[]
       for i in xrange(len(lx)):
-        x,y=lx[i],ly[i]
+        x,y,z=lx[i],ly[i],lz[i]
         #print x
         #print y
         rand = random.random
         if rand < cr:
           probEx = fmin +(fmax-fmin)*rand()
-          new = trim(m,min(x,y)+probEx*abs(x-y),i)
+          new = trim(m,x + probEx*(y-z),i)
         else:
           new = y
         genPoint.append(new)
       return genPoint
-
+    print "This was called######################################################"
     decision=[]
     #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
     #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
@@ -1469,8 +1469,9 @@ class Seive3(SearchersBasic): #minimizing
         #print "generateNew| Extrapolation failed"
       #else:
         #print "FLAG is True!"
-        decisions.extend(self.wrapperextrapolate(m,listExter[2*i],\
-        listExter[(2*i)+1],1000,dictionary))
+        for i in xrange(int(len(listExter)/2)):
+            decisions.extend(self.wrapperextrapolate(m,listExter[2*i],\
+            listExter[(2*i)+1],1000,dictionary))
       old = len(dictionary[convert(xblock,yblock)])
       
       for decision in decisions:dictionary[convert(xblock,yblock)].\
@@ -4812,7 +4813,7 @@ class Seive3_I1(Seive3):
     minR = model.minR
     maxR = model.maxR
     ranking_dict = {}
-    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
     dictionary = generate_dictionary(points)
     #print dictionary
     for indexzx in xrange(1):
@@ -4910,8 +4911,12 @@ class Seive2_V50_1(Seive3):
     self.extermaxlimit=int(myoptions['Seive2_V50_1']['extermaxlimit'])     #Max number of points that can be created by extrapolation
     self.evalscores=0
 
-  def tgenerate(self,m,pop):
-    for _ in xrange(int(myoptions['Seive2_V50_1']['tgen']) ):
+  def tgenerate(self,m,pop,gen=0):
+    if gen == 0:
+      it = int(myoptions['Seive2_V50_1']['tgen'])
+    else:
+      it = gen
+    for _ in xrange(it):
       temp = random.random()
       o = any(pop)
       t = any(pop)
@@ -4973,29 +4978,48 @@ class Seive2_V50_1(Seive3):
     west = furthest(model,one,data)  # 2) west is as far as you can go from anything
     east = furthest(model,west,data) # 3) east is as far as you can go from west
     c    = dist(model,west,east)
-    
-    if score(model,west)[-1] > score(model,east)[-1]:
+
+    if score(model,west)[-1] < score(model,east)[-1]:
       east,west = west,east
 
     for point in data:
       out += [self.mutate1(model,point,c,east,west)]   
     
-    return out
+    #print len(data),len(out)
+    data += out
+   
+    #assert(Before > After),"ouch"
+    return data
+
   def lo(self,m,x)      : return m.minR[x]
   def hi(self,m,x)      : return  m.maxR[x]
+
+  def valid(self,m,val):
+    for x in xrange(len(val.dec)):
+      if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
+        print m.minR[x] , val.dec[x] , m.maxR[x]
+        return False
+    return True
+
   def mutate1(self,model,point,c,east,west,multiplier = 3.0):
+    #print "C: ",c
     tooFar = multiplier * abs(c)
     import copy
     new = copy.deepcopy(point)
     for i in xrange(len(point.dec)):
-      d = east.dec[i] = west.dec[i]
-      x = new.dec[i] * (1 + abs(c) * d)
-      new.dec[i] = max(min(hi(model,i),x),lo(model,i))
+      d = east.dec[i] - west.dec[i]
+      if not d == 0:
+        d = -1 if d < 0 else 1
+        #d = east.dec[i] = west.dec[i]
+        x = new.dec[i] * (1 + abs(c) * d)
+        new.dec[i] = max(min(hi(model,i),x),lo(model,i))
     newDistance = self.project(model,west,east,c,new) -\
                   self.project(model,west,east,c,west)
-    if abs(newDistance) < tooFar : #and valid(new):
+    #print "Distance: ",abs(newDistance)
+    if abs(newDistance) < tooFar  and self.valid(model,new):
       return new
     else:
+      print "Blown away"
       return point
   def fastmap(self,model,data):
     "Divide data into two using distance to two distant items."
@@ -5009,6 +5033,7 @@ class Seive2_V50_1(Seive3):
     xsum, lst = 0.0,[]
     ws = score(model,west)[-1]
     es = score(model,east)[-1]
+
     #print "West: ",ws
     #print "East: ",es
     for one in data:
@@ -5019,17 +5044,107 @@ class Seive2_V50_1(Seive3):
       lst  += [(x,one)]
     # now cut data according to the mean distance
     if ws > es:
-      cut, wests, easts = xsum/len(data), [], []
+      cut, wests, easts = (xsum/len(data)), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return easts
     else:
-      cut, wests, easts = xsum/len(data), [], []
+      cut, wests, easts = (xsum/len(data)), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return wests
+
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,lz,cr=0.9,fmin=0.1,fmax=0.5):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z=lx[i],ly[i],lz[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y
+        genPoint.append(new)
+      return genPoint
+    #print "This was called######################################################"
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count = 0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = interpolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+
+  #There are three points and I am trying to extrapolate. Need to pass two cell numbers
+  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def extrapolate(lx,ly,lz,cr=0.9,fmin=0.9,fmax=2):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      def indexConvert(index):
+        return int(index/100),index%10
+      assert(len(lx)==len(ly)==len(lz))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z = lx[i],ly[i],lz[i]
+        rand = random.random()
+
+        if rand < cr:
+          probEx = fmin + (fmax-fmin)*random.random()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y #Just assign a value for that decision
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #TODO: need to put an assert saying checking whether extrapolation is actually possible
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = extrapolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+
+
+
   def generateNew(self,m,xblock,yblock,dictionary,flag = False):
     convert = self.convert
     rowno = self.rowno
@@ -5150,7 +5265,7 @@ class Seive2_V50_1(Seive3):
         assert(convert(xblock,yblock)<=808),"Something's wrong!"
       decisions=[]
       listInter=interpolateCheck(xblock,yblock)
-      #print "generateNew|Interpolation Check: ",listInter
+      print "generateNew|Interpolation Check: ",listInter
       if(len(listInter)!=0):
         assert(len(listInter)%2==0),"listInter%2 not 0"
         for i in xrange(int(len(listInter)/2)):
@@ -5179,7 +5294,7 @@ class Seive2_V50_1(Seive3):
     #print "generateNew| convert: ",convert(xblock,yblock)
     #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
     #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
-    if(thresholdCheck(convert(xblock,yblock))==False):
+    if(thresholdCheck(convert(xblock,yblock))==False or thresholdCheck(convert(xblock,yblock))==True):
       #print "generateNew| Cell is relatively sparse: Might need to generate new points"
       listInter=interpolateCheck(xblock,yblock)
       #print "generateNew|Interpolation Check: ",listInter
@@ -5207,7 +5322,7 @@ class Seive2_V50_1(Seive3):
         #print "generateNew| Interpolation failed!"
         decisions=[]
         listExter = extrapolateCheck(xblock,yblock)
-        #print "generateNew|Extrapolation Check: ",listInter
+        #print "generateNew|Extrapolation Check: ",listExter
         if(len(listExter)==0):
           #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
           return False,dictionary
@@ -5234,7 +5349,10 @@ class Seive2_V50_1(Seive3):
         return False,dictionary #A lot of points but right in the middle of a deseart
       else:
         return True,dictionary
-
+  def one(self,model,lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ]
 
 
   def evaluate(self,points=[],depth=0):
@@ -5253,14 +5371,30 @@ class Seive2_V50_1(Seive3):
     def thresholdCheck(index,dictionary):
       try:
         #print "Threshold Check: ",self.threshold
-        if(len(dictionary[index])>self.threshold):return True
+        if(len(dictionary[index]) > self.threshold):return True
         else:return False
       except:
         return False
 
+    def randomcell(dictionary):
+      assert(len(dictionary.keys()) > 0),"Something's wrong here"
+      while True:
+        a = int(1 + (9-1)*random.random())
+        b = int(1 + (9-1)*random.random())
+        try:
+          len(dictionary[a*100+b])
+          break
+        except: pass
+      return dictionary[a*100+b]
+
+
     model = self.model
     minR = model.minR
     maxR = model.maxR
+    # if len(points) != 0:
+    #   print "before: ",len(points)
+    #   points = self.tgenerate(model,points,500)
+    #   print "after: ",len(points)
 
     dictionary = generate_dictionary(points)
     #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
@@ -5268,14 +5402,31 @@ class Seive2_V50_1(Seive3):
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
+    tempcount = 0
     for i in xrange(1,9):
       for j in xrange(1,9):
+        # try: 
+        #   print "\t",len(dictionary[i*100+j]),
+        #   tempcount += 1#len(dictionary[i*100+j])
+        # except: print "e",
         if(thresholdCheck(i*100+j,dictionary)==False):
           result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
             #print "in middle of desert"
+            matrix[i-1][j-1] = 100
             continue
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+      #print
+    #print "Cells used: ",tempcount,dictionary.keys()
+    # for i in xrange(1,9):
+    #   for j in xrange(1,9):
+    #     if matrix[i-1][j-1] != 100: print "there ",i,j
+    #if len(points) != 0: assert(tempcount == len(points)),"Screw up detected! %d"%tempcount
+
+
+    #print "Matrix: ",matrix
+    import time
+    #time.sleep(2)
 
     for i in xrange(1,9):
       for j in xrange(1,9):
@@ -5286,9 +5437,15 @@ class Seive2_V50_1(Seive3):
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
 
+    #print "Graph: ",graph
+    #import time
+    #time.sleep(1)
+
     high = 1e6
     bsoln = None
-    maxi = max(graph.keys())
+    maxi = 8#max(graph.keys())
+    #print "Maxi: ",maxi
+    #print "List: ",graph[maxi]
     for x in graph[maxi]:
        #print "The cell is: ",x," depth is: ",depth
        if depth == int(myoptions['Seive2_V50_1']['depth']) or len(dictionary[x]) <= 2:
@@ -5299,16 +5456,21 @@ class Seive2_V50_1(Seive3):
            if temp2 < high:
              high = temp2
              bsoln = y
-     
-       if(depth < int(myoptions['Seive2_V50_1']['depth'])):
+       elif(depth < int(myoptions['Seive2_V50_1']['depth'])):
          #print "Points: ",len(dictionary[x])
          #print len(dictionary[x])
          if len(dictionary[x]) >= 2:
-           lst = self.tgenerate(model,dictionary[x])
-           lst = self.fastmap(model,lst)
-           lst = self.mutate(model,lst)
-         else: 
-            lst = self.tgenerate(model,dictionary[x])
+           olz = len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)
+           #print result,
+           #print "Points Generated: ",len(dictionary[x])-olz
+           #print "Before fastmap: ",len(lst)
+           
+           #print "After fastmap: ",len(lst)
+           
+           lst = self.mutate(model,dictionary[x])
+           #print "Points Generated: ", len(lst)-olz
+           lst = self.fastmap(model,lst) 
 
          rsoln,sc,model = self.evaluate(lst,depth+1)
          if sc < high:
@@ -5329,8 +5491,12 @@ class Seive2_V50_2(Seive3):
     self.extermaxlimit=int(myoptions['Seive2_V50_2']['extermaxlimit'])     #Max number of points that can be created by extrapolation
     self.evalscores=0
 
-  def tgenerate(self,m,pop):
-    for _ in xrange(int(myoptions['Seive2_V50_2']['tgen']) ):
+  def tgenerate(self,m,pop,gen=0):
+    if gen == 0:
+      it = int(myoptions['Seive2_V50_1']['tgen'])
+    else:
+      it = gen
+    for _ in xrange(it):
       temp = random.random()
       o = any(pop)
       t = any(pop)
@@ -5392,29 +5558,48 @@ class Seive2_V50_2(Seive3):
     west = furthest(model,one,data)  # 2) west is as far as you can go from anything
     east = furthest(model,west,data) # 3) east is as far as you can go from west
     c    = dist(model,west,east)
-    
-    if score(model,west)[-1] > score(model,east)[-1]:
+
+    if score(model,west)[-1] < score(model,east)[-1]:
       east,west = west,east
 
     for point in data:
       out += [self.mutate1(model,point,c,east,west)]   
     
-    return out
+    #print len(data),len(out)
+    data += out
+   
+    #assert(Before > After),"ouch"
+    return data
+
   def lo(self,m,x)      : return m.minR[x]
   def hi(self,m,x)      : return  m.maxR[x]
+
+  def valid(self,m,val):
+    for x in xrange(len(val.dec)):
+      if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
+        print m.minR[x] , val.dec[x] , m.maxR[x]
+        return False
+    return True
+
   def mutate1(self,model,point,c,east,west,multiplier = 3.0):
+    #print "C: ",c
     tooFar = multiplier * abs(c)
     import copy
     new = copy.deepcopy(point)
     for i in xrange(len(point.dec)):
-      d = east.dec[i] = west.dec[i]
-      x = new.dec[i] * (1 + abs(c) * d)
-      new.dec[i] = max(min(hi(model,i),x),lo(model,i))
+      d = east.dec[i] - west.dec[i]
+      if not d == 0:
+        d = -1 if d < 0 else 1
+        #d = east.dec[i] = west.dec[i]
+        x = new.dec[i] * (1 + abs(c) * d)
+        new.dec[i] = max(min(hi(model,i),x),lo(model,i))
     newDistance = self.project(model,west,east,c,new) -\
                   self.project(model,west,east,c,west)
-    if abs(newDistance) < tooFar : #and valid(new):
+    #print "Distance: ",abs(newDistance)
+    if abs(newDistance) < tooFar  and self.valid(model,new):
       return new
     else:
+      print "Blown away"
       return point
   def fastmap(self,model,data):
     "Divide data into two using distance to two distant items."
@@ -5428,6 +5613,7 @@ class Seive2_V50_2(Seive3):
     xsum, lst = 0.0,[]
     ws = score(model,west)[-1]
     es = score(model,east)[-1]
+
     #print "West: ",ws
     #print "East: ",es
     for one in data:
@@ -5438,17 +5624,107 @@ class Seive2_V50_2(Seive3):
       lst  += [(x,one)]
     # now cut data according to the mean distance
     if ws > es:
-      cut, wests, easts = (xsum/len(data))*0.5, [], []
+      cut, wests, easts = (xsum/len(data)), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return easts
     else:
-      cut, wests, easts = (xsum/len(data))*1.5, [], []
+      cut, wests, easts = (xsum/len(data)), [], []
       for x,one in lst:
         where = wests if x < cut else easts 
         where += [one]
       return wests
+
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,lz,cr=0.9,fmin=0.1,fmax=0.5):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z=lx[i],ly[i],lz[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y
+        genPoint.append(new)
+      return genPoint
+    #print "This was called######################################################"
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count = 0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = interpolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+
+  #There are three points and I am trying to extrapolate. Need to pass two cell numbers
+  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def extrapolate(lx,ly,lz,cr=0.9,fmin=0.9,fmax=2):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      def indexConvert(index):
+        return int(index/100),index%10
+      assert(len(lx)==len(ly)==len(lz))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z = lx[i],ly[i],lz[i]
+        rand = random.random()
+
+        if rand < cr:
+          probEx = fmin + (fmax-fmin)*random.random()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y #Just assign a value for that decision
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #TODO: need to put an assert saying checking whether extrapolation is actually possible
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = extrapolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+
+
+
   def generateNew(self,m,xblock,yblock,dictionary,flag = False):
     convert = self.convert
     rowno = self.rowno
@@ -5569,7 +5845,7 @@ class Seive2_V50_2(Seive3):
         assert(convert(xblock,yblock)<=808),"Something's wrong!"
       decisions=[]
       listInter=interpolateCheck(xblock,yblock)
-      #print "generateNew|Interpolation Check: ",listInter
+      print "generateNew|Interpolation Check: ",listInter
       if(len(listInter)!=0):
         assert(len(listInter)%2==0),"listInter%2 not 0"
         for i in xrange(int(len(listInter)/2)):
@@ -5598,7 +5874,7 @@ class Seive2_V50_2(Seive3):
     #print "generateNew| convert: ",convert(xblock,yblock)
     #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
     #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
-    if(thresholdCheck(convert(xblock,yblock))==False):
+    if(thresholdCheck(convert(xblock,yblock))==False or thresholdCheck(convert(xblock,yblock))==True):
       #print "generateNew| Cell is relatively sparse: Might need to generate new points"
       listInter=interpolateCheck(xblock,yblock)
       #print "generateNew|Interpolation Check: ",listInter
@@ -5626,7 +5902,7 @@ class Seive2_V50_2(Seive3):
         #print "generateNew| Interpolation failed!"
         decisions=[]
         listExter = extrapolateCheck(xblock,yblock)
-        #print "generateNew|Extrapolation Check: ",listInter
+        #print "generateNew|Extrapolation Check: ",listExter
         if(len(listExter)==0):
           #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
           return False,dictionary
@@ -5653,7 +5929,10 @@ class Seive2_V50_2(Seive3):
         return False,dictionary #A lot of points but right in the middle of a deseart
       else:
         return True,dictionary
-
+  def one(self,model,lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ]
 
 
   def evaluate(self,points=[],depth=0):
@@ -5672,14 +5951,30 @@ class Seive2_V50_2(Seive3):
     def thresholdCheck(index,dictionary):
       try:
         #print "Threshold Check: ",self.threshold
-        if(len(dictionary[index])>self.threshold):return True
+        if(len(dictionary[index]) > self.threshold):return True
         else:return False
       except:
         return False
 
+    def randomcell(dictionary):
+      assert(len(dictionary.keys()) > 0),"Something's wrong here"
+      while True:
+        a = int(1 + (9-1)*random.random())
+        b = int(1 + (9-1)*random.random())
+        try:
+          len(dictionary[a*100+b])
+          break
+        except: pass
+      return dictionary[a*100+b]
+
+
     model = self.model
     minR = model.minR
     maxR = model.maxR
+    # if len(points) != 0:
+    #   print "before: ",len(points)
+    #   points = self.tgenerate(model,points,500)
+    #   print "after: ",len(points)
 
     dictionary = generate_dictionary(points)
     #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
@@ -5687,14 +5982,31 @@ class Seive2_V50_2(Seive3):
     from collections import defaultdict
     graph = defaultdict(list)
     matrix = [[0 for x in range(8)] for x in range(8)]
+    tempcount = 0
     for i in xrange(1,9):
       for j in xrange(1,9):
+        # try: 
+        #   print "\t",len(dictionary[i*100+j]),
+        #   tempcount += 1#len(dictionary[i*100+j])
+        # except: print "e",
         if(thresholdCheck(i*100+j,dictionary)==False):
           result,dictionary = self.generateNew(model,i,j,dictionary)
           if result == False: 
             #print "in middle of desert"
+            matrix[i-1][j-1] = 100
             continue
         matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+      #print
+    #print "Cells used: ",tempcount,dictionary.keys()
+    # for i in xrange(1,9):
+    #   for j in xrange(1,9):
+    #     if matrix[i-1][j-1] != 100: print "there ",i,j
+    #if len(points) != 0: assert(tempcount == len(points)),"Screw up detected! %d"%tempcount
+
+
+    #print "Matrix: ",matrix
+    import time
+    #time.sleep(2)
 
     for i in xrange(1,9):
       for j in xrange(1,9):
@@ -5705,12 +6017,18 @@ class Seive2_V50_2(Seive3):
         if (i*100+j) in dictionary:
           graph[int(sumn)].append(i*100+j)
 
+    #print "Graph: ",graph
+    #import time
+    #time.sleep(1)
+
     high = 1e6
     bsoln = None
-    maxi = max(graph.keys())
+    maxi = 8#max(graph.keys())
+    #print "Maxi: ",maxi
+    #print "List: ",graph[maxi]
     for x in graph[maxi]:
        #print "The cell is: ",x," depth is: ",depth
-       if depth == int(myoptions['Seive2_V50_2']['depth']) or len(dictionary[x]) <= 2:
+       if depth == int(myoptions['Seive2_V50_2']['depth']) or len(dictionary[x]) <= 4:
          for i in xrange(3):
            y = any(dictionary[x])
            #print y
@@ -5718,16 +6036,21 @@ class Seive2_V50_2(Seive3):
            if temp2 < high:
              high = temp2
              bsoln = y
-     
-       if(depth < int(myoptions['Seive2_V50_2']['depth'])):
+       elif(depth < int(myoptions['Seive2_V50_2']['depth'])):
          #print "Points: ",len(dictionary[x])
          #print len(dictionary[x])
          if len(dictionary[x]) >= 2:
-           lst = self.tgenerate(model,dictionary[x])
-           lst = self.fastmap(model,lst)
-           lst = self.mutate(model,lst)
-         else: 
-            lst = self.tgenerate(model,dictionary[x])
+           olz = len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)
+           #print result,
+           #print "Points Generated: ",len(dictionary[x])-olz
+           #print "Before fastmap: ",len(lst)
+           
+           #print "After fastmap: ",len(lst)
+           
+           lst = self.mutate(model,dictionary[x])
+           #print "Points Generated: ", len(lst)-olz
+           lst = self.fastmap(model,lst) + randomcell(dictionary)
 
          rsoln,sc,model = self.evaluate(lst,depth+1)
          if sc < high:
