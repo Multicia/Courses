@@ -353,3 +353,10 @@ rank ,         name ,    med   ,  iqr
    2 ,   Seive2_V50 ,    651500  ,  80800 (            ---|--         *  ),5276.00, 5832.00, 6515.00, 6640.00, 6712.00
 ```
 3. The fastmap approch is not working. This might be because we still have the bad
+
+Report Dec 24
+=============
+    
+    1. Tried to get all the points from all the mountain tops + random jiggle and have multiple generations -> Didn't work
+    2. add one points from all the cell and add it to mountain tops and recurse. Didn't work
+    3. Use points only from the mountains didn't work
