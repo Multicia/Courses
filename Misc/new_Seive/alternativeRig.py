@@ -7,6 +7,7 @@ from models import *
 from searchers import *
 from options import *
 from utilities import *
+import time
 from sk import *
 sys.dont_write_bytecode = True
 #Dr.M
@@ -37,21 +38,21 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 10
-   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
+   r = 1
+   tstart = time.time()
+   for klass in [DTLZ1]:#,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
      evalCollector=defaultdict(list)
      tempC = klass()
-     import time
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
      #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      bmin = -3.2801
      bmax = 5.6677
      print "Baseline Finished: ",bmin,bmax
      
-     for searcher in [Seive6]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+     for searcher in [Seive6]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -63,7 +64,7 @@ def multipleRun():
        for _ in range(r):
          test = searcher(klass(),"display2",bmin,bmax)
          print ".", 
-         import time
+        
          t1 = time.time()
          solution,score,model = test.evaluate()
 
@@ -99,7 +100,7 @@ def multipleRun():
      callrdivdemo(eraCollector)
      callrdivdemo(evalCollector)
      #callrdivdemo(timeCollector)
-     
+   print "Time for Experiment: ",time.time() - tstart
 
 def step2():
     rdivDemo([
