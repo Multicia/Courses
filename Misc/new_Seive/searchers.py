@@ -764,7 +764,7 @@ class Seive(SearchersBasic): #minimizing
           #print "Searcher| smean,siqr: %d %d "%(smean,siqr)
           neighbours = self.listofneighbours(m,soln[0],soln[1])
           #print neighbours
-          nmean,niqr=1e6,1e6
+          nmean,niqr=1e6,1e6 
           for neighbour in neighbours:
             #print "Searcher| neighbour: ",neighbour
             result = self.generateNew(m,int(neighbour/100),neighbour%10,dictionary)
