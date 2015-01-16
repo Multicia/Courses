@@ -194,7 +194,7 @@ class ModelBasic(object):
     self.addWrapper(temp) 
     #print temp
     energy= np.sum(temp)
-    temp.append((energy-self.minVal)/(self.maxVal-self.minVal))
+    temp.append(energy)#(energy-self.minVal)/(self.maxVal-self.minVal))
     self.no_eval+=1
 
     return temp

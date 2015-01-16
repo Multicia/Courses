@@ -2,6 +2,8 @@ from __future__ import division
 import sys
 import random
 import math
+
+from witschey_main import *
 #import numpy as np
 from models import *
 from searchers import *
@@ -40,7 +42,7 @@ def multipleRun():
    from collections import defaultdict
    r = 1
    tstart = time.time()
-   for klass in [DTLZ1]:#,DTLZ5,DTLZ6,DTLZ7]:
+   for klass in [RandomForest]:#,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
@@ -50,9 +52,9 @@ def multipleRun():
      #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      bmin = -3.2801
      bmax = 5.6677
-     print "Baseline Finished: ",bmin,bmax
+     #print "Baseline Finished: ",bmin,bmax
      
-     for searcher in [Seive2_V50_3,Seive2_V50_1]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+     for searcher in [Seive3]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -84,13 +86,13 @@ def multipleRun():
         #print "Score: %f"%(score)
        print
      
-     listbaseline = []
-     for _ in range(r):
-       testB = Baseline(klass(),"display2",bmin,bmax)
-       tmp = testB.evaluate()
-       listbaseline.extend(tmp)
-     print "Baseline: length is: ",len(listbaseline)
-     eraCollector['baseline'] = listbaseline
+     # listbaseline = []
+     # for _ in range(r):
+     #   testB = Baseline(klass(),"display2",bmin,bmax)
+     #   tmp = testB.evaluate()
+     #   listbaseline.extend(tmp)
+     # print "Baseline: length is: ",len(listbaseline)
+     # eraCollector['baseline'] = listbaseline
      #callrdivdemo(eraCollector)
      #raise Exception("I know python!")
      #print eraCollector

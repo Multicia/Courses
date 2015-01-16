@@ -6543,7 +6543,8 @@ class Seive2_V50_3(Seive3):
       ret = []
       for x in dictionary.keys():
         if x in avoid: continue
-        ret.append(self.one(model,dictionary[x]))
+        elif random.random() > 0.5:
+          ret.append(self.one(model,dictionary[x]))
       #print ret
       print "Length: ",len(ret)
       #raise Exception("I know python!")
@@ -6589,15 +6590,43 @@ class Seive2_V50_3(Seive3):
     #print "Matrix: ",matrix
     import time
     #time.sleep(2)
-
+    matrix1 = [[0 for x in range(8)] for x in range(8)]
+    # for i in xrange(1,9):
+    #   for j in xrange(1,9):
+    #     print "\t",matrix[i-1][j-1],
+    #   print
     for i in xrange(1,9):
       for j in xrange(1,9):
         sumn=0
         s = matrix[i-1][j-1]
         neigh = self.listofneighbours(i,j)
-        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
-        if (i*100+j) in dictionary:
-          graph[int(sumn)].append(i*100+j)
+        tm = 1e6
+        idea = 0
+        for x in neigh:
+          temp = matrix[self.rowno(x)-1][self.colmno(x)-1]
+          #print matrix[self.rowno(x)-1][self.colmno(x)-1],
+          if temp < tm:
+            idea = x
+            tm = temp
+        #print
+        #print tm,idea
+        if s < tm: matrix1[i-1][j-1] += 1
+        else: matrix1[self.rowno(idea)-1][self.colmno(idea)-1] +=1
+    # for i in xrange(1,9):
+    #   for j in xrange(1,9):
+    #     print "\t",matrix[i-1][j-1],
+    #   print
+    # print "============================================"
+    # print matrix1
+    points = []
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if matrix1[i-1][j-1] == 9: points.append(i*100+j)
+      #   if (i*100+j) in dictionary:
+      #     graph[int(sumn)].append(i*100+j)
+      #   print "\t",sumn,
+      # print
+    
 
     #print "Graph: ",graph
     #import time
@@ -6609,37 +6638,39 @@ class Seive2_V50_3(Seive3):
     #print "Maxi: ",maxi
     #print "List: ",graph[maxi]
     lst = []
-    for x in graph[maxi]: lst += dictionary[x]
-       #print "The cell is: ",x," depth is: ",depth
-    if depth == int(myoptions['Seive2_V50_3']['depth']) or len(lst) <= 4:
-       for i in xrange(int(len(lst)/10)):
-         y = any(dictionary[x])
-         #print y
-         temp2 = score(model,y)[-1]
-         if temp2 < high:
-           high = temp2
-           bsoln = y
-    elif(depth < int(myoptions['Seive2_V50_3']['depth'])):
-       #print "Points: ",len(dictionary[x])
-       #print len(dictionary[x])
-       if len(lst) >= 2:
-         olz = len(lst)
-         #result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)
-         #print result,
-         #print "Points Generated: ",len(dictionary[x])-olz
-         #print "Before fastmap: ",len(lst)
-         
-         #print "After fastmap: ",len(lst)
-         
-         lst += randomcell(model,dictionary,graph[maxi])
-         print "Len of lst: ",len(lst)
-         lst += self.mutate(model,lst) 
-         print "Points Generated: ", len(lst)-olz
-         lst = self.fastmap(model,lst) 
-         print "Points Used: ", len(lst)
+    
+    for x in points:
+           #print "The cell is: ",x," depth is: ",depth
+       if depth == int(myoptions['Seive2_V50_3']['depth']) or len(dictionary[x]) <= 4:
+         print "Length of the list : ",len(dictionary[x])
+         for i in xrange(min(len(dictionary[x]),3)):
+           y = self.one(model,dictionary[x])
+           #print y
+           temp2 = score(model,y)[-1]
+           if temp2 < high:
+             high = temp2
+             bsoln = y
+         #raise Exception("I know python!")
+       elif(depth < int(myoptions['Seive2_V50_3']['depth'])):
+         #print "Points: ",len(dictionary[x])
+         #print len(dictionary[x])
+         if len(dictionary[x]) >= 2:
+           olz = len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)           
+           lst = self.mutate(model,dictionary[x] + randomcell(model,dictionary,points))
+           #lst = self.fastmap(model,lst) 
 
-       rsoln,sc,model = self.evaluate(lst,depth+1)
-       if sc < high:
-         high = sc 
-         bsoln = rsoln
+         rsoln,sc,model = self.evaluate(lst,depth+1)
+         if sc < high:
+           high = sc 
+           bsoln = rsoln
     return bsoln,high,model
+
+
+
+
+    """
+    1. Tried to get all the points from all the mountain tops + random jiggle and have multiple generations -> Didn't work
+    2. add one points from all the cell and add it to mountain tops and recurse. Didn't work
+    3. Use points only from the mountains didn't work
+    """
