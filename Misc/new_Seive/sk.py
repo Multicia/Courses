@@ -470,7 +470,7 @@ def leftRight(parts,epsilon=0.01):
 Driver for the demos:
 
 """
-def rdivDemo(data):
+def rdivDemo(data,show1="%5.2f"):
   def z(x):
     return int(100 * (x - lo) / (hi - lo + 0.00001))
   data = map(lambda lst:Num(lst[0],lst[1:]),
@@ -492,7 +492,7 @@ def rdivDemo(data):
     q1,q2,q3 = x.quartiles()
     print  ('\t%4s , \t%12s ,    \t%g  ,  \t%5g\t   ' % \
                  (x.rank+1, x.name, float(q2), float(q3 - q1)))  + \
-              xtile(x.all,lo=lo,hi=hi,width=40,show="%5.2f")
+              xtile(x.all,lo=lo,hi=hi,width=40,show=show1)
     last = x.rank 
 """
 

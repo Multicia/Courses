@@ -446,30 +446,41 @@ class DE(SearchersBasic):
         solution.append(one[d]) 
     return solution
 
-  def update(self,f,cf,frontier,total=0.0,n=0):
+  def update(self,m,f,cf,frontier,minScore=1e6,total=0.0,n=0):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+      max(lo(m,i), x%hi(m,i))
     def better(old,new):
-      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      assert(len(old)==len(new)),"Length mismatch"
       for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
-        if old[i] >= new[i]: continue
+        if old[i] > new[i]: pass
         else: return False
       return True
-    #print "update %d"%len(frontier)
+    changed = False
     model=self.model
     newF = []
     total,n=0,0
     for x in frontier:
-      #print "update: %d"%n
       s = model.evaluate(x)[:-1]
       new = self.extrapolate(frontier,x,f,cf)
       #print new
+      tnew = [] 
+      for i,j in enumerate(new):
+        tnew.append(trim(m,j,i))
+      #assert(len(tnew) == 20),"mismatch"
       newe=model.evaluate(new)[:-1]
-      if better(s,newe) == True:
-        newF.append(new)
+      if better(s,newe) == True and s[-1] > newe[-1]:
+        newF.append(tnew)
+        changed = True
       else:
         newF.append(x)
-    return newF
+    return newF,changed
       
-  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01):
+  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01,lives=4):
     #print "evaluate"
     model=self.model
     minR = model.minR
@@ -477,17 +488,14 @@ class DE(SearchersBasic):
     #model.baseline(minR,maxR)
     frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
                for _ in xrange(np)]
-    #print frontier
     for i in xrange(repeat):
-      frontier = self.update(f,cf,frontier)
+      if lives == 0: break
+      frontier,changed = self.update(model,f,cf,frontier)
 
-      #for zz in frontier:
-      #  print "%2.2f "%self.model.evaluate(zz),
-      #print 
-
-      #if(total/n < epsilon):
-      #  break;
       self.model.evalBetter()
+      if changed == False: 
+        lives -= 1
+        print "lost it"
     minR=9e10
     for x in frontier:
       #print x
@@ -8042,7 +8050,9 @@ class Seive7_3(Seive7):
     def lo(m,index)      : return m.minR[index]
     def hi(m,index)      : return m.maxR[index]
     def trim(m,x,i)  : # trim to legal range
-      return max(lo(m,i), x%hi(m,i))
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
     def indexConvert(index):
       return int(index/100),index%10
 
@@ -8070,7 +8080,6 @@ class Seive7_3(Seive7):
   def valid(self,m,val):
     for x in xrange(len(val.dec)):
       if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
-        print m.minR[x] , val.dec[x] , m.maxR[x]
         return False
     return True
 
@@ -8328,7 +8337,9 @@ class Seive2_Initial(Seive7):
     def lo(m,index)      : return m.minR[index]
     def hi(m,index)      : return m.maxR[index]
     def trim(m,x,i)  : # trim to legal range
-      return max(lo(m,i), x%hi(m,i))
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
     def indexConvert(index):
       return int(index/100),index%10
 
@@ -8356,7 +8367,6 @@ class Seive2_Initial(Seive7):
   def valid(self,m,val):
     for x in xrange(len(val.dec)):
       if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
-        print m.minR[x] , val.dec[x] , m.maxR[x]
         return False
     return True
 
@@ -8774,3 +8784,218 @@ class Seive2_I2(Seive7):
            bsoln = y
     #print count     
     return bsoln.dec,high,model
+
+
+class DE2(SearchersBasic):
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model=modelName
+    self.displayStyle=displayS
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+
+  def threeOthers(self,frontier,one):
+    #print "threeOthers"
+    seen = [one]
+    def other():
+      #print "other"
+      for i in xrange(len(frontier)):
+        count = 10
+        while True:
+          if count == 0: return frontier[k]
+          else: count -= 1
+          k = random.randint(0,len(frontier)-1)
+          if frontier[k] not in seen:
+            seen.append(frontier[k])
+            break
+          #print "+",seen,frontier[k]
+        return frontier[k]
+    this = other()
+    that = other()
+    then = other()
+    return this,that,then
+  
+  def trim(self,x,i)  : # trim to legal range
+    m=self.model
+    return max(m.minR[i], min(x, m.maxR[i]))      
+
+  def extrapolate(self,frontier,one,f,cf):
+    #print "Extrapolate"
+    two,three,four = self.threeOthers(frontier,one)
+    #print two,three,four
+    solution=[]
+    for d in xrange(self.model.n):
+      x,y,z=two[d],three[d],four[d]
+      if(random.random() < cf):
+        solution.append(self.trim(x + f*(y-z),d))
+      else:
+        solution.append(one[d]) 
+    return solution
+
+  def update(self,m,f,cf,frontier,total=0.0,n=0):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+    def better(old,new):
+      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
+        if old[i] > new[i]: pass
+        else: return False
+      return True
+    #print "update %d"%len(frontier)
+    changed = False
+    model=self.model
+    newF = []
+    total,n=0,0
+    #print frontier 
+    for x in frontier:
+      #print "x: ",x,len(frontier)
+      #print "eval: ",model.evaluate(x)
+      s = model.evaluate(x)[:-1]
+      new = self.extrapolate(frontier,x,f,cf)
+      #print new
+      tnew = [] 
+      for i,j in enumerate(new):
+        tnew.append(trim(m,j,i))
+
+
+      newe=model.evaluate(tnew)[:-1]
+      if better(s,newe) == True and s[-1] > newe[-1]:
+        newF.append(tnew)
+        changed = True
+      else:
+        newF.append(x)
+    return newF,changed
+
+  def sdiv(self,lst, tiny=3,cohen=0.3,
+             num1=lambda x:x[0], num2=lambda x:x[1]):
+      "Divide lst of (num1,num2) using variance of num2."
+      #----------------------------------------------
+      class Counts(): # Add/delete counts of numbers.
+        def __init__(i,inits=[]):
+          i.zero()
+          for number in inits: i + number 
+        def zero(i): i.n = i.mu = i.m2 = 0.0
+        def sd(i)  : 
+          if i.n < 2: return i.mu
+          else:       
+            return (max(0,i.m2)*1.0/(i.n - 1))**0.5
+        def __add__(i,x):
+          i.n  += 1
+          delta = x - i.mu
+          i.mu += delta/(1.0*i.n)
+          i.m2 += delta*(x - i.mu)
+        def __sub__(i,x):
+          if i.n < 2: return i.zero()
+          i.n  -= 1
+          delta = x - i.mu
+          i.mu -= delta/(1.0*i.n)
+          i.m2 -= delta*(x - i.mu)    
+      #----------------------------------------------
+      def divide(this,small): #Find best divide of 'this'
+        lhs,rhs = Counts(), Counts(num2(x) for x in this)
+        n0, least, cut = 1.0*rhs.n, rhs.sd(), None
+        for j,x  in enumerate(this): 
+          if lhs.n > tiny and rhs.n > tiny: 
+            maybe= lhs.n/n0*lhs.sd()+ rhs.n/n0*rhs.sd()
+            if maybe < least :  
+              if abs(lhs.mu - rhs.mu) >= small: # where's the paper for this method?
+                cut,least = j,maybe
+          rhs - num2(x)
+          lhs + num2(x)    
+        return cut,least
+      #----------------------------------------------
+      def recurse(this, small,cuts):
+        #print this,small
+        cut,sd = divide(this,small)
+        if cut: 
+          recurse(this[:cut], small, cuts)
+          recurse(this[cut:], small, cuts)
+        else:   
+          cuts += [(sd,this)]
+        return cuts
+      #---| main |-----------------------------------
+      # for x in lst:
+      #   print num2(x)
+      small = Counts(num2(x) for x in lst).sd()*cohen # why we use a cohen??? how to choose cohen
+      if lst: 
+        return recurse(sorted(lst,key=num1),small,[])
+
+  def indexof(self,lsts,number,index = lambda x: x[1]):
+    for i,lst in enumerate(sorted(lsts,key = index)):
+      if number == index(lst): return i
+    return -1 
+
+  def uscore(self,lsts,starti,endi):
+    summ = 0
+    for i in xrange(starti,endi+1):
+      summ += lsts[i][-1]
+    return summ/(endi-starti+1)
+
+  def constraint_check(self,model):
+    points = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
+               for _ in xrange(500)]
+    scores = []
+    for point in points: scores.append(model.evaluate(point)[-1])
+    points = [point +[scores[i]] for i,point in enumerate(points)]
+    constraints = []
+
+    for i in xrange(len(points[0])-1):
+      constraint = []
+      cohen=0.3
+      h = 1e6
+      #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+      #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+      for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+        starti = self.indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+        endi =  self.indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+        #print "Starti: ",starti, "Endi: ",endi
+        mean_score = self.uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+        #print "-----------------Mean Score: ",mean_score
+        if mean_score < h:
+          const1 = d[1][0][i]
+          const2 = d[1][-1][i]
+          h = mean_score
+      constraints.append([i]+[(const1,const2)]) 
+
+    return constraints
+
+
+
+  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01,lives=4):
+    #print "evaluate"
+    model=self.model
+    minR = model.minR
+    maxR = model.maxR
+
+    constraints = self.constraint_check(model)
+    for i,constraint in enumerate(constraints):
+      model.minR[i] = constraint[1][0]
+      model.maxR[i] = constraint[1][1]
+
+    #model.baseline(minR,maxR)
+    frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
+               for _ in xrange(np)]
+    #print frontier
+    changed = False
+    for i in xrange(repeat):
+      if lives == 0: break
+      frontier,changed = self.update(model,f,cf,frontier)
+
+      self.model.evalBetter()
+      if changed == False: 
+        lives -= 1
+        print "lost it"
+    minR=9e10
+    for x in frontier:
+      #print x
+      energy = self.model.evaluate(x)[-1]
+      if(minR>energy):
+        minR = energy
+        solution=x 
+    print solution,minR
+    return solution,minR,self.model
+
+

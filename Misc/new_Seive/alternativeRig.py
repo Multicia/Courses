@@ -38,9 +38,9 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r =10
+   r = 10
    tstart = time.time()
-   for klass in [DTLZ1,DTLZ2,DTLZ3,DTLZ4,DTLZ5,DTLZ6,DTLZ7]:
+   for klass in [Viennet,Osyczka,Schwefel,DTLZ1,DTLZ5,DTLZ6,DTLZ7,Fonseca,Kursawe,ZDT1,ZDT3]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
@@ -52,7 +52,7 @@ def multipleRun():
      #bmax = 5.6677
      print "Baseline Finished: ",bmin,bmax
      
-     for searcher in [Seive2_I2,Seive2_Initial]:#,Seive7_3,DE]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+     for searcher in [DE,DE2,Seive2_Initial,Seive7_3]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -76,7 +76,7 @@ def multipleRun():
            sys.stdout.flush()
          timeTaken = (time.time() - t1) * 1000
          #listTimeTaken.append(timeTaken)
-         list_eval.append(model.no_eval)
+         list_eval.append(int(model.no_eval))
          listScores.append(score)
          #timeCollector[searcher.__name__]=listTimeTaken
        eraCollector[searcher.__name__]=listScores
@@ -98,7 +98,7 @@ def multipleRun():
      #print timeCollector
      print "=========================================================="
      callrdivdemo(eraCollector)
-     callrdivdemo(evalCollector)
+     callrdivdemo(evalCollector,"%5.0f")
      #callrdivdemo(timeCollector)
    print "Time for Experiment: ",time.time() - tstart
 
@@ -110,7 +110,7 @@ def step2():
       ["Mythology",377,288,560,368,320]])   
 
 
-def callrdivdemo(eraCollector):
+def callrdivdemo(eraCollector,show="%5.2f"):
   #print eraCollector
   #print "callrdivdemo %d"%len(eraCollector.keys())
   keylist = eraCollector.keys() 
@@ -125,7 +125,7 @@ def callrdivdemo(eraCollector):
       temp.insert(0,str(keylist[y]))
       #print temp
       rdivarray.append(temp)
-  rdivDemo(rdivarray) 
+  rdivDemo(rdivarray,show) 
   
 
 
