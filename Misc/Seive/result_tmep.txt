@@ -1,0 +1,3189 @@
+Model Name: RandomForest
+Date: 06/01/2015
+Seive2 . [17.892864208130618, 604.0727504808103, 2.608439506650747]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=604,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.2657450698  IQR:  -4.38134890878
+- ====================================
+[5.521406691073656, 704.46023230888, 2.9526935094277684]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=704,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.659368257623  IQR:  -2.77647603333
+- ====================================
+[11.830323908734357, 718.6396763658345, 1.576357519791585]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=718,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.07502100803  IQR:  -3.43116994459
+- ====================================
+[18.4966570462615, 489.5660867325894, 2.6567237050417987]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=489,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.35054560364  IQR:  -4.4767927097
+- ====================================
+[19.022914948860635, 608.4206670851117, 2.137353906655393]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=608,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.38757545422  IQR:  -4.55465623682
+- ====================================
+[20.723750887726545, 540.4796481761357, 2.498732402614106]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=540,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.49567195297  IQR:  -4.87854759854
+- ====================================
+[21.46958402990123, 172.78790048002477, 1.901859209187389]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=172,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.35439597502  IQR:  -5.47673832878
+- ====================================
+[5.8730222768048606, 936.810963191881, 1.4268265508086935]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=936,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.363694734563  IQR:  -0.0472162638198
+- ====================================
+[3.3665666423914082, 230.8462173818626, 2.8707369631610318]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=230,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.603827959163  IQR:  -2.53069773059
+- ====================================
+[24.204960092219476, 976.7596452188697, 1.0317739033657243]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=976,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.18987142602  IQR:  0.653451419537
+- ====================================
+[21.619904734357817, 569.5625384079768, 1.614323941160003]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=569,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.46150165016  IQR:  -5.2444486207
+- ====================================
+[30.49941009273163, 429.46855764889233, 1.3170046226640082]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=429,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.62219611136  IQR:  -3.2007508118
+- ====================================
+[26.81658297560632, 700.6024913637877, 2.6710272183133554]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=700,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56681062339  IQR:  -3.29749930286
+- ====================================
+[11.407983093377783, 595.5574790876299, 1.943611375516484]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=595,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0967161137  IQR:  -3.265072798
+- ====================================
+[8.131696656732888, 624.0248857562078, 2.073600573489458]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=624,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.03645634311  IQR:  -3.13479881792
+- ====================================
+[25.056607249626804, 991.6731682142876, 2.531669595024809]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=991,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.54662625576  IQR:  -3.92079126259
+- ====================================
+[16.521999347474285, 144.4726699304514, 2.3320162419333235]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=144,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15276266068  IQR:  -3.40495493441
+- ====================================
+[29.36132438311178, 355.7885156774877, 2.649683822451376]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=355,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.60314632093  IQR:  -3.16079336872
+- ====================================
+[21.534029250753363, 417.45408876459965, 1.2389005650598721]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=417,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15738466448  IQR:  0.4264470306
+- ====================================
+[16.24013965324258, 690.1004792308678, 1.4904091861370432]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=690,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.915587586537  IQR:  1.96009994042
+- ====================================
+[3.65992264503506, 567.2132345366877, 2.0817507006530516]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=567,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.524407921017  IQR:  -2.23679129471
+- ====================================
+[19.479742006821837, 384.7711783522922, 1.0307253231719273]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=384,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.03005074571  IQR:  1.2989189647
+- ====================================
+[7.024702781732851, 402.35228277638976, 1.8234233218747784]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=402,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.931457414203  IQR:  -3.14565311688
+- ====================================
+[6.294096639662566, 691.7609154591801, 1.0018951836748327]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=691,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.393908312485  IQR:  -0.0165491675487
+- ====================================
+[6.925698242213788, 166.40954145160248, 2.6601798053188332]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=166,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.746458021438  IQR:  -3.39101985316
+- ====================================
+[13.829707730284264, 866.5029144347443, 1.611696086750542]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=866,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11891419393  IQR:  -3.2072403646
+- ====================================
+[16.14804391784903, 327.83732157846566, 1.5184555223096274]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=327,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.18639973316  IQR:  -4.18928926415
+- ====================================
+[2.716140406882675, 828.2542662295798, 2.985701217544757]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=828,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.582375324457  IQR:  -2.56925219872
+- ====================================
+[27.180127967323916, 808.323356684801, 1.836605051619614]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=808,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.5374615137  IQR:  -2.84125474857
+- ====================================
+[20.418634671562486, 772.3639854911637, 2.9071537637580627]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=772,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.44251565598  IQR:  -5.12280266223
+- ====================================
+[19.165130320328366, 748.2854506401543, 1.2871169305883592]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=748,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.05264636563  IQR:  1.20320976095
+- ====================================
+[31.718595460179007, 690.7443186603131, 2.4830936068249576]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=690,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41442754766  IQR:  -4.96963709877
+- ====================================
+[2.212680030278981, 573.0125611483345, 1.8051858061559203]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=573,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.526468472274  IQR:  -1.96739633922
+- ====================================
+[4.703273712418586, 324.52368896593134, 2.0484869449711463]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=324,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.585117765548  IQR:  -2.2420470979
+- ====================================
+[12.465765830526287, 242.00812622844026, 1.1352539874179566]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=242,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.730234876927  IQR:  1.49729262574
+- ====================================
+[9.216848384615808, 526.5131320408251, 2.481853351348936]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=526,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.14046403768  IQR:  -3.08961117856
+- ====================================
+[2.654157355031656, 617.0051594632204, 2.649356624162646]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=617,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.54408068715  IQR:  -2.09659954122
+- ====================================
+[3.489143431349457, 300.503136073217, 2.9530732671832918]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=300,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.535430689035  IQR:  -2.41334310029
+- ====================================
+[21.244519011607114, 793.5516715411709, 2.988463175178052]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=793,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43606387044  IQR:  -5.17461715498
+- ====================================
+[13.87973659664305, 734.3797748417659, 2.504093340762621]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=734,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaaa0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.14264112333  IQR:  -3.49011887834
+- ====================================
+[30.41065892536235, 507.71490180110925, 1.5879779536364234]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=507,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.53204624959  IQR:  -4.0905045985
+- ====================================
+[19.472670969605723, 383.36862454197814, 1.3244933411071447]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=383,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0454669954  IQR:  1.05721250703
+- ====================================
+[8.653214595402455, 370.41308107068863, 1.4942722154839052]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=370,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.534485028469  IQR:  0.0732516448509
+- ====================================
+[27.069539311799385, 526.0918365741938, 1.149791728429503]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=526,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.35792791906  IQR:  0.512291252238
+- ====================================
+[6.731699642242776, 101.81490284851614, 2.4564423506223747]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=101,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.809341990604  IQR:  -3.35457936965
+- ====================================
+[7.541476379078041, 558.8769556550927, 1.1246553060512288]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=558,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.484556217203  IQR:  0.0269402883772
+- ====================================
+[8.61074288088702, 138.963162179221, 2.844749669969202]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=138,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.03553426383  IQR:  -2.62996923727
+- ====================================
+[5.687112372024166, 998.0102732638345, 2.6988091506492395]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=998,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.662498238722  IQR:  -2.52745449227
+- ====================================
+[23.498512871404767, 121.9250193423135, 2.879559709615357]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=121,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.53262499171  IQR:  -4.43917787208
+- ====================================
+[23.228736140331687, 847.307043745595, 2.573841756291979]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=847,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.45453514248  IQR:  -4.38458349271
+- ====================================
+[24.268203541516474, 295.5515797875179, 2.1295254258049203]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=295,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56890895471  IQR:  -4.45379101043
+- ====================================
+[9.420503082347706, 441.43802465112634, 1.235062237494932]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=441,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.607322536971  IQR:  0.252895340524
+- ====================================
+[18.463216545574003, 918.5788428359018, 2.223585884738375]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=918,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.32085867551  IQR:  -4.73054249873
+- ====================================
+[18.39430011967898, 772.1525790774749, 2.9694379418429517]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=772,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.35448465209  IQR:  -4.87786844977
+- ====================================
+[24.369169276934315, 897.7353982183063, 2.995090755646762]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=897,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.52312835929  IQR:  -4.34322827117
+- ====================================
+[31.006634759066092, 312.5015700692794, 2.3558145808983992]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=312,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.46819294234  IQR:  -4.84982924821
+- ====================================
+[4.00809622995375, 610.2060704868893, 2.031647293130247]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=610,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.598745193909  IQR:  -2.3740772215
+- ====================================
+[17.71531714395003, 340.9438020962298, 2.7048462740965156]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=340,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.17179974571  IQR:  -4.02364562557
+- ====================================
+[10.928329040170599, 381.77179484961124, 2.088056896041504]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=381,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0692339856  IQR:  -3.27910460554
+- ====================================
+[10.586765353623488, 660.1806037180536, 1.0544606432183976]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=660,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.649603569756  IQR:  0.676500578177
+- ====================================
+[9.472826812485087, 524.515677571591, 1.5105394592475514]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=524,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09491312319  IQR:  -3.04483246258
+- ====================================
+[5.167246643255723, 516.9448437642948, 1.8886482601546029]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=516,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.644611717514  IQR:  -2.77662126715
+- ====================================
+[8.293105361453279, 450.7495201911315, 1.5867999909420836]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=450,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09372121722  IQR:  -3.24786444426
+- ====================================
+[11.315557247716457, 916.8094867097831, 1.2679128285643908]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=916,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.70033592291  IQR:  0.975140374642
+- ====================================
+[14.629475903893765, 297.29565002772904, 1.0790050176660204]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=297,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.841917024508  IQR:  1.87295070574
+- ====================================
+[23.258313216830544, 130.39805822036303, 2.8875575061791094]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=130,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56065447156  IQR:  -5.23715802131
+- ====================================
+[24.550926978407936, 336.8813085011849, 2.822349517525547]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=336,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.54821186666  IQR:  -4.60626585156
+- ====================================
+[13.379286556628754, 882.5554847527513, 2.0924817957635167]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=882,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.04591395307  IQR:  -3.32992074938
+- ====================================
+[22.279571744172976, 767.7115844146107, 1.9358551071815817]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=767,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41705261308  IQR:  -4.88220063978
+- ====================================
+[31.635568365070604, 994.2759167367952, 2.7535640372854204]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=994,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43804029552  IQR:  -4.96129498324
+- ====================================
+[15.737120141991344, 956.0810140128107, 2.8400441835268797]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=956,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13484854878  IQR:  -3.93865787794
+- ====================================
+[3.0724265452655004, 823.9085751228549, 1.5578640215819821]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=823,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.537626981623  IQR:  -2.47906962798
+- ====================================
+[24.714639895780195, 418.24003545835416, 1.702778142108723]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=418,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.50868914679  IQR:  -4.45582820988
+- ====================================
+[18.89197241865102, 113.54224526795113, 2.208231030399613]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=113,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.44001630947  IQR:  -4.51807652836
+- ====================================
+[16.669691919075795, 779.9236378596858, 1.3223368692618138]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=779,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.904850620154  IQR:  1.83737006205
+- ====================================
+[24.306556964649015, 760.4057206658235, 2.9283482882938445]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=760,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.55515622818  IQR:  -4.40160694242
+- ====================================
+[6.757133097309376, 353.61185040227076, 2.9365640716912953]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=353,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.80258339778  IQR:  -2.49316784258
+- ====================================
+[13.228551594635016, 351.614874297518, 2.1273841712844757]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=351,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1164688252  IQR:  -3.73820414684
+- ====================================
+[7.5196229802994985, 984.0151958353534, 2.008448771486986]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=984,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.962664838334  IQR:  -3.15096660132
+- ====================================
+[7.855826319033502, 652.0520330523906, 2.7907567346084865]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=652,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.98189880282  IQR:  -3.04592857474
+- ====================================
+[26.384985016550445, 780.5331833192472, 1.4916890715042843]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=780,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.2071195995  IQR:  0.709948825938
+- ====================================
+[27.163748305013534, 367.27566320958624, 2.441850762780115]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=367,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.51561356412  IQR:  -3.18612118133
+- ====================================
+[27.728322318572996, 804.953706024945, 1.8482695197904762]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=804,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.54796752616  IQR:  -2.91750786376
+- ====================================
+[31.96100951305643, 752.2373639272863, 2.868382321394186]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=752,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41883686957  IQR:  -4.83233942247
+- ====================================
+[12.951597260835205, 903.0991062918421, 1.1754016646567107]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=903,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.733298765323  IQR:  1.21874461491
+- ====================================
+[17.046671156835323, 101.95836519339497, 2.995659956937378]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=101,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.23779469153  IQR:  -3.97638224038
+- ====================================
+[8.637627328602827, 843.7662351378204, 1.9884794467994948]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=843,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.05336133125  IQR:  -3.17229798171
+- ====================================
+[4.422985906977954, 592.1683313801364, 2.1961878454070938]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=592,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.62440231676  IQR:  -2.66597007404
+- ====================================
+[2.3355601906098125, 270.79853993369636, 2.552179799978633]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=270,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.498146767014  IQR:  -2.03007201888
+- ====================================
+[8.764720831906109, 380.70737342511546, 1.173288506271547]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=380,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.561536723746  IQR:  0.0394610197478
+- ====================================
+[18.79196734643411, 458.46588234661675, 2.0219813933880295]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=458,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.32309443899  IQR:  -4.74998992928
+- ====================================
+[18.568005403317333, 315.45114510322855, 2.099477406047654]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=315,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.28729189211  IQR:  -4.81402671682
+- ====================================
+[14.456974938431037, 318.58032675721347, 2.4226768093509916]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=318,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11949271332  IQR:  -3.34940820081
+- ====================================
+[20.825815783505295, 310.59666678125234, 1.7428993474764278]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=310,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.38639668361  IQR:  -5.12975812193
+- ====================================
+[25.121492408544736, 108.40721799689055, 1.6524319829649843]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=108,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.57375083434  IQR:  -4.07579139583
+- ====================================
+[10.231490522032402, 266.06983789437174, 1.5468050785304521]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=266,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09462813828  IQR:  -3.22310162205
+- ====================================
+[6.672392476360083, 260.23964235775077, 2.9257868317114726]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=260,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.863450410998  IQR:  -2.68119713396
+- ====================================
+[4.137320248322306, 121.91481256729982, 1.726019271471773]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=121,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.624092668201  IQR:  -2.42257243002
+- ====================================
+[26.453960435648767, 290.5456496728434, 2.865397297570177]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=290,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.62593675619  IQR:  -3.35811515775
+- ====================================
+[26.9799000302367, 175.18921975011168, 2.236243451106223]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=175,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.63116927951  IQR:  -3.13621845995
+- ====================================
+[17.343595219129178, 368.4562860991175, 2.9779429974095226]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=368,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13016682986  IQR:  -4.74484708555
+- ====================================
+[27.10893825014056, 567.8245390646446, 2.9080829031817013]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=567,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.50964016565  IQR:  -2.94698453858
+- ====================================
+[27.02789624226598, 265.5925742690215, 2.8341193019980238]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=265,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.50607470184  IQR:  -2.88347737227
+- ====================================
+[25.877302555687873, 983.6452477810834, 2.5526498143616685]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=983,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.58711936343  IQR:  -3.9111747836
+- ====================================
+[23.429203426895242, 872.9007530953473, 1.9803183273636398]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=872,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.4577727719  IQR:  -4.81484451044
+- ====================================
+[28.95818168591274, 363.1954718247528, 1.4022818892729054]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=363,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.42159929747  IQR:  -0.453574714187
+- ====================================
+[31.31767213263905, 891.2610962403475, 1.2312243584259523]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=891,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.51993080539  IQR:  -4.64320489986
+- ====================================
+[13.572877142293892, 260.07425014558476, 1.7344824709772904]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=260,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.12120343996  IQR:  -3.55746605848
+- ====================================
+[18.88142788213667, 706.7906730848679, 1.9302655742162995]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=706,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.42510114377  IQR:  -4.85495283091
+- ====================================
+[13.179388965353027, 908.3073424903025, 1.8913064679771463]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=908,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11647310743  IQR:  -3.42248135009
+- ====================================
+[23.088135189281743, 621.9779761918322, 1.9945665256883394]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=621,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.47749235697  IQR:  -5.00888686093
+- ====================================
+[6.284009836199486, 181.52338916575403, 2.5932436010951143]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=181,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.791006293245  IQR:  -2.25990334964
+- ====================================
+[22.82185797103896, 127.64594314052442, 2.1270584352853543]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=127,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.32750311421  IQR:  -4.90333347509
+- ====================================
+[19.413698507841126, 368.89037634947726, 1.6322959638524266]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=368,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.39692764487  IQR:  -5.14196514251
+- ====================================
+[22.37811525185495, 585.6755348173186, 1.5410741659590947]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=585,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43695528463  IQR:  -5.30047474145
+- ====================================
+[4.947179621212806, 207.16297728286764, 2.941178640196819]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=207,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.625508319077  IQR:  -2.30758477769
+- ====================================
+[17.952537687030482, 673.7815337268671, 1.371384344783539]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=673,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.91659784839  IQR:  1.64215006925
+- ====================================
+[14.93144319593855, 423.84797460508065, 1.498130552267273]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=423,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.809235252793  IQR:  2.03130170257
+- ====================================
+[4.881858917958962, 664.9353134304226, 2.939503094579427]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=664,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.600555809597  IQR:  -2.41031411788
+- ====================================
+[2.1001690559892965, 840.0930226260606, 2.5153628706619857]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=840,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.514219644573  IQR:  -2.21505313739
+- ====================================
+[26.154921571671323, 832.0685495924333, 2.943984183761529]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=832,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.57533742285  IQR:  -3.31861052232
+- ====================================
+[28.336984393929747, 198.590875199447, 2.805265966126294]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=198,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.64097762245  IQR:  -3.21311119645
+- ====================================
+[27.239024579870538, 678.0045821790023, 2.914811996369736]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=678,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.54610665446  IQR:  -2.92435299175
+- ====================================
+[18.193589886508352, 566.5812891780979, 2.9306771662506272]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=566,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.37560962649  IQR:  -4.88518492738
+- ====================================
+[13.01421408905759, 205.40742951353363, 2.8969439977831772]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=205,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13233876189  IQR:  -4.26647407741
+- ====================================
+[15.372937673369966, 111.21005716528241, 2.988230063654549]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=111,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.12260204666  IQR:  -3.46533717051
+- ====================================
+[23.418883387918328, 485.04126520287605, 2.26455629411292]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=485,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41815094191  IQR:  -4.77898460593
+- ====================================
+[24.27487205344574, 553.1932336979171, 2.231120336951721]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=553,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56528735536  IQR:  -4.65284981817
+- ====================================
+[18.53176527843633, 695.867606421081, 2.4327448343290854]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=695,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.40432423971  IQR:  -4.44880845479
+- ====================================
+[22.278106106783273, 756.4960798829545, 2.3019293503213283]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=756,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.46534568598  IQR:  -5.09964219261
+- ====================================
+[28.504746959772845, 680.4837999502927, 2.994522920359347]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=680,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddac80> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.59594451924  IQR:  -2.94386910284
+- ====================================
+[31.53600632058466, 788.5336139446068, 1.2092562329826508]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=788,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.47901827646  IQR:  -4.76995096553
+- ====================================
+[2.7446550262549243, 452.5751722023517, 1.8800228552036804]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=452,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.508023565443  IQR:  -2.02821960011
+- ====================================
+[6.253737134829097, 868.8094295439676, 2.1370376993639795]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=868,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.797235525363  IQR:  -2.72945100995
+- ====================================
+[13.744146332456625, 118.19904251213504, 1.8917709157744653]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=118,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13398337924  IQR:  -2.67202677804
+- ====================================
+[25.353904913847916, 234.74845491423264, 1.018415398855765]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=234,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0460014475  IQR:  0.809659622979
+- ====================================
+[28.511602860331656, 948.6799061826026, 1.7629559288493282]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=948,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.57179473274  IQR:  -2.81671196086
+- ====================================
+[18.739814901143657, 674.5108709012071, 1.9612523503265338]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=674,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.26351677797  IQR:  -4.57686011411
+- ====================================
+[8.259442926136657, 775.6093657531953, 2.9482439432700573]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=775,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.07952142576  IQR:  -2.78615867557
+- ====================================
+[15.62746045620877, 500.76391814307226, 1.0043366445188]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=500,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.9233299955  IQR:  1.74545967038
+- ====================================
+[10.597456284043904, 136.4494157800052, 1.9450451369952622]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=136,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11218676628  IQR:  -3.18454040549
+- ====================================
+[11.269089952685048, 925.0563990079563, 1.370209970843576]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=925,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.682112689529  IQR:  0.841136792354
+- ====================================
+[30.547135715688576, 257.0984031396301, 1.031662089320218]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=257,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56363769829  IQR:  -3.49083368358
+- ====================================
+[16.86013736907784, 727.7634472131867, 2.75091319068217]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=727,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.23676207791  IQR:  -3.83762071941
+- ====================================
+[9.90474868192597, 775.5233653082524, 2.3244884380391517]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=775,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.08056197052  IQR:  -3.00530895239
+- ====================================
+[28.66165951528055, 149.1320090926092, 2.2949307282175004]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=149,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.527512782  IQR:  -2.26764870949
+- ====================================
+[25.323915262453266, 606.5282551280079, 1.589059054267066]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=606,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.67735179069  IQR:  -3.96830664662
+- ====================================
+[2.23411717926761, 135.8622096623334, 2.9395547914615365]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=135,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.518439911386  IQR:  -1.86459484684
+- ====================================
+[2.031702323188909, 323.61285762257603, 2.0725872836944443]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=323,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.539740791097  IQR:  -2.59318791061
+- ====================================
+[12.140076577727422, 705.4131137953459, 2.208512967693259]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=705,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09723056548  IQR:  -3.3784134619
+- ====================================
+[14.130158901537285, 728.9000528872413, 2.8613432080397754]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=728,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.16623059926  IQR:  -3.48737154328
+- ====================================
+[14.532355510922638, 491.1766683119535, 1.638572071198736]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=491,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09721803366  IQR:  -3.86740814362
+- ====================================
+[21.988530095010432, 316.06936825394166, 1.1262862832589864]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=316,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13647434432  IQR:  0.796521412492
+- ====================================
+[27.05909199197544, 877.0589654855844, 2.521503011118197]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=877,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82bb18> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.55196979106  IQR:  -3.06279585509
+- ====================================
+[19.52449539602414, 815.68399397577, 2.5108884274310377]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=815,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.45671658797  IQR:  -4.94306114325
+- ====================================
+[30.62965195359214, 782.0226611964354, 1.5164926019474438]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=782,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.53309195437  IQR:  -3.91259490959
+- ====================================
+[26.442812071348797, 701.7811727435895, 2.946931745193098]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=701,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.55804210364  IQR:  -3.4701670636
+- ====================================
+[17.180431753680082, 500.1225704425503, 1.6524815678634528]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=500,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.2787346531  IQR:  -4.58567336803
+- ====================================
+[21.451589819223795, 470.3085045547709, 1.7302013478300622]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=470,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43496057498  IQR:  -5.09474776849
+- ====================================
+[7.893142701541944, 880.9146046210958, 2.6929426038704003]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=880,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaaa0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.934261603682  IQR:  -2.769595547
+- ====================================
+[17.207335291568768, 549.7571555004447, 1.714767541971296]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=549,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.29912993905  IQR:  -4.32496968605
+- ====================================
+[5.868130364221195, 602.1698696586989, 2.990675553085974]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=602,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.651621059074  IQR:  -2.68091514436
+- ====================================
+[16.140959728339975, 210.54287411837396, 1.664171155921896]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=210,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.24871559749  IQR:  -3.85975938654
+- ====================================
+[4.192230533346631, 472.6028832145002, 2.8603166694582374]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=472,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.610417538072  IQR:  -2.48968270061
+- ====================================
+[10.104571197634504, 778.1174651559026, 2.7828220108624304]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=778,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.10973733405  IQR:  -3.48693047543
+- ====================================
+[22.901125743308757, 645.3177088566066, 1.418448681727268]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=645,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1056608946  IQR:  0.570903072205
+- ====================================
+[30.974757936800565, 696.7447088038468, 1.291543370370016]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=696,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.61812111624  IQR:  -3.20342262138
+- ====================================
+[17.882977986728015, 995.9989357805867, 1.5628886874157093]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=995,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.22308203016  IQR:  -4.69051057468
+- ====================================
+[24.330132531446807, 526.8975963884183, 2.3638679808797436]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=526,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.50569029659  IQR:  -4.48479262155
+- ====================================
+[20.65676871586263, 985.5889422840897, 1.6255879223817624]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=985,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41293507674  IQR:  -5.00973252889
+- ====================================
+[19.471732110116616, 252.19979967564987, 1.2000089519057533]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=252,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.08121810295  IQR:  0.90109770528
+- ====================================
+[19.764861809948655, 530.8191072584405, 1.0436773224393563]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=530,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.03058387269  IQR:  1.19122001605
+- ====================================
+[25.471746665634527, 694.3906032003696, 2.0640232941687096]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=694,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.5857176054  IQR:  -3.97600445439
+- ====================================
+[16.554394203319774, 672.2233591911056, 2.3415114025545583]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=672,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.21996370649  IQR:  -3.81574295994
+- ====================================
+[25.32215553789206, 387.2776333295719, 1.9887877079150318]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=387,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.57189263091  IQR:  -4.17310140769
+- ====================================
+[29.393333188454086, 695.3171392430753, 2.642253497574437]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=695,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.6411149736  IQR:  -3.08833045175
+- ====================================
+[8.080626810058458, 702.3583187336991, 2.4521248544603655]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=702,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09122645196  IQR:  -3.02516968051
+- ====================================
+[20.03461696526982, 368.29390719653435, 2.750806899412667]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=368,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.42760632487  IQR:  -5.3413285117
+- ====================================
+[13.659589441745881, 442.300674911531, 1.424071314582645]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=442,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.786224583257  IQR:  1.70065478774
+- ====================================
+[28.15286239007275, 268.4170519603773, 1.0388711104544888]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=268,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.39890297102  IQR:  -0.200926365058
+- ====================================
+[26.405414802921996, 542.5246236341995, 1.9377982501993563]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=542,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.59845251217  IQR:  -3.26646056435
+- ====================================
+[29.626839921319334, 124.05920775174594, 1.2963612751457976]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=124,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.61915409021  IQR:  -1.77133777473
+- ====================================
+[24.518707998393815, 504.38315412115827, 1.0252992361004154]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=504,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.28899507995  IQR:  0.512272082997
+- ====================================
+[31.34902003613057, 750.1278101236958, 1.363649749800479]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=750,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.48712214207  IQR:  -4.68884225494
+- ====================================
+[29.646223329711447, 903.3120635535888, 2.4368612131580054]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=903,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b500> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.59858049294  IQR:  -3.23108742933
+- ====================================
+[19.20593638328855, 993.2896631907296, 1.6860635327638978]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=993,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.40646441546  IQR:  -4.98916177673
+- ====================================
+[29.20915537133712, 948.6849268643937, 1.2907887484225353]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=948,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.5643286553  IQR:  -1.62653144653
+- ====================================
+[10.972934352700305, 402.95147432511385, 1.599222526074734]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=402,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.01788722165  IQR:  -3.02707502573
+- ====================================
+[30.226772219984984, 316.98458659798155, 2.630006672832493]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=316,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.55441181955  IQR:  -3.80506855574
+- ====================================
+[13.870267781383042, 513.2371784348414, 2.0006087613082935]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=513,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11513899685  IQR:  -3.36454800652
+- ====================================
+[23.01122921058071, 806.6208018006831, 2.880697650882643]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=806,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.52636764592  IQR:  -4.73816299848
+- ====================================
+[25.065472447104515, 590.7992162676684, 2.842228079447423]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=590,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.70318724142  IQR:  -4.1239621164
+- ====================================
+[24.736744733318094, 740.988722294233, 2.4126930589572266]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=740,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.58773057532  IQR:  -4.30440666093
+- ====================================
+[21.873635413393302, 696.8912080264207, 2.165867992896735]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=696,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.47946967495  IQR:  -5.05027932638
+- ====================================
+[6.682470361408456, 731.1285261495808, 1.9016730236606036]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=731,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.805432336011  IQR:  -2.86461601416
+- ====================================
+[2.3980150813827454, 442.6100819537301, 2.056419551824091]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=442,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.560508963544  IQR:  -2.06131436688
+- ====================================
+[25.13299208807286, 954.1087873241322, 2.0762150998572833]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=954,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.55783675277  IQR:  -3.9812340404
+- ====================================
+[7.824751052329546, 298.36654141645135, 1.6625948761655016]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=298,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.946412568638  IQR:  -2.73626940564
+- ====================================
+[26.291166302935963, 449.8940367355064, 2.2995025356148724]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=449,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.53829037049  IQR:  -3.42397870031
+- ====================================
+[3.944136344796922, 101.71851890084416, 2.7078317089973716]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=101,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.593652777115  IQR:  -1.86140423044
+- ====================================
+[30.522138633801088, 928.2681425198167, 1.635900283524523]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=928,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56321685456  IQR:  -4.04398053733
+- ====================================
+[26.357834582986467, 769.6167397831936, 1.3643345899720458]
+
+ +===============================================
+[('forest(mss=13,msl=26,ne=769,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.23888764014  IQR:  0.861821006694
+- ====================================
+[7.416448601693295, 310.7806941972367, 2.552704736836284]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=310,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.989666186662  IQR:  -3.2252368975
+- ====================================
+[4.588154384773793, 872.9865565544607, 2.5329371571699157]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=872,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.61260387965  IQR:  -2.40040913071
+- ====================================
+[22.04292171511991, 797.9893257342125, 2.2857907897545773]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=797,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43794347568  IQR:  -5.20114049293
+- ====================================
+[4.4312770478851515, 160.3159465955531, 1.54379020233039]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=160,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.608855181085  IQR:  -2.26934250714
+- ====================================
+[11.125480005815293, 343.90887619109566, 1.247628290349532]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=343,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.674461487091  IQR:  0.89361620079
+- ====================================
+[25.060805470635398, 576.2004291050091, 1.9505503100889687]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=576,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.62469224932  IQR:  -4.12140262648
+- ====================================
+[16.05059511769648, 722.6482040876768, 1.7141502832604039]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=722,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.16556708659  IQR:  -3.95058971449
+- ====================================
+[15.604860204155313, 827.7258865707506, 1.6302795386704894]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=827,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.20466173423  IQR:  -3.85231153748
+- ====================================
+[12.873397326600395, 919.5537869759224, 1.9600715269367126]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=919,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.04908131432  IQR:  -3.12032046835
+- ====================================
+[23.404819204280873, 756.7994741399369, 1.531580123298122]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=756,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.49481952598  IQR:  -4.55504466956
+- ====================================
+[15.289846542740095, 823.1806443233668, 2.41465385363907]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=823,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15519968023  IQR:  -3.67046563143
+- ====================================
+[12.927867118188455, 994.9714637981605, 2.6834037857114477]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=994,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.01870887909  IQR:  -2.85387174988
+- ====================================
+[27.55313747413348, 947.9778199632801, 1.4447740578460335]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=947,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.29010957532  IQR:  0.513709741676
+- ====================================
+[16.394049421075273, 998.1196040496085, 2.669380064987517]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=998,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1879720917  IQR:  -4.33161233726
+- ====================================
+[11.226832917130597, 661.0750378136745, 1.757929436018825]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=661,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1210424115  IQR:  -3.37316611487
+- ====================================
+[3.912944110333321, 733.316392612042, 1.4305833274655104]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=733,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.356122534299  IQR:  -0.0792624625262
+- ====================================
+[6.121035427102321, 493.1782770687443, 1.6187246734951761]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=493,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddab90> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.80610954784  IQR:  -2.7512724206
+- ====================================
+[5.7040658775543065, 832.1289725094115, 1.3313328495906962]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=832,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.369667693904  IQR:  -0.0226711870051
+- ====================================
+[30.58256393889223, 254.48750755761301, 1.3841651411443092]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=254,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56915787223  IQR:  -3.16522244243
+- ====================================
+[19.134985211540624, 469.50144672602636, 2.681645958381636]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=469,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.34068915805  IQR:  -4.94915104877
+- ====================================
+[10.28876643119926, 369.1760781091314, 1.9417994727711678]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=369,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.06936679054  IQR:  -3.3448801459
+- ====================================
+[5.22685661187526, 194.98138172778562, 1.7675769128569347]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=194,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.666103352151  IQR:  -2.31502223534
+- ====================================
+[3.342275976664177, 782.2297269985369, 2.9490284845725823]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=782,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.527812329127  IQR:  -2.22304348258
+- ====================================
+[18.486028860182778, 257.1698007363658, 2.483326229334747]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=257,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.39317098863  IQR:  -4.98197451939
+- ====================================
+[4.654649200824869, 813.9294788062921, 1.4756242571948848]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=813,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.371595337656  IQR:  -0.0834841423933
+- ====================================
+[28.7577163454643, 184.90265569895718, 2.6425181748971154]
+
+ +===============================================
+[('forest(mss=14,msl=28,ne=184,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.65011011046  IQR:  -2.9990622226
+- ====================================
+[3.0541311535992817, 607.8567165415559, 1.684418117748722]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=607,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.584340783893  IQR:  -2.35467730074
+- ====================================
+[4.528347277511672, 555.536234731537, 2.8993717555497227]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=555,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.616156362199  IQR:  -2.64445195564
+- ====================================
+[2.1091409069847615, 756.9834189251468, 2.0454511971629623]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=756,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.509116298987  IQR:  -1.92083931216
+- ====================================
+[6.393414310278857, 483.3419728141426, 1.1513111154609976]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=483,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.376934503263  IQR:  0.0133032319856
+- ====================================
+[30.7771497181468, 212.49854858699612, 1.0458974901576286]
+
+ +===============================================
+[('forest(mss=15,msl=30,ne=212,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.58572375027  IQR:  -3.6005383888
+- ====================================
+[4.198812037487699, 255.89408027392992, 2.028837434220257]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=255,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.633663979112  IQR:  -2.43627119744
+- ====================================
+[13.609471871697327, 218.6327116697882, 2.829911085524793]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=218,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.20400130659  IQR:  -2.74579207071
+- ====================================
+[25.28277026839062, 821.3678708298016, 1.3446603397860222]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=821,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.14214886124  IQR:  0.766110467446
+- ====================================
+[9.891907023595575, 676.8300292991589, 1.9694005818996694]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=676,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.05456653374  IQR:  -3.06334876535
+- ====================================
+[19.532779077945754, 357.21565714338703, 2.349402455460606]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=357,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.50922195187  IQR:  -5.0539577226
+- ====================================
+[11.67161521179313, 870.293011642566, 2.4126456175938857]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=870,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.10278405883  IQR:  -3.42092636649
+- ====================================
+[5.108993947907983, 980.6742549495629, 1.768660189529575]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=980,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.648870561785  IQR:  -2.62780437554
+- ====================================
+[4.222499578059066, 685.4480146670256, 1.0180077754864834]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=685,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b6e0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.369219042936  IQR:  -0.0547193871878
+- ====================================
+[4.810366656976511, 635.8280307118537, 1.065482368499786]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=635,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.374759939042  IQR:  -0.0420228541452
+- ====================================
+[9.731779118001443, 689.8732913694532, 1.8812781232002869]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=689,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d1f82b668> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09074696556  IQR:  -3.15318122794
+- ====================================
+[3.90091173888562, 395.4847361298631, 2.449502235930075]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=395,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.575222212438  IQR:  -2.37270048064
+- ====================================
+[21.996886947400927, 136.75622870192757, 1.7155670632898286]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=136,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41904515311  IQR:  -5.128656633
+- ====================================
+[3.863401019845962, 806.0382257663296, 1.7969171202336263]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=806,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.524372180717  IQR:  -2.42853363935
+- ====================================
+[8.412355958106563, 532.9709160987716, 2.017724575873589]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=532,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.06870165946  IQR:  -3.03873763759
+- ====================================
+[12.179717165497257, 945.2470298447005, 2.614295283604906]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=945,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1272649247  IQR:  -3.36347644004
+- ====================================
+[23.890567443865546, 738.4740709220457, 1.887726239637877]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=738,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.40478844573  IQR:  -4.87671196301
+- ====================================
+[27.584564083176886, 799.310890122728, 1.1752558725345361]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=799,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.34165256391  IQR:  0.540570692429
+- ====================================
+[5.170747154016713, 632.5934889136654, 2.5482717768545404]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=632,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.640387689623  IQR:  -2.53401953681
+- ====================================
+[4.625356579651936, 320.4196702902866, 1.906331551790317]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=320,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.619867650377  IQR:  -2.40882572841
+- ====================================
+[18.34005502596593, 187.06212761273082, 2.9336639978994556]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=187,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.32568504497  IQR:  -4.52886670844
+- ====================================
+[21.723285666642326, 435.5468574411308, 1.671526779325983]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=435,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.43590076238  IQR:  -4.84296655685
+- ====================================
+[31.464462145834357, 723.4171417162794, 2.506632311107424]
+
+ +===============================================
+[('forest(mss=15,msl=31,ne=723,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.47751799352  IQR:  -4.86218940027
+- ====================================
+[4.464418003064324, 906.8623667002918, 2.331967100891652]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=906,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.619504293121  IQR:  -2.43120894619
+- ====================================
+[27.83144555271595, 227.46334196310804, 1.8150685191039921]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=227,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.52199788261  IQR:  -2.62778830078
+- ====================================
+[6.479153243365957, 430.362903028101, 1.9324438493465148]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=430,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.807055210903  IQR:  -2.6080150514
+- ====================================
+[6.422723842004364, 617.3617519516107, 1.5946991187935842]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=617,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.811555587476  IQR:  -2.89561331036
+- ====================================
+[17.596987817045406, 133.81007044281296, 1.508572154933924]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=133,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.23043260758  IQR:  -3.77045280177
+- ====================================
+[13.332859213060031, 517.8205910274698, 2.738222863161907]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=517,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.07312111101  IQR:  -3.20276411744
+- ====================================
+[23.562924342197213, 175.50673022012393, 2.9659501069108822]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=175,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.54425659228  IQR:  -5.32512385461
+- ====================================
+[3.869899234710448, 652.6462232227002, 1.4821443602051958]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=652,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.365467325949  IQR:  -0.123760588942
+- ====================================
+[6.377765868347315, 183.5340130979733, 2.821712645598039]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=183,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.812601059471  IQR:  -2.74754675962
+- ====================================
+[27.517377713993973, 100.1026437567144, 2.6498863531963623]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=100,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41565638155  IQR:  -2.8554839706
+- ====================================
+[3.6845027574369666, 817.9254767205375, 2.2970500818422552]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=817,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.551362338742  IQR:  -2.44065870024
+- ====================================
+[3.1655343692652185, 920.2352958672468, 1.3100504607604004]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=920,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.365779792682  IQR:  -0.0746597004422
+- ====================================
+[23.39487563655929, 517.2659681198987, 1.7044101241828293]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=517,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.46130022082  IQR:  -4.78662858406
+- ====================================
+[22.912496080940684, 479.6989750104853, 2.100876034103752]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=479,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.40430050702  IQR:  -5.18231045751
+- ====================================
+[27.348937187654922, 380.46533703523977, 1.9077467158141055]
+
+ +===============================================
+[('forest(mss=13,msl=27,ne=380,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.56578805738  IQR:  -2.80427409667
+- ====================================
+[8.03910690729025, 512.2038751358934, 1.3488290287873683]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=512,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.571430621079  IQR:  0.0665071621924
+- ====================================
+[3.727266956566992, 454.82658147564393, 1.7770268030370706]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=454,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.530848687009  IQR:  -2.37624704759
+- ====================================
+[16.115415149705754, 322.1350582368667, 1.3706604809681955]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=322,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.933922912829  IQR:  1.81761926054
+- ====================================
+[25.3417990274678, 377.68483856252334, 1.0031322872904898]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=377,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.24427696133  IQR:  0.786314472525
+- ====================================
+[14.157696864704185, 169.22329405085094, 2.6226703547475996]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=169,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15872517401  IQR:  -3.6619363727
+- ====================================
+[10.75532559875172, 141.28926082554088, 2.446603504668508]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=141,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0404796648  IQR:  -3.16881850415
+- ====================================
+[19.43596379263882, 679.384649164222, 2.4020972545086607]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=679,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.41969760511  IQR:  -5.06405307316
+- ====================================
+[29.88725015850816, 260.0269178300781, 2.2110741997605756]
+
+ +===============================================
+[('forest(mss=14,msl=29,ne=260,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.60904286322  IQR:  -3.03283116377
+- ====================================
+[23.55394551959186, 769.1262088983735, 1.4348930366140764]
+
+ +===============================================
+[('forest(mss=11,msl=23,ne=769,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15159142802  IQR:  0.646032810536
+- ====================================
+[3.084111788807961, 639.0350666547135, 1.58020371291034]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=639,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.554705758918  IQR:  -2.21440776626
+- ====================================
+[16.687867671863113, 487.4745348227324, 1.7063741685552851]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=487,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.18871863095  IQR:  -4.0563790828
+- ====================================
+[22.891980519200505, 861.2698008363919, 2.2517899238232766]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=861,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.40892947008  IQR:  -5.16650607087
+- ====================================
+[24.1117586715161, 313.0205472195606, 2.7319383519636773]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=313,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.45495012025  IQR:  -4.04241217544
+- ====================================
+[8.10691914689876, 243.38837516831853, 1.371682190533737]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=243,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.534115852654  IQR:  0.196548773991
+- ====================================
+[16.42806327111684, 947.3129992386756, 1.8181080654493527]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=947,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.17162751931  IQR:  -4.06188939396
+- ====================================
+[3.426746436591073, 142.38157577635067, 2.618176725167218]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=142,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.59932383634  IQR:  -2.3908698871
+- ====================================
+[25.071376351511386, 393.0507060805345, 1.3617193595974433]
+
+ +===============================================
+[('forest(mss=12,msl=25,ne=393,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29ddaa28> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.14129447735  IQR:  0.774168433294
+- ====================================
+[24.642369565160763, 905.610591492182, 1.0518338417008266]
+
+ +===============================================
+[('forest(mss=12,msl=24,ne=905,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.22539053484  IQR:  0.74671864447
+- ====================================
+[10.4242625648367, 453.2708253764017, 1.0282700592568086]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=453,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.650487218914  IQR:  0.607577865547
+- ====================================
+[5.704859372482644, 630.4740072906036, 1.722098249011622]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=630,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.666588001485  IQR:  -2.40041738182
+- ====================================
+[5.597353954312636, 633.4268886880335, 1.9473909063072052]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=633,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.642824683984  IQR:  -2.64443313038
+- ====================================
+[8.62305186890303, 445.88529542758624, 2.0939788464052453]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=445,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09523221848  IQR:  -3.32515295662
+- ====================================
+[11.276827651068471, 449.51605098804635, 2.186418394801299]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=449,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.15335126004  IQR:  -3.12469160408
+- ====================================
+[8.685416606260048, 416.4126568966654, 2.1279217119495284]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=416,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11277955345  IQR:  -2.63280185752
+- ====================================
+[3.961413001348081, 581.1565282175234, 1.9292942375571216]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=581,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.537279419556  IQR:  -2.48299984088
+- ====================================
+[8.027651836741345, 411.7836011394152, 1.813978714126246]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=411,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09005874829  IQR:  -3.17673718883
+- ====================================
+[9.429203142375606, 324.2818608674345, 2.0594768162853914]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=324,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.12123951371  IQR:  -3.71830570621
+- ====================================
+[5.496321135684939, 568.2882424901021, 2.0755591017960495]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=568,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.634005475063  IQR:  -2.41556774772
+- ====================================
+[5.167246643255723, 516.9448437642948, 1.8886482601546029]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=516,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.673595549287  IQR:  -2.64732984519
+- ====================================
+[2.5600699486037906, 851.9274891850598, 1.8488060183389228]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=851,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.52385680948  IQR:  -2.31365130082
+- ====================================
+[2.608604502925706, 855.9570145231322, 1.7384969747835002]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=855,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.508799311969  IQR:  -2.00628002227
+- ====================================
+[5.998659994598719, 692.6026229919554, 1.9517044958619945]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=692,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.654665808429  IQR:  -2.80195566232
+- ====================================
+[8.00367545069679, 555.6275076444391, 1.7180895269760776]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=555,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.08823318129  IQR:  -2.97319093125
+- ====================================
+[6.754100033163905, 586.7342312828457, 1.9568757666660095]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=586,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.779298996665  IQR:  -2.60222039328
+- ====================================
+[4.591340676417388, 655.6305396726733, 1.614717268322151]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=655,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.599949219362  IQR:  -2.45577426292
+- ====================================
+[6.587266112353104, 681.3675476656583, 1.8434371272223256]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=681,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.806837985175  IQR:  -2.70647221715
+- ====================================
+[11.755768635118931, 399.93151231282076, 2.1451473791215]
+
+ +===============================================
+[('forest(mss=5,msl=11,ne=399,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.13974371962  IQR:  -3.25397870187
+- ====================================
+[10.768723689137463, 388.40966873506017, 2.324519308119934]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=388,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11775988492  IQR:  -3.23490715707
+- ====================================
+[9.571173828833713, 348.52506830293754, 2.206217889514037]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=348,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.08710702472  IQR:  -3.18002326626
+- ====================================
+[5.185082341536218, 697.8490567474411, 1.69598248169611]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=697,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.662276264232  IQR:  -2.41559190775
+- ====================================
+[6.590977204941846, 636.3308901787101, 1.925605648581832]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=636,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.809798872522  IQR:  -2.83602935218
+- ====================================
+[3.259592233646062, 729.1672998648278, 1.811707651564948]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=729,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.526201016617  IQR:  -2.16881754502
+- ====================================
+[2.7415429791259265, 733.5159277804723, 1.8256083212184906]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=733,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.529400990311  IQR:  -2.1212869812
+- ====================================
+[7.170589693890628, 543.8843186501009, 1.6799655272808744]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=543,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.949635645016  IQR:  -3.06318793086
+- ====================================
+[4.6795763923762, 686.2631602595881, 1.7919094357577774]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=686,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.61336842599  IQR:  -2.63576222048
+- ====================================
+[4.825565807869089, 690.7202322527036, 1.7802955928646798]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=690,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.563910471405  IQR:  -2.38849503488
+- ====================================
+[4.1582646295774595, 773.3341836696553, 1.6202402795808715]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=773,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.605861876149  IQR:  -2.27825302394
+- ====================================
+[10.433705797211585, 532.9663750246116, 2.040566450526353]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=532,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.06994023948  IQR:  -3.66624187648
+- ====================================
+[4.111331554849976, 208.96095528667826, 2.4100074052595817]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=208,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.618313890896  IQR:  -2.75599341317
+- ====================================
+[2.874025812504111, 194.59668669478543, 2.023871792557133]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=194,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.524715686937  IQR:  -1.7762763567
+- ====================================
+[7.05467234319243, 258.96586884509065, 1.7149118237713072]
+
+ +===============================================
+[('forest(mss=3,msl=7,ne=258,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.992156343563  IQR:  -2.79704595051
+- ====================================
+[5.140013721786148, 294.64270265162355, 2.278002545398821]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=294,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.664364936112  IQR:  -3.0780593664
+- ====================================
+[3.6213044121741325, 346.67232445678053, 2.471227516196267]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=346,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.520920917726  IQR:  -2.57654012789
+- ====================================
+[2.1060021194786143, 464.699999157354, 1.913711645197584]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=464,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.531105723879  IQR:  -1.92683029277
+- ====================================
+[2.3355601906098125, 270.79853993369636, 2.552179799978633]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=270,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.523356932747  IQR:  -2.34529157923
+- ====================================
+[2.9940696102332747, 268.78060914484746, 2.564449694161504]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=268,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.542702832801  IQR:  -2.21026362729
+- ====================================
+[5.426613569444001, 302.4765386779053, 2.7021057720383928]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=302,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.65619192969  IQR:  -2.63126418748
+- ====================================
+[2.6481949456821923, 171.21739805179584, 2.0660209847650064]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=171,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.522863599738  IQR:  -1.88734899704
+- ====================================
+[5.094629185668988, 279.9741141016673, 1.7393681395078238]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=279,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.661074952026  IQR:  -2.77967171434
+- ====================================
+[3.216378124032281, 284.85420412791984, 2.3570930741809017]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=284,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.566019749718  IQR:  -2.45570302175
+- ====================================
+[4.735731051143, 353.4659364182737, 1.7662059875821114]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=353,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.598696635266  IQR:  -2.22114678646
+- ====================================
+[2.835601791911161, 211.97963120689374, 2.134304537422489]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=211,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.517269788261  IQR:  -2.1246813834
+- ====================================
+[2.5229408444867243, 250.49462720658647, 2.2342354468648336]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=250,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.50988721588  IQR:  -2.17922094851
+- ====================================
+[2.1345793948121763, 273.39796128016735, 2.8298872434948286]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=273,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.557813093597  IQR:  -1.87368326614
+- ====================================
+[4.327844312258201, 758.3678879457555, 1.2280700266309508]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=758,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.357128567496  IQR:  -0.0638306648259
+- ====================================
+[3.196143285678067, 783.0690440036683, 1.2291845627258369]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=783,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.363600367546  IQR:  -0.0364934116278
+- ====================================
+[8.418748858083106, 632.9900615796682, 1.5098865110731055]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=632,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.07647029262  IQR:  -3.03782728821
+- ====================================
+[15.068835143524133, 849.2182454025395, 1.1035006246567978]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=849,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.938311678145  IQR:  1.89592213782
+- ====================================
+[2.0774099969036888, 845.4981441596706, 1.1750423711107663]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=845,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.295966891093  IQR:  -0.0194449597892
+- ====================================
+[16.859013607410734, 583.1057632662491, 1.3405379182731203]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=583,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.915719301757  IQR:  1.91032295989
+- ====================================
+[12.774477673220227, 690.3768402346487, 1.1753230388645104]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=690,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.728788553651  IQR:  1.35367005335
+- ====================================
+[15.158173210298097, 580.2530115956713, 1.353139887543332]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=580,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.916057103606  IQR:  1.95325421793
+- ====================================
+[5.389338602357136, 702.3293207577744, 1.278558722006375]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=702,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.34671992002  IQR:  -0.0531304435877
+- ====================================
+[12.918410972589317, 549.0888176903763, 1.5062050819061101]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=549,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.19228460147  IQR:  -3.32017073432
+- ====================================
+[18.845805284852503, 551.5430627719311, 1.4015978634529724]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=551,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0231497503  IQR:  1.58229077762
+- ====================================
+[18.81217004493628, 637.1735820327903, 1.4936861850296563]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=637,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.04655164944  IQR:  1.59157924441
+- ====================================
+[10.175253906643679, 584.6269746094385, 1.2127611721662515]
+
+ +===============================================
+[('forest(mss=5,msl=10,ne=584,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.668130316039  IQR:  0.626355818464
+- ====================================
+[9.375186624749285, 688.7776453105196, 1.0266454583814524]
+
+ +===============================================
+[('forest(mss=4,msl=9,ne=688,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.59533545015  IQR:  0.262765663938
+- ====================================
+[17.6938627052256, 544.1151974458562, 1.4992099716021698]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=544,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.892408698445  IQR:  1.57043188186
+- ====================================
+[2.329508076287286, 926.3639017964192, 1.2770768692495127]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=926,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.298554342414  IQR:  -0.0275032769306
+- ====================================
+[21.479876276234922, 652.0112969281872, 1.5522984418473957]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=652,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.49014308204  IQR:  -5.39702645263
+- ====================================
+[14.59413476876088, 682.3082752744342, 1.0867390420281922]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=682,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.809280018906  IQR:  1.96419506427
+- ====================================
+[6.343920060199908, 657.5870939832382, 1.333536219814214]
+
+ +===============================================
+[('forest(mss=3,msl=6,ne=657,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.388970207235  IQR:  -5.14217922488e-05
+- ====================================
+[8.04218980055193, 678.393492762712, 1.3447236444324704]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=678,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.561822064873  IQR:  0.075868634893
+- ====================================
+[3.9073417852359196, 996.8119367541663, 1.2759935698093294]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=996,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.356429844862  IQR:  -0.0723638151051
+- ====================================
+[12.83773332200377, 604.7202497569428, 1.185885100338231]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=604,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.728536651836  IQR:  1.27797269829
+- ====================================
+[2.5369549799883555, 961.1352354632514, 1.29779333159877]
+
+ +===============================================
+[('forest(mss=1,msl=2,ne=961,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.309370427783  IQR:  -0.0296958139198
+- ====================================
+[5.2508879150911945, 786.182223907853, 1.4281749395898458]
+
+ +===============================================
+[('forest(mss=2,msl=5,ne=786,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.35568096721  IQR:  -0.0404165809546
+- ====================================
+[4.6059283339522334, 686.5421228112339, 1.3803855899630435]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=686,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.357713455763  IQR:  -0.0311059081769
+- ====================================
+[8.556138626180893, 643.6441875978369, 1.0885902937738998]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=643,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.561009144969  IQR:  0.0165170150032
+- ====================================
+[8.43909286154069, 703.7278252053768, 1.177364435930198]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=703,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.541711755862  IQR:  0.176438103318
+- ====================================
+[8.698052154137315, 698.9233488220872, 1.7305426068560799]
+
+ +===============================================
+[('forest(mss=4,msl=8,ne=698,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.06101816231  IQR:  -2.82136619393
+- ====================================
+[15.022655039119753, 818.2572930556329, 1.1344364723323663]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=818,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.960039767626  IQR:  1.95025011407
+- ====================================
+[20.26691905726024, 634.839617116575, 1.4992489039435564]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=634,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09157577263  IQR:  0.904964659796
+- ====================================
+[13.070954956227375, 657.8079813599683, 1.2232950349598257]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=657,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.764416573088  IQR:  1.83427405952
+- ====================================
+[3.912944110333321, 733.316392612042, 1.4305833274655104]
+
+ +===============================================
+[('forest(mss=1,msl=3,ne=733,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.373004615668  IQR:  -0.0832696724495
+- ====================================
+[12.405143523349215, 508.25546411659707, 1.3768028788636282]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=508,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.698754450242  IQR:  1.32076080463
+- ====================================
+[13.044592392749733, 712.18331987122, 1.025505569618587]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=712,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.783045937344  IQR:  1.80966436536
+- ====================================
+[20.767806793010248, 645.9221466369411, 1.288552567924266]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=645,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.08313797087  IQR:  0.788028291418
+- ====================================
+[20.875921449999407, 731.2334201953141, 1.2540132346245245]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=731,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.0687761616  IQR:  0.856023105082
+- ====================================
+[4.810366656976511, 635.8280307118537, 1.065482368499786]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=635,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.372537640185  IQR:  -0.0328981702201
+- ====================================
+[17.951352243625802, 854.2424331290384, 1.2077505735425305]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=854,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.936656122504  IQR:  1.70242276787
+- ====================================
+[13.959207636993973, 539.9060710622366, 1.1394943852472126]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=539,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.753968591282  IQR:  1.76693462392
+- ====================================
+[19.68216200125313, 524.9906220773416, 1.2081010112299746]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=524,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.99465676794  IQR:  1.17562109844
+- ====================================
+[15.609587646912974, 999.5890888335384, 1.0237924733512958]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=999,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.940014682864  IQR:  1.90142761248
+- ====================================
+[17.040110239390394, 666.4735890711484, 1.0149918518919039]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=666,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.897322618447  IQR:  1.72842544775
+- ====================================
+[13.66106375852397, 415.08256861394534, 1.2744767646357158]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=415,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.748265519898  IQR:  1.87378265181
+- ====================================
+[14.716421260314377, 557.6459881076672, 1.2140462490470452]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=557,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.859233427824  IQR:  1.88703514384
+- ====================================
+[21.1230193264868, 791.303390641411, 1.230827643375191]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=791,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.1628187798  IQR:  0.624069917291
+- ====================================
+[21.901210551485576, 651.3458814809744, 1.4015011522914362]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=651,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.14554216362  IQR:  0.517408443283
+- ====================================
+[21.731459161836835, 595.6181225121597, 1.3405857899454416]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=595,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.11350537398  IQR:  0.653654485187
+- ====================================
+[18.630576592561432, 540.9859327875113, 1.2098679185583698]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=540,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.03921205606  IQR:  1.52414959225
+- ====================================
+[15.47070153420282, 402.9636517582635, 1.3393899606578599]
+
+ +===============================================
+[('forest(mss=7,msl=15,ne=402,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.930030591627  IQR:  1.90546793886
+- ====================================
+[22.211266451973568, 711.9126267476003, 1.4205526061717522]
+
+ +===============================================
+[('forest(mss=11,msl=22,ne=711,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.09966541655  IQR:  0.586916141388
+- ====================================
+[18.25347196844, 655.2989006752372, 1.0580361858796252]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=655,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.00932101487  IQR:  1.52987140156
+- ====================================
+[14.40917489716073, 686.3490995941976, 1.0267636586057443]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=686,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.837509364847  IQR:  1.92044413153
+- ====================================
+[13.30335899029322, 461.10321936145164, 1.2277537726252739]
+
+ +===============================================
+[('forest(mss=6,msl=13,ne=461,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.741487773894  IQR:  1.80326395137
+- ====================================
+[12.539218939493983, 486.88231149404083, 1.236371159586347]
+
+ +===============================================
+[('forest(mss=6,msl=12,ne=486,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.733680865753  IQR:  1.37964014574
+- ====================================
+[18.764749193754092, 794.5806428837852, 1.0627640502716191]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=794,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.01734191583  IQR:  1.37713067782
+- ====================================
+[19.92076997017629, 754.5600906177722, 1.3971009275671809]
+
+ +===============================================
+[('forest(mss=9,msl=19,ne=754,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.01304375273  IQR:  1.08708540683
+- ====================================
+[17.1752411971586, 520.3117316158787, 1.0233023197667839]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=520,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.904955636981  IQR:  1.70694853045
+- ====================================
+[17.013826968118316, 883.831628386712, 1.2942712745722973]
+
+ +===============================================
+[('forest(mss=8,msl=17,ne=883,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.941361567163  IQR:  1.69517836444
+- ====================================
+[21.323084833971127, 593.3397243896554, 1.135306358624578]
+
+ +===============================================
+[('forest(mss=10,msl=21,ne=593,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.21867193796  IQR:  0.438774686759
+- ====================================
+[14.97822955167749, 958.8463233466923, 1.0161367945554713]
+
+ +===============================================
+[('forest(mss=7,msl=14,ne=958,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.821091635409  IQR:  1.99971672308
+- ====================================
+[18.488215136539736, 672.7394308838365, 1.1824620453595271]
+
+ +===============================================
+[('forest(mss=9,msl=18,ne=672,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.01557434806  IQR:  1.49477127769
+- ====================================
+[20.016865380556645, 816.1996044598197, 1.1241534584153492]
+
+ +===============================================
+[('forest(mss=10,msl=20,ne=816,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.06760826064  IQR:  0.828506187986
+- ====================================
+[16.070427211500196, 463.9781691787504, 1.0386674694088809]
+
+ +===============================================
+[('forest(mss=8,msl=16,ne=463,mf=auto)', Score{:all [] :estimator_func <function forest_inner at 0x7f6d29e518c0> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.890898161213  IQR:  1.87062585348
+- ====================================
+
+==========================================================
+
+	rank , 	        name ,    	  med   , 	  iqr 
+----------------------------------------------------
+	   1 , 	      Seive2 ,    	0.3  ,  	    0	   (*                   |                   ), 0.30,  0.30,  0.30,  0.30,  0.30
+
+	rank , 	        name ,    	  med   , 	  iqr 
+----------------------------------------------------
+	   1 , 	      Seive2 ,    	396  ,  	    0	   (*                   |                   ),396.00, 396.00, 396.00, 396.00, 396.00
+Time for Experiment:  50479.484283
