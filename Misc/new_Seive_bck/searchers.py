@@ -8184,7 +8184,7 @@ class Seive7_3(Seive7):
 
         #print "SDIV working!"
       #print "Initial Points: ",len(points)
-      dictionary = generate_dictionary(points + return_points(model,100))
+      dictionary = generate_dictionary(points)
       # for key in dictionary.keys():
       #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
       #   print "Key: ",key," Length: ",len(dictionary[key])

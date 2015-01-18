@@ -38,9 +38,9 @@ def display(modelName,searcher,runTimes,scores,historyhi=[],historylo=[]):
 
 def multipleRun():
    from collections import defaultdict
-   r = 10
+   r = 3
    tstart = time.time()
-   for klass in [DTLZ1,Viennet,Schwefel,DTLZ5,Kursawe,DE]:#Osyczka,DTLZ1,DTLZ5,DTLZ6,DTLZ7,Fonseca,Kursawe,ZDT1,ZDT3]:
+   for klass in [Viennet,Osyczka,Schwefel,DTLZ1,DTLZ5,DTLZ6,DTLZ7,Fonseca,Kursawe,ZDT1,ZDT3]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
@@ -48,57 +48,59 @@ def multipleRun():
      tempC = klass()
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
      bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
-     #bmin = 49876.0460531 
-     #bmax = 2856943.62481
+     #bmin = -3.2801
+     #bmax = 5.6677
      print "Baseline Finished: ",bmin,bmax
-     
-     for searcher in [Seive7_3,Seive2_Initial]:#DE,DE2,Seive2_Initial,Seive7_3]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
-       n = 0.0
-       listTimeTaken = []
-       listScores = []
-       list_eval = []
-       random.seed(6)
-       historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
-       historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
-       print searcher.__name__,
-       for _ in range(r):
-         test = searcher(klass(),"display2",bmin,bmax)
-         print ".", 
-        
-         t1 = time.time()
-         solution,score,model = test.evaluate()
+     counts = [600,800,1000,1200]
+     for count in counts:
+       myoptions['DE2']['initial'] = count
+       print ">>>>>>>>>>>>>>>>>>>>>> myoptions['DE2']['initial']: ",myoptions['DE2']['initial']
+       for searcher in [DE,DE2,Seive2_Initial,Seive7_3]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+         n = 0.0
+         listTimeTaken = []
+         listScores = []
+         list_eval = []
+         random.seed(6)
+         historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
+         historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
+         print searcher.__name__,
+         for _ in range(r):
+           test = searcher(klass(),"display2",bmin,bmax)
+           print ".", 
+           t1 = time.time()
+           solution,score,model = test.evaluate()
 
-         for x in xrange(model.objf):
-           #print len(model.past[x].listing)
-           #print x
-           historyhi[x]=max(model.past[x].historyhi,historyhi[x])
-           historylo[x]=min(model.past[x].historylo,historylo[x])
-           sys.stdout.flush()
-         timeTaken = (time.time() - t1) * 1000
-         #listTimeTaken.append(timeTaken)
-         list_eval.append(int(model.no_eval))
-         listScores.append(score)
-         #timeCollector[searcher.__name__]=listTimeTaken
+           for x in xrange(model.objf):
+             #print len(model.past[x].listing)
+             #print x
+             historyhi[x]=max(model.past[x].historyhi,historyhi[x])
+             historylo[x]=min(model.past[x].historylo,historylo[x])
+             sys.stdout.flush()
+           timeTaken = (time.time() - t1) * 1000
+           #listTimeTaken.append(timeTaken)
+           list_eval.append(int(model.no_eval))
+           listScores.append(score)
+           #timeCollector[searcher.__name__]=listTimeTaken
          eraCollector[searcher.__name__]=listScores
          evalCollector[searcher.__name__]=list_eval
           #print "Score: %f"%(score)
          print
-     
-     listbaseline = []
-     for _ in range(r):
-       testB = Baseline(klass(),"display2",bmin,bmax)
-       tmp = testB.evaluate()
-       listbaseline.extend(tmp)
-     print "Baseline: length is: ",len(listbaseline)
-     eraCollector['baseline'] = listbaseline
-     #callrdivdemo(eraCollector)
-     #raise Exception("I know python!")
-     #print eraCollector
-     #print evalCollector
-     #print timeCollector
-     print "=========================================================="
-     callrdivdemo(eraCollector)
-     callrdivdemo(evalCollector,"%5.0f")
+       
+       listbaseline = []
+       for _ in range(r):
+         testB = Baseline(klass(),"display2",bmin,bmax)
+         tmp = testB.evaluate()
+         listbaseline.extend(tmp)
+       print "Baseline: length is: ",len(listbaseline)
+       eraCollector['baseline'] = listbaseline
+       #callrdivdemo(eraCollector)
+       #raise Exception("I know python!")
+       #print eraCollector
+       #print evalCollector
+       #print timeCollector
+       print "=========================================================="
+       callrdivdemo(eraCollector)
+       callrdivdemo(evalCollector,"%5.0f")
      #callrdivdemo(timeCollector)
    print "Time for Experiment: ",time.time() - tstart
 
