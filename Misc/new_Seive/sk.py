@@ -478,7 +478,7 @@ def rdivDemo(data,show1="%5.2f"):
   print ""
   ranks=[]
   for x in scottknott(data,useA12=True):
-    ranks += [(x.rank,x.median(),x)]
+    ranks += [(x.rank,x.median(),x)]Results_DE2
 
   all=[]
   for _,__,x in sorted(ranks): all += x.all

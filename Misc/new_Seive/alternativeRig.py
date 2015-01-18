@@ -61,28 +61,31 @@ def multipleRun():
        historyhi=[-9e10 for count in xrange(myModelobjf[klass.__name__])]
        historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
        print searcher.__name__,
-       for _ in range(r):
-         test = searcher(klass(),"display2",bmin,bmax)
-         print ".", 
-        
-         t1 = time.time()
-         solution,score,model = test.evaluate()
+       counts = [600,800,1000,1200]
+       for count in counts:
+         myoptions['DE2']['initial'] = count
+         for _ in range(r):
+           test = searcher(klass(),"display2",bmin,bmax)
+           print ".", 
+          
+           t1 = time.time()
+           solution,score,model = test.evaluate()
 
-         for x in xrange(model.objf):
-           #print len(model.past[x].listing)
-           #print x
-           historyhi[x]=max(model.past[x].historyhi,historyhi[x])
-           historylo[x]=min(model.past[x].historylo,historylo[x])
-           sys.stdout.flush()
-         timeTaken = (time.time() - t1) * 1000
-         #listTimeTaken.append(timeTaken)
-         list_eval.append(int(model.no_eval))
-         listScores.append(score)
-         #timeCollector[searcher.__name__]=listTimeTaken
-       eraCollector[searcher.__name__]=listScores
-       evalCollector[searcher.__name__]=list_eval
-        #print "Score: %f"%(score)
-       print
+           for x in xrange(model.objf):
+             #print len(model.past[x].listing)
+             #print x
+             historyhi[x]=max(model.past[x].historyhi,historyhi[x])
+             historylo[x]=min(model.past[x].historylo,historylo[x])
+             sys.stdout.flush()
+           timeTaken = (time.time() - t1) * 1000
+           #listTimeTaken.append(timeTaken)
+           list_eval.append(int(model.no_eval))
+           listScores.append(score)
+           #timeCollector[searcher.__name__]=listTimeTaken
+         eraCollector[searcher.__name__]=listScores
+         evalCollector[searcher.__name__]=list_eval
+          #print "Score: %f"%(score)
+         print
      
      listbaseline = []
      for _ in range(r):

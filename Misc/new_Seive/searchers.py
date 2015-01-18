@@ -8935,8 +8935,9 @@ class DE2(SearchersBasic):
     return summ/(endi-starti+1)
 
   def constraint_check(self,model):
+    print int(myoptions['DE2']['initial'])
     points = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
-               for _ in xrange(500)]
+               for _ in xrange(int(myoptions['DE2']['initial']))]
     scores = []
     for point in points: scores.append(model.evaluate(point)[-1])
     points = [point +[scores[i]] for i,point in enumerate(points)]
@@ -8999,3 +9000,533 @@ class DE2(SearchersBasic):
     return solution,minR,self.model
 
 
+class Seive2Rev(SearchersBasic): #minimizing
+  model = None
+  minR=0
+  maxR=0
+  random.seed(1)
+
+
+
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y=lx[i],ly[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
+        else:
+          new = y
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    import itertools
+    listpoints=list(itertools.product(xpoints,ypoints))
+    #print "Length of Listpoints: ",len(listpoints)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      x=self.one(m,listpoints)
+      decision.append(interpolate(x[0],x[1]))
+      count+=1
+    return decision
+  def generateSlot(self,m,decision,x,y):
+    newpoint=Slots(changed = True,
+            scores=1e6, 
+            xblock=-1, #sam
+            yblock=-1,  #sam
+            x=-1,
+            y=-1,
+            obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
+            dec = [some(m,d) for d in xrange(m.n)])
+
+    scores(m,newpoint)
+    #print "Decision: ",newpoint.dec
+    #print "Objectives: ",newpoint.obj
+    return newpoint
+  #There are three points and I am trying to extrapolate. Need to pass two cell numbers
+  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      def indexConvert(index):
+        return int(index/100),index%10
+      assert(len(lx)==len(ly)==len(lz))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z = lx[i],ly[i],lz[i]
+        rand = random.random()
+
+        if rand < cr:
+          probEx = fmin + (fmax-fmin)*random.random()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y #Just assign a value for that decision
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #TODO: need to put an assert saying checking whether extrapolation is actually possible
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = extrapolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+  
+
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold =1#int(myoptions['Seive']['threshold'])         #threshold for number of points to be considered as a prospective solution
+    self.ncol=8               #number of columns in the chess board
+    self.nrow=8               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
+  def convert(self,x,y): return (x*100)+y
+  def rowno(self,x): return int(x/100)
+  def colmno(self,x): return x%10 
+
+  def gonw(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1 and self.colmno(x)==1):return self.convert(nrow,ncol)#in the first coulumn and first row
+    elif(self.rowno(x)==1): return self.convert(nrow,self.colmno(x)-1)
+    elif(self.colmno(x)==1): return self.convert(self.rowno(x)-1,ncol)#in the first column
+    else: return (x-101)
+
+  def gow(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.colmno(x)==1): return self.convert(self.rowno(x),ncol)
+    else: return (x-1)
+
+  def gosw(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow and self.colmno(x)==1): return self.convert(1,ncol)
+    elif(self.rowno(x)==nrow): return self.convert(1,self.colmno(x)-1)
+    elif(self.colmno(x)==1): return self.convert(self.rowno(x)+1,ncol)
+    else: return (x+99)
+
+  def gos(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow): return self.convert(1,self.colmno(x))
+    else: return x+100
+
+  def gose(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow and self.colmno(x)==ncol): return self.convert(1,1)
+    elif(self.rowno(x)==nrow): return self.convert(1,self.colmno(x)+1)
+    elif(self.colmno(x)==ncol): return self.convert(self.rowno(x)+1,1)
+    else: return x+101
+
+  def goe(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.colmno(x)==ncol): return self.convert(self.rowno(x),1)
+    else: return x+1
+
+  def gone(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1 and self.colmno(x)==ncol): return self.convert(nrow,1)
+    elif(self.rowno(x)==1): return self.convert(nrow,self.colmno(x)+1)
+    elif(self.colmno(x)==ncol): return self.convert(self.rowno(x)-1,1)
+    else: return x-99
+
+  def gon(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1): return self.convert(nrow,self.colmno(x))
+    else: return x-100 
+
+  def generateNew(self,m,xblock,yblock,dictionary):
+    convert = self.convert
+    rowno = self.rowno
+    colmno = self.colmno 
+
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    def opposite(a,b):
+      ax,ay,bx,by=a/100,a%100,b/100,b%100
+      if(abs(ax-bx)==2 or abs(ay-by)==2):return True
+      else: return False
+
+    def thresholdCheck(index):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    def interpolateCheck(xblock,yblock):
+      returnList=[]
+      if(thresholdCheck(self.gonw(convert(xblock,yblock))) and thresholdCheck(self.gose(convert(xblock,yblock))) == True):
+        returnList.append(self.gonw(convert(xblock,yblock)))
+        returnList.append(self.gose(convert(xblock,yblock)))
+      if(thresholdCheck(self.gow(convert(xblock,yblock))) and thresholdCheck(self.goe(convert(xblock,yblock))) == True):
+       returnList.append(self.gow(convert(xblock,yblock)))
+       returnList.append(self.goe(convert(xblock,yblock)))
+      if(thresholdCheck(self.gosw(convert(xblock,yblock))) and thresholdCheck(self.gone(convert(xblock,yblock))) == True):
+       returnList.append(self.gosw(convert(xblock,yblock)))
+       returnList.append(self.gone(convert(xblock,yblock)))
+      if(thresholdCheck(self.gon(convert(xblock,yblock))) and thresholdCheck(self.gos(convert(xblock,yblock))) == True):
+       returnList.append(self.gon(convert(xblock,yblock)))
+       returnList.append(self.gos(convert(xblock,yblock)))
+      return returnList
+
+
+    def extrapolateCheck(xblock,yblock):
+      #TODO: If there are more than one consequetive blocks with threshold number of points how do we handle it?
+      #TODO: Need to make this logic more succint
+      returnList=[]
+      #go North West
+      temp = self.gonw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gonw(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gonw(temp))
+
+      #go North 
+      temp = self.gon(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gon(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gon(temp))
+
+      #go North East
+      temp = self.gone(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gone(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gone(temp))
+  
+      #go East
+      temp = self.goe(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.goe(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.goe(temp))
+
+      #go South East
+      temp = self.gose(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gose(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gose(temp))
+
+      #go South
+      temp = self.gos(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gos(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gos(temp))
+
+      #go South West
+      temp = self.gosw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gosw(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gosw(temp))
+ 
+      #go West
+      temp = self.gow(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gow(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gow(temp))
+
+      return returnList
+  
+    newpoints=[]
+    ##print "generateNew| xblock: %d yblock: %d"%(xblock,yblock)
+    ##print "generateNew| convert: ",convert(xblock,yblock)
+    ##print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+    ##print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
+    if(thresholdCheck(convert(xblock,yblock))==False):
+      ##print "generateNew| Cell is relatively sparse: Might need to generate new points"
+      listInter=interpolateCheck(xblock,yblock)
+      ##print "generateNew|listInter: ",listInter
+      if(len(listInter)!=0):
+        decisions=[]
+        assert(len(listInter)%2==0),"listInter%2 not 0"
+      #print thresholdCheck(xb),thresholdCheck(yb)
+        for i in xrange(int(len(listInter)/2)):
+          decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
+          ##print "generateNew| Decisions Length: ",len(decisions)
+        ##print "generateNew| Decisions: ",decisions
+        if convert(xblock,yblock) in dictionary: pass
+        else:
+          #print convert(xblock,yblock)
+          assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=808),"Something's wrong!"
+          dictionary[convert(xblock,yblock)]=[]
+        old = self._checkDictionary(dictionary)
+        for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
+        ##print "generateNew| Interpolation works!"
+        new = self._checkDictionary(dictionary)
+        #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
+        return True
+      else:
+        #print "generateNew| Interpolation failed!"
+        decisions=[]
+        listExter = extrapolateCheck(xblock,yblock)
+        if(len(listExter)==0):
+          #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          return False
+        else:
+          assert(len(listExter)%2==0),"listExter%2 not 0"
+          for i in xrange(int(len(listExter)/2)):
+            decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],int(self.extermaxlimit)/len(listExter),dictionary))
+          if convert(xblock,yblock) in dictionary: pass
+          else: 
+            assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=808),"Something's wrong!"
+            dictionary[convert(xblock,yblock)]=[]
+          old = self._checkDictionary(dictionary)
+          for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
+          new = self._checkDictionary(dictionary)
+          #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+          #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
+          return True
+    else:
+      listExter = extrapolateCheck(xblock,yblock)
+      if(len(listExter) == 0):
+        #print "generateNew| Lot of points but middle of a desert"
+        return False #A lot of points but right in the middle of a deseart
+      else:
+        return True
+    """
+    print interpolateCheck(xblock,yblock)
+    """
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y=lx[i],ly[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
+        else:
+          new = y
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    import itertools
+    listpoints=list(itertools.product(xpoints,ypoints))
+    #print "Length of Listpoints: ",len(listpoints)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      x=self.one(m,listpoints)
+      decision.append(interpolate(x[0],x[1]))
+      count+=1
+    return decision
+
+
+
+  def listofneighbours(self,xblock,yblock):
+    index=self.convert(xblock,yblock)
+    #print "listofneighbours| Index passed: ",index
+    listL=[]
+    listL.append(self.goe(index))
+    listL.append(self.gose(index))
+    listL.append(self.gos(index))
+    listL.append(self.gosw(index))
+    listL.append(self.gow(index))
+    listL.append(self.gonw(index))
+    listL.append(self.gon(index))
+    listL.append(self.gone(index))
+    return listL
+
+  def getpoints(self,index,dictionary):
+    tempL = []
+    for x in dictionary[index]:tempL.append(x.dec)
+    return tempL
+
+  def one(self,model,lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ]
+
+  def evaluate(self,points=[],depth=0):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      #print chess_board
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      #print dictionary.keys()
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+    dictionary = generate_dictionary(points)
+    #print "Depth: %d #points: %d"%(depth,self._checkDictionary(dictionary))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          try:
+            print i,j,len(dictionary[i*100+j])
+          except:
+            print "empty"
+    raise Exception("ASdas")
+
+        #   result = self.generateNew(self.model,i,j,dictionary)
+        #   if result == False: 
+        #     #print "in middle of desert"
+        #     continue
+        # matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    #print graph.keys()
+    #print "Number of points: ",len(graph[maxi])
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       if(len(dictionary[x]) < 15): [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    #print count     
+    return bsoln.dec,high,model
+
+  def getpoints(self,index,dictionary):
+    tempL = []
+    for x in dictionary[index]:tempL.append(x.dec)
+    return tempL
+
+  #new_interpolate
+  def n_i(self,m,dictionary,index):
+
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      return max(lo(m,i), x%hi(m,i))
+    genPoint=[]
+    row = index/100
+    col = index%10
+    xpoints=self.getpoints(index,dictionary)
+    two = self.one(m,xpoints)
+    three = self.one(m,xpoints)
+    four = self.one(m,xpoints) 
+    
+    assert(len(two)==len(three)),"Something's wrong!"
+    
+    for i in xrange(len(two)):
+      x,y,z=two[i],three[i],four[i]
+      new = trim(m,x+0.1*abs(z-y),i)
+      genPoint.append(new)
+    dictionary[index].append(self.generateSlot(m,genPoint,row,col))
+    return genPoint
+   
+
+  def _checkDictionary(self,dictionary):
+    sum=0
+    for i in dictionary.keys():
+      sum+=len(dictionary[i])
+    return sum
