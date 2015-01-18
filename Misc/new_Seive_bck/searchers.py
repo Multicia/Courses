@@ -8316,7 +8316,7 @@ class Seive2_Initial(Seive7):
       return new
     else:
       # print "Distance: ",abs(newDistance), "toofar: ",abs(tooFar)
-      print "Blown away"
+      #print "Blown away"
       return point
 
   def tgenerate(self,m,pop,gen=0):
