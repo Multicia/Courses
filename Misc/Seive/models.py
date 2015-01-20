@@ -404,6 +404,7 @@ class Schaffer(ModelBasic):
       self.minVal=self.returnMin(temp)
       self.maxVal=self.returnMax(temp)
     #print("Max: %d Min: %d"%(self.maxVal,self.minVal))
+    return self.minVal,self.maxVal
 
 class ZDT3(ModelBasic):
   
@@ -502,8 +503,11 @@ class Viennet(ModelBasic):
   def baseline(self,minR,maxR):
     for x in range(0,90000):
       solution = [(self.minR[z] + random.random()*(self.maxR[z]-self.minR[z])) for z in range(0,self.n)]
+      #print solution  
       self.returnMax(self.f1(solution)+ self.f2(solution)+self.f3(solution))
       self.returnMin(self.f1(solution)+ self.f2(solution)+self.f3(solution))
+    return self.minVal,self.maxVal
+
 
 class DTLZ7(ModelBasic):
   def __init__(self,minR=0,maxR=1,objf=5,n=20,k=16):

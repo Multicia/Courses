@@ -446,30 +446,41 @@ class DE(SearchersBasic):
         solution.append(one[d]) 
     return solution
 
-  def update(self,f,cf,frontier,total=0.0,n=0):
+  def update(self,m,f,cf,frontier,minScore=1e6,total=0.0,n=0):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+      max(lo(m,i), x%hi(m,i))
     def better(old,new):
-      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      assert(len(old)==len(new)),"Length mismatch"
       for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
-        if old[i] >= new[i]: continue
+        if old[i] > new[i]: pass
         else: return False
       return True
-    #print "update %d"%len(frontier)
+    changed = False
     model=self.model
     newF = []
     total,n=0,0
     for x in frontier:
-      #print "update: %d"%n
       s = model.evaluate(x)[:-1]
       new = self.extrapolate(frontier,x,f,cf)
       #print new
+      tnew = [] 
+      for i,j in enumerate(new):
+        tnew.append(trim(m,j,i))
+      #assert(len(tnew) == 20),"mismatch"
       newe=model.evaluate(new)[:-1]
-      if better(s,newe) == True:
-        newF.append(new)
+      if better(s,newe) == True and s[-1] > newe[-1]:
+        newF.append(tnew)
+        changed = True
       else:
         newF.append(x)
-    return newF
+    return newF,changed
       
-  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01):
+  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01,lives=4):
     #print "evaluate"
     model=self.model
     minR = model.minR
@@ -477,17 +488,14 @@ class DE(SearchersBasic):
     #model.baseline(minR,maxR)
     frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
                for _ in xrange(np)]
-    #print frontier
     for i in xrange(repeat):
-      frontier = self.update(f,cf,frontier)
+      if lives == 0: break
+      frontier,changed = self.update(model,f,cf,frontier)
 
-      #for zz in frontier:
-      #  print "%2.2f "%self.model.evaluate(zz),
-      #print 
-
-      #if(total/n < epsilon):
-      #  break;
       self.model.evalBetter()
+      if changed == False: 
+        lives -= 1
+        print "lost it"
     minR=9e10
     for x in frontier:
       #print x
@@ -764,7 +772,7 @@ class Seive(SearchersBasic): #minimizing
           #print "Searcher| smean,siqr: %d %d "%(smean,siqr)
           neighbours = self.listofneighbours(m,soln[0],soln[1])
           #print neighbours
-          nmean,niqr=1e6,1e6
+          nmean,niqr=1e6,1e6 
           for neighbour in neighbours:
             #print "Searcher| neighbour: ",neighbour
             result = self.generateNew(m,int(neighbour/100),neighbour%10,dictionary)
@@ -6543,8 +6551,7 @@ class Seive2_V50_3(Seive3):
       ret = []
       for x in dictionary.keys():
         if x in avoid: continue
-        elif random.random() > 0.5:
-          ret.append(self.one(model,dictionary[x]))
+        ret.append(self.one(model,dictionary[x]))
       #print ret
       print "Length: ",len(ret)
       #raise Exception("I know python!")
@@ -6590,43 +6597,15 @@ class Seive2_V50_3(Seive3):
     #print "Matrix: ",matrix
     import time
     #time.sleep(2)
-    matrix1 = [[0 for x in range(8)] for x in range(8)]
-    # for i in xrange(1,9):
-    #   for j in xrange(1,9):
-    #     print "\t",matrix[i-1][j-1],
-    #   print
+
     for i in xrange(1,9):
       for j in xrange(1,9):
         sumn=0
         s = matrix[i-1][j-1]
         neigh = self.listofneighbours(i,j)
-        tm = 1e6
-        idea = 0
-        for x in neigh:
-          temp = matrix[self.rowno(x)-1][self.colmno(x)-1]
-          #print matrix[self.rowno(x)-1][self.colmno(x)-1],
-          if temp < tm:
-            idea = x
-            tm = temp
-        #print
-        #print tm,idea
-        if s < tm: matrix1[i-1][j-1] += 1
-        else: matrix1[self.rowno(idea)-1][self.colmno(idea)-1] +=1
-    # for i in xrange(1,9):
-    #   for j in xrange(1,9):
-    #     print "\t",matrix[i-1][j-1],
-    #   print
-    # print "============================================"
-    # print matrix1
-    points = []
-    for i in xrange(1,9):
-      for j in xrange(1,9):
-        if matrix1[i-1][j-1] == 9: points.append(i*100+j)
-      #   if (i*100+j) in dictionary:
-      #     graph[int(sumn)].append(i*100+j)
-      #   print "\t",sumn,
-      # print
-    
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
 
     #print "Graph: ",graph
     #import time
@@ -6638,39 +6617,2397 @@ class Seive2_V50_3(Seive3):
     #print "Maxi: ",maxi
     #print "List: ",graph[maxi]
     lst = []
+    for x in graph[maxi]: lst += dictionary[x]
+       #print "The cell is: ",x," depth is: ",depth
+    if depth == int(myoptions['Seive2_V50_3']['depth']) or len(lst) <= 4:
+       for i in xrange(int(len(lst)/10)):
+         y = any(dictionary[x])
+         #print y
+         temp2 = score(model,y)[-1]
+         if temp2 < high:
+           high = temp2
+           bsoln = y
+    elif(depth < int(myoptions['Seive2_V50_3']['depth'])):
+       #print "Points: ",len(dictionary[x])
+       #print len(dictionary[x])
+       if len(lst) >= 2:
+         olz = len(lst)
+         #result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)
+         #print result,
+         #print "Points Generated: ",len(dictionary[x])-olz
+         #print "Before fastmap: ",len(lst)
+         
+         #print "After fastmap: ",len(lst)
+         
+         lst += randomcell(model,dictionary,graph[maxi])
+         print "Len of lst: ",len(lst)
+         lst += self.mutate(model,lst) 
+         print "Points Generated: ", len(lst)-olz
+         lst = self.fastmap(model,lst) 
+         print "Points Used: ", len(lst)
+
+       rsoln,sc,model = self.evaluate(lst,depth+1)
+       if sc < high:
+         high = sc 
+         bsoln = rsoln
+    return bsoln,high,model
+
+
+# class Seive6(Seive3):
+#   def __init__(self,modelName,displayS,bmin,bmax):
+#     self.model = modelName
+#     self.model.minVal = bmin
+#     self.model.maxVal = bmax
+#     self.displayStyle=displayS
+#     self.threshold = int(myoptions['Seive2_V50_3']['threshold'])         
+#     self.ncol=8               #number of columns in the chess board
+#     self.nrow=8               #number of rows in the chess board
+#     self.intermaxlimit=int(myoptions['Seive2_V50_3']['intermaxlimit'])     #Max number of points that can be created by interpolation
+#     self.extermaxlimit=int(myoptions['Seive2_V50_3']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+#     self.evalscores=0
+#   import sys,random
+#   sys.dont_write_bytecode = True
+
+#   def sdiv(self,lst, tiny=3,cohen=0.3,
+#            num1=lambda x:x[0], num2=lambda x:x[1]):
+#     "Divide lst of (num1,num2) using variance of num2."
+#     #----------------------------------------------
+#     class Counts(): # Add/delete counts of numbers.
+#       def __init__(i,inits=[]):
+#         i.zero()
+#         for number in inits: i + number 
+#       def zero(i): i.n = i.mu = i.m2 = 0.0
+#       def sd(i)  : 
+#         if i.n < 2: return i.mu
+#         else:       
+#           return (max(0,i.m2)*1.0/(i.n - 1))**0.5
+#       def __add__(i,x):
+#         i.n  += 1
+#         delta = x - i.mu
+#         i.mu += delta/(1.0*i.n)
+#         i.m2 += delta*(x - i.mu)
+#       def __sub__(i,x):
+#         if i.n < 2: return i.zero()
+#         i.n  -= 1
+#         delta = x - i.mu
+#         i.mu -= delta/(1.0*i.n)
+#         i.m2 -= delta*(x - i.mu)    
+#     #----------------------------------------------
+#     def divide(this,small): #Find best divide of 'this'
+#       lhs,rhs = Counts(), Counts(num2(x) for x in this)
+#       n0, least, cut = 1.0*rhs.n, rhs.sd(), None
+#       for j,x  in enumerate(this): 
+#         if lhs.n > tiny and rhs.n > tiny: 
+#           maybe= lhs.n/n0*lhs.sd()+ rhs.n/n0*rhs.sd()
+#           if maybe < least :  
+#             if abs(lhs.mu - rhs.mu) >= small: # where's the paper for this method?
+#               cut,least = j,maybe
+#         rhs - num2(x)
+#         lhs + num2(x)    
+#       return cut,least
+#     #----------------------------------------------
+#     def recurse(this, small,cuts):
+#       #print this,small
+#       cut,sd = divide(this,small)
+#       if cut: 
+#         recurse(this[:cut], small, cuts)
+#         recurse(this[cut:], small, cuts)
+#       else:   
+#         cuts += [(sd,this)]
+#       return cuts
+#     #---| main |-----------------------------------
+#     # for x in lst:
+#     #   print num2(x)
+#     small = Counts(num2(x) for x in lst).sd()*cohen # why we use a cohen??? how to choose cohen
+#     if lst: 
+#       return recurse(sorted(lst,key=num1),small,[])
+
+
+
+#   def evaluate(self,points=[],depth=0):
+#     model = self.model
+#     points = return_points(model,50)
+#     for point in points:
+#       point.score = score(model,point)[-1]
     
-    for x in points:
-           #print "The cell is: ",x," depth is: ",depth
-       if depth == int(myoptions['Seive2_V50_3']['depth']) or len(dictionary[x]) <= 4:
-         print "Length of the list : ",len(dictionary[x])
-         for i in xrange(min(len(dictionary[x]),3)):
-           y = self.one(model,dictionary[x])
+#     points = [point.dec+[point.score] for point in points]
+#     constraints = []
+#     for i in xrange(len(points[0])-1):
+#       constraint = []
+#       cohen=0.3
+#       #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+#       for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+#         constraint.append((d[1][0][i],d[1][-1][i]))
+#         #raise Exception(":asd")
+#       constraints.append([i]+[constraint])
+    
+#     summ = 0
+#     for i,constraint in enumerate(constraints):
+#       print i, len(constraint[1])
+
+
+class Seive6(SearchersBasic): #minimizing
+  model = None
+  minR=0
+  maxR=0
+
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model = modelName
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+    self.displayStyle=displayS
+    self.threshold = int(myoptions['Seive3']['threshold'])         
+    self.ncol=8               #number of columns in the chess board
+    self.nrow=8               #number of rows in the chess board
+    self.intermaxlimit=int(myoptions['Seive3']['intermaxlimit'])     #Max number of points that can be created by interpolation
+    self.extermaxlimit=int(myoptions['Seive3']['extermaxlimit'])     #Max number of points that can be created by extrapolation
+    self.evalscores=0
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,lz,cr=0.3,fmin=0.1,fmax=0.5):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z=lx[i],ly[i],lz[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y
+        genPoint.append(new)
+      return genPoint
+    print "This was called######################################################"
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    import itertools
+    listpoints=list(itertools.product(xpoints,ypoints))
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      x=self.one(m,listpoints)
+      decision.append(interpolate(x[0],x[1]))
+      count+=1
+    return decision
+  def generateSlot(self,m,decision,x,y):
+    newpoint=Slots(changed = True,
+            scores=1e6, 
+            xblock=-1, #sam
+            yblock=-1,  #sam
+            x=-1,
+            y=-1,
+            obj = [None] * m.objf, #This needs to be removed. Not using it as of 11/10
+            dec = [some(m,d) for d in xrange(m.n)])
+
+    #scores(m,newpoint)
+    #print "Decision: ",newpoint.dec
+    #print "Objectives: ",newpoint.obj
+    return newpoint
+  #There are three points and I am trying to extrapolate. Need to pass two cell numbers
+  def wrapperextrapolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def extrapolate(lx,ly,lz,cr=0.3,fmin=0.9,fmax=2):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      def indexConvert(index):
+        return int(index/100),index%10
+      assert(len(lx)==len(ly)==len(lz))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y,z = lx[i],ly[i],lz[i]
+        rand = random.random()
+
+        if rand < cr:
+          probEx = fmin + (fmax-fmin)*random.random()
+          new = trim(m,x + probEx*(y-z),i)
+        else:
+          new = y #Just assign a value for that decision
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #TODO: need to put an assert saying checking whether extrapolation is actually possible
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      two = self.one(m,xpoints)
+      index2,index3=0,0
+      while(index2 == index3): #just making sure that the indexes are not the same
+        index2=random.randint(0,len(ypoints)-1)
+        index3=random.randint(0,len(ypoints)-1)
+
+      three=ypoints[index2]
+      four=ypoints[index3]
+      temp = extrapolate(two,three,four)
+      #decision.append(extrapolate(two,three,four))
+      decision.append(temp)
+      count+=1
+    return decision
+  def convert(self,x,y): return (x*100)+y
+  def rowno(self,x): return int(x/100)
+  def colmno(self,x): return x%10 
+  def gonw(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1 and self.colmno(x)==1):return self.convert(nrow,ncol)#in the first coulumn and first row
+    elif(self.rowno(x)==1): return self.convert(nrow,self.colmno(x)-1)
+    elif(self.colmno(x)==1): return self.convert(self.rowno(x)-1,ncol)#in the first column
+    else: return (x-101)
+  def gow(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.colmno(x)==1): return self.convert(self.rowno(x),ncol)
+    else: return (x-1)
+  def gosw(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow and self.colmno(x)==1): return self.convert(1,ncol)
+    elif(self.rowno(x)==nrow): return self.convert(1,self.colmno(x)-1)
+    elif(self.colmno(x)==1): return self.convert(self.rowno(x)+1,ncol)
+    else: return (x+99)
+  def gos(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow): return self.convert(1,self.colmno(x))
+    else: return x+100
+  def gose(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==nrow and self.colmno(x)==ncol): return self.convert(1,1)
+    elif(self.rowno(x)==nrow): return self.convert(1,self.colmno(x)+1)
+    elif(self.colmno(x)==ncol): return self.convert(self.rowno(x)+1,1)
+    else: return x+101
+  def goe(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.colmno(x)==ncol): return self.convert(self.rowno(x),1)
+    else: return x+1
+  def gone(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1 and self.colmno(x)==ncol): return self.convert(nrow,1)
+    elif(self.rowno(x)==1): return self.convert(nrow,self.colmno(x)+1)
+    elif(self.colmno(x)==ncol): return self.convert(self.rowno(x)-1,1)
+    else: return x-99
+  def gon(self,x):
+    nrow=self.nrow
+    ncol=self.ncol
+    if(self.rowno(x)==1): return self.convert(nrow,self.colmno(x))
+    else: return x-100 
+  def generateNew(self,m,xblock,yblock,dictionary,flag = False):
+    convert = self.convert
+    rowno = self.rowno
+    colmno = self.colmno 
+
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    def opposite(a,b):
+      ax,ay,bx,by=a/100,a%100,b/100,b%100
+      if(abs(ax-bx)==2 or abs(ay-by)==2):return True
+      else: return False
+
+    def thresholdCheck(index):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+
+    def interpolateCheck(xblock,yblock):
+      returnList=[]
+      if(thresholdCheck(self.gonw(convert(xblock,yblock))) and thresholdCheck(self.gose(convert(xblock,yblock))) == True):
+        returnList.append(self.gonw(convert(xblock,yblock)))
+        returnList.append(self.gose(convert(xblock,yblock)))
+      if(thresholdCheck(self.gow(convert(xblock,yblock))) and thresholdCheck(self.goe(convert(xblock,yblock))) == True):
+       returnList.append(self.gow(convert(xblock,yblock)))
+       returnList.append(self.goe(convert(xblock,yblock)))
+      if(thresholdCheck(self.gosw(convert(xblock,yblock))) and thresholdCheck(self.gone(convert(xblock,yblock))) == True):
+       returnList.append(self.gosw(convert(xblock,yblock)))
+       returnList.append(self.gone(convert(xblock,yblock)))
+      if(thresholdCheck(self.gon(convert(xblock,yblock))) and thresholdCheck(self.gos(convert(xblock,yblock))) == True):
+       returnList.append(self.gon(convert(xblock,yblock)))
+       returnList.append(self.gos(convert(xblock,yblock)))
+      return returnList
+
+
+    def extrapolateCheck(xblock,yblock):
+      #TODO: If there are more than one consequetive blocks with threshold number of points how do we handle it?
+      #TODO: Need to make this logic more succint
+      returnList=[]
+      #go North West
+      temp = self.gonw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gonw(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gonw(temp))
+
+      #go North 
+      temp = self.gon(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gon(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gon(temp))
+
+      #go North East
+      temp = self.gone(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gone(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gone(temp))
+  
+      #go East
+      temp = self.goe(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.goe(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.goe(temp))
+
+      #go South East
+      temp = self.gose(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gose(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gose(temp))
+
+      #go South
+      temp = self.gos(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gos(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gos(temp))
+
+      #go South West
+      temp = self.gosw(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gosw(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gosw(temp))
+ 
+      #go West
+      temp = self.gow(convert(xblock,yblock))
+      result1 = thresholdCheck(temp)
+      if result1 == True:
+        result2 = thresholdCheck(self.gow(temp))
+        if(result1 == True and result2 == True):
+          returnList.append(temp)
+          returnList.append(self.gow(temp))
+
+      return returnList
+  
+    newpoints=[]
+    if flag == True:
+      if convert(xblock,yblock) in dictionary: pass
+      else:
+        assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+        assert(convert(xblock,yblock)<=808),"Something's wrong!"
+      decisions=[]
+      listInter=interpolateCheck(xblock,yblock)
+      #print "generateNew|Interpolation Check: ",listInter
+      if(len(listInter)!=0):
+        assert(len(listInter)%2==0),"listInter%2 not 0"
+        for i in xrange(int(len(listInter)/2)):
+          #print "FLAG is True!"
+          decisions.extend(self.wrapperInterpolate(m,listInter[i*2],\
+          listInter[(i*2)+1],1000,dictionary))
+      #else:
+        #print "generateNew| Interpolation failed"
+      listExter = extrapolateCheck(xblock,yblock)
+      #print "generateNew|Extrapolation Check: ",listInter
+      if(len(listExter)!= 0):
+        #print "generateNew| Extrapolation failed"
+      #else:
+        #print "FLAG is True!"
+        for i in xrange(int(len(listExter)/2)):
+            decisions.extend(self.wrapperextrapolate(m,listExter[2*i],\
+            listExter[(2*i)+1],1000,dictionary))
+      old = len(dictionary[convert(xblock,yblock)])
+      
+      for decision in decisions:dictionary[convert(xblock,yblock)].\
+      append(self.generateSlot(m,decision,xblock,yblock))
+      new = len(dictionary[convert(xblock,yblock)])
+      #print "generateNew|Flag:True| Number of new points generated: ", (new-old) 
+      return True,dictionary   
+
+
+    #print "generateNew| convert: ",convert(xblock,yblock)
+    #print "generateNew| thresholdCheck(convert(xblock,yblock): ",thresholdCheck(convert(xblock,yblock))
+    #print "generateNew| points in the block: ",len(dictionary[convert(xblock,yblock)])
+    if(thresholdCheck(convert(xblock,yblock))==False):
+      #print "generateNew| Cell is relatively sparse: Might need to generate new points"
+      listInter=interpolateCheck(xblock,yblock)
+      #print "generateNew|Interpolation Check: ",listInter
+      if(len(listInter)!=0):
+        decisions=[]
+        assert(len(listInter)%2==0),"listInter%2 not 0"
+      #print thresholdCheck(xb),thresholdCheck(yb)
+        for i in xrange(int(len(listInter)/2)):
+            decisions.extend(self.wrapperInterpolate(m,listInter[i*2],listInter[(i*2)+1],int(self.intermaxlimit/len(listInter))+1,dictionary))
+
+        if convert(xblock,yblock) in dictionary: pass
+        else:
+          #print convert(xblock,yblock)
+          assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+          #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+          assert(convert(xblock,yblock)<=808),"Something's wrong!"
+          dictionary[convert(xblock,yblock)]=[]
+        old = self._checkDictionary(dictionary)
+        for decision in decisions:dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
+        #print "generateNew| Interpolation works!"
+        new = self._checkDictionary(dictionary)
+        #print "generateNew|Interpolation| Number of new points generated: ", (new-old)
+        return True,dictionary
+      else:
+        #print "generateNew| Interpolation failed!"
+        decisions=[]
+        listExter = extrapolateCheck(xblock,yblock)
+        #print "generateNew|Extrapolation Check: ",listInter
+        if(len(listExter)==0):
+          #print "generateNew|Interpolation and Extrapolation failed|In a tight spot..somewhere in the desert RANDOM JUMP REQUIRED"
+          return False,dictionary
+        else:
+          assert(len(listExter)%2==0),"listExter%2 not 0"
+          for i in xrange(int(len(listExter)/2)):
+              decisions.extend(self.wrapperextrapolate(m,listExter[2*i],listExter[(2*i)+1],int(self.extermaxlimit)/len(listExter),dictionary))
+          if convert(xblock,yblock) in dictionary: pass
+          else: 
+            assert(convert(xblock,yblock)>=101),"Something's wrong!" 
+            #assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            assert(convert(xblock,yblock)<=808),"Something's wrong!" 
+            dictionary[convert(xblock,yblock)]=[]
+          old = self._checkDictionary(dictionary)
+          for decision in decisions: dictionary[convert(xblock,yblock)].append(self.generateSlot(m,decision,xblock,yblock))
+          new = self._checkDictionary(dictionary)
+          #print "generateNew|Extrapolation Worked ",len(dictionary[convert(xblock,yblock)])
+          #print "generateNew|Extrapolation| Number of new points generated: ", (new-old)
+          return True,dictionary
+    else:
+      listExter = extrapolateCheck(xblock,yblock)
+      if(len(listExter) == 0):
+        print "generateNew| Lot of points but middle of a desert"
+        return False,dictionary #A lot of points but right in the middle of a deseart
+      else:
+        return True,dictionary
+
+  def wrapperInterpolate(self,m,xindex,yindex,maxlimit,dictionary):
+    def interpolate(lx,ly,cr=0.3,fmin=0,fmax=1):
+      def lo(m,index)      : return m.minR[index]
+      def hi(m,index)      : return m.maxR[index]
+      def trim(m,x,i)  : # trim to legal range
+        return max(lo(m,i), x%hi(m,i))
+      assert(len(lx)==len(ly))
+      genPoint=[]
+      for i in xrange(len(lx)):
+        x,y=lx[i],ly[i]
+        #print x
+        #print y
+        rand = random.random
+        if rand < cr:
+          probEx = fmin +(fmax-fmin)*rand()
+          new = trim(m,min(x,y)+probEx*abs(x-y),i)
+        else:
+          new = y 
+        genPoint.append(new)
+      return genPoint
+
+    decision=[]
+    #print "Number of points in ",xindex," is: ",len(dictionary[xindex])
+    #print "Number of points in ",yindex," is: ",len(dictionary[yindex])
+    xpoints=self.getpoints(xindex,dictionary)
+    ypoints=self.getpoints(yindex,dictionary)
+    import itertools
+    listpoints=list(itertools.product(xpoints,ypoints))
+    #print "Length of Listpoints: ",len(listpoints)
+    count=0
+    while True:
+      if(count>min(len(xpoints),maxlimit)):break
+      x=self.one(m,listpoints)
+      decision.append(interpolate(x[0],x[1]))
+      count+=1
+    return decision
+
+
+
+  def listofneighbours(self,xblock,yblock):
+    index=self.convert(xblock,yblock)
+    #print "listofneighbours| Index passed: ",index
+    listL=[]
+    listL.append(self.goe(index))
+    listL.append(self.gose(index))
+    listL.append(self.gos(index))
+    listL.append(self.gosw(index))
+    listL.append(self.gow(index))
+    listL.append(self.gonw(index))
+    listL.append(self.gon(index))
+    listL.append(self.gone(index))
+    return listL
+
+  def getpoints(self,index,dictionary):
+    tempL = []
+    for x in dictionary[index]:tempL.append(x.dec)
+    return tempL
+
+  def sdiv(self,lst, tiny=3,cohen=0.3,
+           num1=lambda x:x[0], num2=lambda x:x[1]):
+    "Divide lst of (num1,num2) using variance of num2."
+    #----------------------------------------------
+    class Counts(): # Add/delete counts of numbers.
+      def __init__(i,inits=[]):
+        i.zero()
+        for number in inits: i + number 
+      def zero(i): i.n = i.mu = i.m2 = 0.0
+      def sd(i)  : 
+        if i.n < 2: return i.mu
+        else:       
+          return (max(0,i.m2)*1.0/(i.n - 1))**0.5
+      def __add__(i,x):
+        i.n  += 1
+        delta = x - i.mu
+        i.mu += delta/(1.0*i.n)
+        i.m2 += delta*(x - i.mu)
+      def __sub__(i,x):
+        if i.n < 2: return i.zero()
+        i.n  -= 1
+        delta = x - i.mu
+        i.mu -= delta/(1.0*i.n)
+        i.m2 -= delta*(x - i.mu)    
+    #----------------------------------------------
+    def divide(this,small): #Find best divide of 'this'
+      lhs,rhs = Counts(), Counts(num2(x) for x in this)
+      n0, least, cut = 1.0*rhs.n, rhs.sd(), None
+      for j,x  in enumerate(this): 
+        if lhs.n > tiny and rhs.n > tiny: 
+          maybe= lhs.n/n0*lhs.sd()+ rhs.n/n0*rhs.sd()
+          if maybe < least :  
+            if abs(lhs.mu - rhs.mu) >= small: # where's the paper for this method?
+              cut,least = j,maybe
+        rhs - num2(x)
+        lhs + num2(x)    
+      return cut,least
+    #----------------------------------------------
+    def recurse(this, small,cuts):
+      #print this,small
+      cut,sd = divide(this,small)
+      if cut: 
+        recurse(this[:cut], small, cuts)
+        recurse(this[cut:], small, cuts)
+      else:   
+        cuts += [(sd,this)]
+      return cuts
+    #---| main |-----------------------------------
+    # for x in lst:
+    #   print num2(x)
+    small = Counts(num2(x) for x in lst).sd()*cohen # why we use a cohen??? how to choose cohen
+    if lst: 
+      return recurse(sorted(lst,key=num1),small,[])
+
+
+  def one(self,model,lst): 
+    def any(l,h):
+      return (0 + random.random()*(h-l))
+    return lst[int(any(0,len(lst) - 1)) ]
+  
+  def generate2(self,model,constraints):
+    def any(l,h):
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(950):
+      dec = []
+      for constraint in constraints:
+        lo,hi = self.one(model,constraint[1])
+        # lo,hi = constraint[0],constraint[1]
+        temp = any(lo,hi)
+        assert(temp >= lo and temp <= hi),"ranges are messed up"
+        dec.append(temp)
+      points.append(self.generateSlot(model,dec,-1,-1))
+      #print "\n\n",points
+    assert(len(points) == 950),"all the points were not generated"
+    return points
+
+
+  def evaluate(self,points=[],depth=0):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",self.threshold
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+    def indexof(lsts,number,index = lambda x: x[1]):
+      for i,lst in enumerate(sorted(lsts,key = index)):
+        if number == index(lst): return i
+      return -1 
+    def uscore(lsts,starti,endi):
+      summ = 0
+      for i in xrange(starti,endi+1):
+        summ += lsts[i][-1]
+      return summ/(endi-starti+1)
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    if depth == 0 and len(points) == 0: 
+      #generate points according to the constraints
+      points = return_points(model,50)
+      for point in points:
+        point.score = score(model,point)[-1]
+      
+      points = [point.dec+[point.score] for point in points]
+      constraints = []
+      for i in xrange(len(points[0])-1):
+        constraint = []
+        cohen=0.6
+        h = 1e6
+        #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+        # print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+        for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+        #   starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+        #   endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+        #   print "Starti: ",starti, "Endi: ",endi
+        #   mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+        #   #print "-----------------Mean Score: ",mean_score
+        #   if mean_score < h:
+        #     const1 = d[1][0][i]
+        #     const2 = d[1][-1][i]
+        #     h = mean_score
+        #     print "+++++++++++++++High Mean Score: ",h
+           constraint.append((d[1][0][i],d[1][-1][i]))
+        constraints.append([i]+[constraint])# (const1,const2)])  
+      #raise Exception(":asd")    
+      points = self.generate2(model,constraints)
+      #print "SDIV working!"
+
+    dictionary = generate_dictionary(points)
+    # for key in dictionary.keys():
+    #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
+    #   print "Key: ",key," Length: ",len(dictionary[key])
+    # raise Exception("asdaskdj")
+
+    #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result,dictionary = self.generateNew(model,i,j,dictionary)
+          if result == False: 
+            matrix[i-1][j-1] = 100
+            #print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        #print "%0.3f"%matrix[i-1][j-1],
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+      #print
+    
+    #print graph[8]
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    #print "Depth: ",depth,
+    #print "Points: ",len(graph[maxi]),
+    #print "Maxi: ",maxi
+    #import time
+    #time.sleep(3)
+    for x in graph[maxi]:
+       #print "The cell is: ",x," depth is: ",depth
+       if depth == int(myoptions['Seive3']['depth']):
+         for i in xrange(0,5):
+           y = any(dictionary[x])
            #print y
            temp2 = score(model,y)[-1]
            if temp2 < high:
              high = temp2
              bsoln = y
-         #raise Exception("I know python!")
-       elif(depth < int(myoptions['Seive2_V50_3']['depth'])):
-         #print "Points: ",len(dictionary[x])
-         #print len(dictionary[x])
-         if len(dictionary[x]) >= 2:
-           olz = len(dictionary[x])
-           result,dictionary = self.generateNew(model,int(x/100),x%100,dictionary)           
-           lst = self.mutate(model,dictionary[x] + randomcell(model,dictionary,points))
-           #lst = self.fastmap(model,lst) 
+             #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+             #print bsoln.dec
 
-         rsoln,sc,model = self.evaluate(lst,depth+1)
+           #print temp2,high,bsoln.dec
+           #print
+       
+       if(depth < int(myoptions['Seive3']['depth'])):
+         #print "RECURSE"
+         #print "Cell No: ",x,x/100,x%10
+         #print "Before: ",len(dictionary[x])
+         result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+         #print "After: ",len(dictionary[x])
+         rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+         #print high,sc
          if sc < high:
            high = sc 
            bsoln = rsoln
+           #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+           #print bsoln.dec
+
+    #print bsoln.dec     W
     return bsoln,high,model
 
+  def _checkDictionary(self,dictionary):
+    sum=0
+    for i in dictionary.keys():
+      sum+=len(dictionary[i])
+    return sum
+
+class Seive7(Seive6):
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(950):
+      dec = []
+      for constraint in constraints:
+        #lo,hi = self.one(model,constraint )
+        #print constraint
+        lo,hi = constraint[1][0],constraint[1][1]
+        temp = any(lo,hi)
+        assert(temp >= lo and temp <= hi),"ranges are messed up"
+        dec.append(temp)
+      points.append(self.generateSlot(model,dec,-1,-1))
+      #print "\n\n",points
+    assert(len(points) == 950),"all the points were not generated"
+    return points
+  def evaluate(self,points=[],depth=0):
+      def generate_dictionary(points=[]):  
+        dictionary = {}
+        chess_board = whereMain(self.model,points) #checked: working well
+        for i in range(1,9):
+          for j in range(1,9):
+            temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+            if(len(temp)!=0):
+              index=temp[0].xblock*100+temp[0].yblock
+              dictionary[index] = temp
+              assert(len(temp)==len(dictionary[index])),"something"
+        return dictionary
+
+      def thresholdCheck(index,dictionary):
+        try:
+          #print "Threshold Check: ",self.threshold
+          if(len(dictionary[index])>self.threshold):return True
+          else:return False
+        except:
+          return False
+      def indexof(lsts,number,index = lambda x: x[1]):
+        for i,lst in enumerate(sorted(lsts,key = index)):   
+          if number == index(lst): return i
+        return -1 
+      def uscore(lsts,starti,endi):
+        summ = 0
+        for i in xrange(starti,endi+1):
+          summ += lsts[i][-1]
+        return summ/(endi-starti+1)
+
+      model = self.model
+      minR = model.minR
+      maxR = model.maxR
+      if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+        points = return_points(model,50)
+        for point in points:
+          point.score = score(model,point)[-1]
+        
+        points = [point.dec+[point.score] for point in points]
+        constraints = []
+        for i in xrange(len(points[0])-1):
+          constraint = []
+          cohen=0.6
+          h = 1e6
+          #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+          #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+          for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+            starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+            endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+            #print "Starti: ",starti, "Endi: ",endi
+            mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+            #print "-----------------Mean Score: ",mean_score
+            if mean_score < h:
+              const1 = d[1][0][i]
+              const2 = d[1][-1][i]
+              h = mean_score
+              #print "+++++++++++++++High Mean Score: ",h
+          #constraint.append()
+
+          
+          constraints.append([i]+[(const1,const2)])  
+        # print constraints
+        # raise Exception(":asd")    
+        points = self.generate2(model,constraints)
+        #print "SDIV working!"
+
+      dictionary = generate_dictionary(points)
+      # for key in dictionary.keys():
+      #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
+      #   print "Key: ",key," Length: ",len(dictionary[key])
+      # raise Exception("asdaskdj")
+
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+      from collections import defaultdict
+      graph = defaultdict(list)
+      matrix = [[0 for x in range(8)] for x in range(8)]
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          if(thresholdCheck(i*100+j,dictionary)==False):
+            result,dictionary = self.generateNew(model,i,j,dictionary)
+            if result == False: 
+              matrix[i-1][j-1] = 100
+              #print "in middle of desert"
+              continue
+          matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+          
+         # print matrix[i-1][j-1],
+        #print
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          #print "%0.3f"%matrix[i-1][j-1],
+          sumn=0
+          s = matrix[i-1][j-1]
+          neigh = self.listofneighbours(i,j)
+          sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+          if (i*100+j) in dictionary:
+            graph[int(sumn)].append(i*100+j)
+        #print
+      
+      #print graph[8]
+      high = 1e6
+      bsoln = None
+      maxi = max(graph.keys())
+      #print "Depth: ",depth,
+      #print "Points: ",len(graph[maxi]),
+      #print "Maxi: ",maxi
+      #import time
+      #time.sleep(3)
+      for x in graph[maxi]:
+         #print "The cell is: ",x," depth is: ",depth
+         if depth == int(myoptions['Seive3']['depth']):
+           for i in xrange(0,5):
+             y = any(dictionary[x])
+             #print y
+             temp2 = score(model,y)[-1]
+             if temp2 < high:
+               high = temp2
+               bsoln = y
+               #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+               #print bsoln.dec
+
+             #print temp2,high,bsoln.dec
+             #print
+         
+         if(depth < int(myoptions['Seive3']['depth'])):
+           #print "RECURSE"
+           #print "Cell No: ",x,x/100,x%10
+           #print "Before: ",len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+           #print "After: ",len(dictionary[x])
+           rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+           #print high,sc
+           if sc < high:
+             high = sc 
+             bsoln = rsoln
+             #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+             #print bsoln.dec
+
+      #print bsoln.dec     W
+      return bsoln,high,model
+class Seive7_1(Seive7):
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(940):
+      dec = []
+      for constraint in constraints:
+        #lo,hi = self.one(model,constraint )
+        #print constraint
+        lo,hi = constraint[1][0],constraint[1][1]
+        temp = any(lo,hi)
+        assert(temp >= lo and temp <= hi),"ranges are messed up"
+        dec.append(temp)
+      points.append(self.generateSlot(model,dec,-1,-1))
+      #print "\n\n",points
+    assert(len(points) == 940),"all the points were not generated"
+    return points
+
+  def evaluate(self,points=[],depth=0):
+      def generate_dictionary(points=[]):  
+        dictionary = {}
+        chess_board = whereMain(self.model,points) #checked: working well
+        for i in range(1,9):
+          for j in range(1,9):
+            temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+            if(len(temp)!=0):
+              index=temp[0].xblock*100+temp[0].yblock
+              dictionary[index] = temp
+              assert(len(temp)==len(dictionary[index])),"something"
+        return dictionary
+
+      def thresholdCheck(index,dictionary):
+        try:
+          #print "Threshold Check: ",self.threshold
+          if(len(dictionary[index])>self.threshold):return True
+          else:return False
+        except:
+          return False
+      def indexof(lsts,number,index = lambda x: x[1]):
+        for i,lst in enumerate(sorted(lsts,key = index)):   
+          if number == index(lst): return i
+        return -1 
+      def uscore(lsts,starti,endi):
+        summ = 0
+        for i in xrange(starti,endi+1):
+          summ += lsts[i][-1]
+        return summ/(endi-starti+1)
+
+      model = self.model
+      minR = model.minR
+      maxR = model.maxR
+      if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+        points = return_points(model,60)
+        for point in points:
+          point.score = score(model,point)[-1]
+        
+        points = [point.dec+[point.score] for point in points]
+        constraints = []
+        for i in xrange(len(points[0])-1):
+          constraint = []
+          cohen=0.3
+          h = 1e6
+          #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+          #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+          for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+            starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+            endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+            #print "Starti: ",starti, "Endi: ",endi
+            mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+            #print "-----------------Mean Score: ",mean_score
+            if mean_score < h:
+              const1 = d[1][0][i]
+              const2 = d[1][-1][i]
+              h = mean_score
+              #print "+++++++++++++++High Mean Score: ",h
+          #constraint.append()
+
+          
+          constraints.append([i]+[(const1,const2)])  
+        # print constraints
+        # raise Exception(":asd")    
+        points = self.generate2(model,constraints)
+        #print "SDIV working!"
+
+      dictionary = generate_dictionary(points)
+      # for key in dictionary.keys():
+      #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
+      #   print "Key: ",key," Length: ",len(dictionary[key])
+      # raise Exception("asdaskdj")
+
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+      from collections import defaultdict
+      graph = defaultdict(list)
+      matrix = [[0 for x in range(8)] for x in range(8)]
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          if(thresholdCheck(i*100+j,dictionary)==False):
+            result,dictionary = self.generateNew(model,i,j,dictionary)
+            if result == False: 
+              matrix[i-1][j-1] = 100
+              #print "in middle of desert"
+              continue
+          matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+          
+         # print matrix[i-1][j-1],
+        #print
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          #print "%0.3f"%matrix[i-1][j-1],
+          sumn=0
+          s = matrix[i-1][j-1]
+          neigh = self.listofneighbours(i,j)
+          sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+          if (i*100+j) in dictionary:
+            graph[int(sumn)].append(i*100+j)
+        #print
+      
+      #print graph[8]
+      high = 1e6
+      bsoln = None
+      maxi = max(graph.keys())
+      #print "Depth: ",depth,
+      #print "Points: ",len(graph[maxi]),
+      #print "Maxi: ",maxi
+      #import time
+      #time.sleep(3)
+      for x in graph[maxi]:
+         #print "The cell is: ",x," depth is: ",depth
+         if depth == int(myoptions['Seive3']['depth']):
+           for i in xrange(0,5):
+             y = any(dictionary[x])
+             #print y
+             temp2 = score(model,y)[-1]
+             if temp2 < high:
+               high = temp2
+               bsoln = y
+               #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+               #print bsoln.dec
+
+             #print temp2,high,bsoln.dec
+             #print
+         
+         if(depth < int(myoptions['Seive3']['depth'])):
+           #print "RECURSE"
+           #print "Cell No: ",x,x/100,x%10
+           #print "Before: ",len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+           #print "After: ",len(dictionary[x])
+           rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+           #print high,sc
+           if sc < high:
+             high = sc 
+             bsoln = rsoln
+             #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+             #print bsoln.dec
+
+      #print bsoln.dec     W
+      return bsoln,high,model
+
+
+class Seive7_2(Seive7):
+  def fastmap(self,model,data):
+    "Divide data into two using distance to two distant items."
+    #print ">>>>>>>>>>>>>>>>>>.FastMap"
+    #print "Length of data: ",len(data)
+    one  = any(data)             # 1) pick anything
+    west = furthest(model,one,data)  # 2) west is as far as you can go from anything
+    east = furthest(model,west,data) # 3) east is as far as you can go from west
+    c    = dist(model,west,east)
+    # now find everyone's distance
+    xsum, lst = 0.0,[]
+    ws = score(model,west)[-1]
+    es = score(model,east)[-1]
+    #print "West: ",ws
+    #print "East: ",es
+    for one in data:
+      a = dist(model,one,west)
+      b = dist(model,one,east)
+      x = (a*a + c*c - b*b)/(2*c) # cosine rule
+      xsum += x
+      lst  += [(x,one)]
+    # now cut data according to the mean distance
+    if ws > es:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+      return easts
+    else:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+      return wests
+
+  def tgenerate(self,m,pop,gen=0):
+    it = int(myoptions['Seive7_2']['tgen'])
+    for _ in xrange(it):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = self.generateSlot(m,cand,-1,-1)
+      #print one.dec
+      pop += [one]
+    return pop
+
+  def polate(m,lx,ly,lz,fmin,fmax):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      return max(lo(m,i), x%hi(m,i))
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    assert(len(lx)==len(ly)==len(lz))
+    cr=0.3
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
+
+      if rand < cr:
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(m,x + probEx*(y-z),i)
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    return genPoint
+
+
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(20):
+      for _ in xrange(200):
+        dec = []
+        for constraint in constraints:
+          #lo,hi = self.one(model,constraint )
+          #print constraint
+          lo,hi = constraint[1][0],constraint[1][1]
+          temp = any(lo,hi)
+          assert(temp >= lo and temp <= hi),"ranges are messed up"
+          dec.append(temp)
+        points.append(self.generateSlot(model,dec,-1,-1))
+      #print "After Generation: ",len(points)
+      points = self.fastmap(model,points)
+      #print "After FastMap: ",len(points)
+      points = self.tgenerate(model,points)
+    #print ">>>>>>>Final: ",len(points)
+    #raise Exception("asdasdasffd")
+    #print "\n\n",points
+    #assert(len(points) == 940),"all the points were not generated"
+    return points
 
 
 
-    """
-    1. Tried to get all the points from all the mountain tops + random jiggle and have multiple generations -> Didn't work
-    2. add one points from all the cell and add it to mountain tops and recurse. Didn't work
-    3. Use points only from the mountains didn't work
-    """
+  def evaluate(self,points=[],depth=0):
+      def generate_dictionary(points=[]):  
+        dictionary = {}
+        chess_board = whereMain(self.model,points) #checked: working well
+        for i in range(1,9):
+          for j in range(1,9):
+            temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+            if(len(temp)!=0):
+              index=temp[0].xblock*100+temp[0].yblock
+              dictionary[index] = temp
+              assert(len(temp)==len(dictionary[index])),"something"
+        return dictionary
+
+      def thresholdCheck(index,dictionary):
+        try:
+          #print "Threshold Check: ",self.threshold
+          if(len(dictionary[index])>self.threshold):return True
+          else:return False
+        except:
+          return False
+      def indexof(lsts,number,index = lambda x: x[1]):
+        for i,lst in enumerate(sorted(lsts,key = index)):   
+          if number == index(lst): return i
+        return -1 
+      def uscore(lsts,starti,endi):
+        summ = 0
+        for i in xrange(starti,endi+1):
+          summ += lsts[i][-1]
+        return summ/(endi-starti+1)
+
+      model = self.model
+      minR = model.minR
+      maxR = model.maxR
+      if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+        points = return_points(model,60)
+        for point in points:
+          point.score = score(model,point)[-1]
+        
+        points = [point.dec+[point.score] for point in points]
+        constraints = []
+        for i in xrange(len(points[0])-1):
+          constraint = []
+          cohen=0.3
+          h = 1e6
+          #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+          #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+          for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+            starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+            endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+            #print "Starti: ",starti, "Endi: ",endi
+            mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+            #print "-----------------Mean Score: ",mean_score
+            if mean_score < h:
+              const1 = d[1][0][i]
+              const2 = d[1][-1][i]
+              h = mean_score
+              #print "+++++++++++++++High Mean Score: ",h
+          #constraint.append()
+
+          
+          constraints.append([i]+[(const1,const2)])  
+        # print constraints
+        # raise Exception(":asd")    
+        points = self.generate2(model,constraints)
+
+
+        #print "SDIV working!"
+      #print "Initial Points: ",len(points)
+      dictionary = generate_dictionary(points)
+      # for key in dictionary.keys():
+      #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
+      #   print "Key: ",key," Length: ",len(dictionary[key])
+      # raise Exception("asdaskdj")
+
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+      from collections import defaultdict
+      graph = defaultdict(list)
+      matrix = [[0 for x in range(8)] for x in range(8)]
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          if(thresholdCheck(i*100+j,dictionary)==False):
+            result,dictionary = self.generateNew(model,i,j,dictionary)
+            if result == False: 
+              matrix[i-1][j-1] = 100
+              #print "in middle of desert"
+              continue
+          matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+          
+         # print matrix[i-1][j-1],
+        #print
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          #print "%0.3f"%matrix[i-1][j-1],
+          sumn=0
+          s = matrix[i-1][j-1]
+          neigh = self.listofneighbours(i,j)
+          sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+          if (i*100+j) in dictionary:
+            graph[int(sumn)].append(i*100+j)
+        #print
+      
+      #print graph[8]
+      high = 1e6
+      bsoln = None
+      maxi = max(graph.keys())
+      #print "Depth: ",depth,
+      #print "Points: ",len(graph[maxi]),
+      #print "Maxi: ",maxi
+      #import time
+      #time.sleep(3)
+      for x in graph[maxi]:
+         #print "The cell is: ",x," depth is: ",depth
+         if depth == int(myoptions['Seive3']['depth']):
+           for i in xrange(0,5):
+             y = any(dictionary[x])
+             #print y
+             temp2 = score(model,y)[-1]
+             if temp2 < high:
+               high = temp2
+               bsoln = y
+               #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+               #print bsoln.dec
+
+             #print temp2,high,bsoln.dec
+             #print
+         
+         if(depth < int(myoptions['Seive3']['depth'])):
+           #print "RECURSE"
+           #print "Cell No: ",x,x/100,x%10
+           #print "Before: ",len(dictionary[x])
+           result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+           #print "After: ",len(dictionary[x])
+           rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+           #print high,sc
+           if sc < high:
+             high = sc 
+             bsoln = rsoln
+             #print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+             #print bsoln.dec
+
+      #print bsoln.dec     W
+      return bsoln,high,model
+
+
+class Seive7_3(Seive7):
+  def fastmap(self,model,data):
+    "Divide data into two using distance to two distant items."
+    #print ">>>>>>>>>>>>>>>>>>.FastMap"
+    #print "Length of data: ",len(data)
+    one  = any(data)             # 1) pick anything
+    west = furthest(model,one,data)  # 2) west is as far as you can go from anything
+    east = furthest(model,west,data) # 3) east is as far as you can go from west
+    c    = dist(model,west,east)
+    # now find everyone's distance
+    xsum, lst = 0.0,[]
+    ws = score(model,west)[-1]
+    es = score(model,east)[-1]
+    #print "West: ",ws
+    #print "East: ",es
+    for one in data:
+      a = dist(model,one,west)
+      b = dist(model,one,east)
+      x = (a*a + c*c - b*b)/(2*c) # cosine rule
+      xsum += x
+      lst  += [(x,one)]
+    # now cut data according to the mean distance
+    if ws > es:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+      #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,east,west) for point in easts]
+    else:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+        #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,west,east) for point in easts]
+
+
+  def gale_mutate(self,model,point,c,east,west,multiplier = 3):
+    #tooFar = multiplier * abs(c)
+    #print "C: ",c
+    tooFar = multiplier * abs(c)
+    import copy
+    new = copy.deepcopy(point)
+    for i in xrange(len(point.dec)):
+      d = east.dec[i] - west.dec[i]
+      if not d == 0:
+        d = -1 if d < 0 else 1
+        #d = east.dec[i] = west.dec[i]
+        x = new.dec[i] * (1 + abs(c) * d)
+        new.dec[i] = max(min(hi(model,i),x),lo(model,i))
+        # if x != new.dec[i] : print "blah",new.dec[i]-x
+        # else: print "boom"
+    newDistance = self.project(model,west,east,c,new) -\
+                  self.project(model,west,east,c,west)
+    
+    if abs(newDistance) < tooFar  and self.valid(model,new):
+      return new
+    else:
+      # print "Distance: ",abs(newDistance), "toofar: ",abs(tooFar)
+      # print "Blown away"
+      return point
+
+  def tgenerate(self,m,pop,gen=0):
+    it = int(myoptions['Seive7_2']['tgen'])
+    for _ in xrange(it):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = self.generateSlot(m,cand,-1,-1)
+      #print one.dec
+      pop += [one]
+    return pop
+
+  def polate(m,lx,ly,lz,fmin,fmax):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    assert(len(lx)==len(ly)==len(lz))
+    cr=0.3
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
+
+      if rand < cr:
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(m,x + probEx*(y-z),i)
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    return genPoint
+  def project(self,model,west, east, c, x):
+    "Project x onto line east to west"
+    if c == 0: return 0
+    a = dist(model,x,west)
+    b = dist(model,x,east)
+    return (a*a + c*c - b*b)/(2*c) # cosine rule
+
+  def valid(self,m,val):
+    for x in xrange(len(val.dec)):
+      if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
+        return False
+    return True
+
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(50):
+      for _ in xrange(500):
+        dec = []
+        for constraint in constraints:
+          #lo,hi = self.one(model,constraint )
+          #print constraint
+          lo,hi = constraint[1][0],constraint[1][1]
+          temp = any(lo,hi)
+          assert(temp >= lo and temp <= hi),"ranges are messed up"
+          dec.append(temp)
+        points.append(self.generateSlot(model,dec,-1,-1))
+      #print "After Generation: ",len(points)
+      points = self.fastmap(model,points)
+      points += return_points(model,100)
+      #print "After FastMap: ",len(points)
+      points = self.tgenerate(model,points)
+    print ">>>>>>>Final: ",len(points)
+    #raise Exception("asdasdasffd")
+    #print "\n\n",points
+    #assert(len(points) == 940),"all the points were not generated"
+    return points
+
+
+
+  def evaluate(self,points=[],depth=0):
+      def generate_dictionary(points=[]):  
+        dictionary = {}
+        chess_board = whereMain(self.model,points) #checked: working well
+        for i in range(1,9):
+          for j in range(1,9):
+            temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+            if(len(temp)!=0):
+              index=temp[0].xblock*100+temp[0].yblock
+              dictionary[index] = temp
+              assert(len(temp)==len(dictionary[index])),"something"
+        return dictionary
+
+      def thresholdCheck(index,dictionary):
+        try:
+          #print "Threshold Check: ",self.threshold
+          if(len(dictionary[index])>self.threshold):return True
+          else:return False
+        except:
+          return False
+      def indexof(lsts,number,index = lambda x: x[1]):
+        for i,lst in enumerate(sorted(lsts,key = index)):   
+          if number == index(lst): return i
+        return -1 
+      def uscore(lsts,starti,endi):
+        summ = 0
+        for i in xrange(starti,endi+1):
+          summ += lsts[i][-1]
+        return summ/(endi-starti+1)
+
+      model = self.model
+      minR = model.minR
+      maxR = model.maxR
+      if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+        points = return_points(model,60)
+        for point in points:
+          point.score = score(model,point)[-1]
+        
+        points = [point.dec+[point.score] for point in points]
+        constraints = []
+        for i in xrange(len(points[0])-1):
+          constraint = []
+          cohen=0.3
+          h = 1e6
+          #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+          #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+          for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+            starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+            endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+            #print "Starti: ",starti, "Endi: ",endi
+            mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+            #print "-----------------Mean Score: ",mean_score
+            if mean_score < h:
+              const1 = d[1][0][i]
+              const2 = d[1][-1][i]
+              h = mean_score
+              #print "+++++++++++++++High Mean Score: ",h
+          #constraint.append()
+
+          
+          constraints.append([i]+[(const1,const2)])  
+        # print constraints
+        # raise Exception(":asd")    
+        points = self.generate2(model,constraints)
+        points += self.generate2(model,constraints)
+        points += return_points(model,100)
+
+
+
+        #print "SDIV working!"
+      #print "Initial Points: ",len(points)
+      dictionary = generate_dictionary(points)
+      # for key in dictionary.keys():
+      #   if len(dictionary[key]) == 0: print ">>>>>>>>>>>>>>>>>>>>>>>"
+      #   print "Key: ",key," Length: ",len(dictionary[key])
+      # raise Exception("asdaskdj")
+
+      #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Depth: %d #points: %d"%(depth,len(points))
+      from collections import defaultdict
+      graph = defaultdict(list)
+      matrix = [[0 for x in range(8)] for x in range(8)]
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          if(thresholdCheck(i*100+j,dictionary)==False):
+            result,dictionary = self.generateNew(model,i,j,dictionary)
+            if result == False: 
+              matrix[i-1][j-1] = 100
+              #print "in middle of desert"
+              continue
+          matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+          
+         # print matrix[i-1][j-1],
+        #print
+      for i in xrange(1,9):
+        for j in xrange(1,9):
+          #print "%0.3f"%matrix[i-1][j-1],
+          sumn=0
+          s = matrix[i-1][j-1]
+          neigh = self.listofneighbours(i,j)
+          sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+          if (i*100+j) in dictionary:
+            graph[int(sumn)].append(i*100+j)
+        #print
+      
+      #print graph[8]
+      high = 1e6
+      bsoln = None
+      if len(graph.keys()) != 0:
+	      maxi = max(graph.keys())
+	      for x in graph[maxi]:
+	         #print "The cell is: ",x," depth is: ",depth
+	         if depth == int(myoptions['Seive3']['depth']):
+	           #for i in xrange(0,5):
+	             y = any(dictionary[x])
+	             #print y
+	             temp2 = score(model,y)[-1]
+	             if temp2 < high:
+	               high = temp2
+	               bsoln = y
+	               #print ">>>>>>>>>>>>>>>>>>>>>>>changed!"
+	               #print bsoln.dec
+
+	             #print temp2,high,bsoln.dec
+	             #print
+	         
+	         if(depth < int(myoptions['Seive3']['depth']) and len(dictionary[x]) > 2):
+	           #print "RECURSE"
+	           #print "Cell No: ",x,x/100,x%10
+	           #print "Before: ",len(dictionary[x])
+	           #result,dictionary = self.generateNew(model,int(x/100),x%10,dictionary,True)
+	           #print "After: ",len(dictionary[x])
+	           rsoln,sc,model = self.evaluate(dictionary[x],depth+1)
+	           #print high,sc
+	           if sc < high:
+	             high = sc 
+	             bsoln = rsoln
+	             print "Changed2!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+	             #print bsoln.dec
+
+      #print bsoln.dec     W
+      return bsoln,high,model
+
+class Seive2_Initial(Seive7):
+  def fastmap(self,model,data):
+    "Divide data into two using distance to two distant items."
+    #print ">>>>>>>>>>>>>>>>>>.FastMap"
+    #print "Length of data: ",len(data)
+    one  = any(data)             # 1) pick anything
+    west = furthest(model,one,data)  # 2) west is as far as you can go from anything
+    east = furthest(model,west,data) # 3) east is as far as you can go from west
+    c    = dist(model,west,east)
+    # now find everyone's distance
+    xsum, lst = 0.0,[]
+    ws = score(model,west)[-1]
+    es = score(model,east)[-1]
+    #print "West: ",ws
+    #print "East: ",es
+    for one in data:
+      a = dist(model,one,west)
+      b = dist(model,one,east)
+      x = (a*a + c*c - b*b)/(2*c) # cosine rule
+      xsum += x
+      lst  += [(x,one)]
+    # now cut data according to the mean distance
+    if ws > es:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+      #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,east,west) for point in easts]
+    else:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+        #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,west,east) for point in easts]
+
+
+  def gale_mutate(self,model,point,c,east,west,multiplier = 4.5):
+    #tooFar = multiplier * abs(c)
+    #print "C: ",c
+    tooFar = multiplier * abs(c)
+    import copy
+    new = copy.deepcopy(point)
+    for i in xrange(len(point.dec)):
+      d = east.dec[i] - west.dec[i]
+      if not d == 0:
+        d = -1 if d < 0 else 1
+        #d = east.dec[i] = west.dec[i]
+        x = new.dec[i] * (1 + abs(c) * d)
+        new.dec[i] = max(min(hi(model,i),x),lo(model,i))
+        # if x != new.dec[i] : print "blah",new.dec[i]-x
+        # else: print "boom"
+    newDistance = self.project(model,west,east,c,new) -\
+                  self.project(model,west,east,c,west)
+    
+    if abs(newDistance) < tooFar  and self.valid(model,new):
+      return new
+    else:
+      # print "Distance: ",abs(newDistance), "toofar: ",abs(tooFar)
+      #print "Blown away"
+      return point
+
+  def tgenerate(self,m,pop,gen=0):
+    it = int(myoptions['Seive2_Initial']['tgen'])
+    for _ in xrange(it):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = self.generateSlot(m,cand,-1,-1)
+      #print one.dec
+      pop += [one]
+    return pop
+
+  def polate(m,lx,ly,lz,fmin,fmax):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    assert(len(lx)==len(ly)==len(lz))
+    cr=0.3
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
+
+      if rand < cr:
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(m,x + probEx*(y-z),i)
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    return genPoint
+  def project(self,model,west, east, c, x):
+    "Project x onto line east to west"
+    if c == 0: return 0
+    a = dist(model,x,west)
+    b = dist(model,x,east)
+    return (a*a + c*c - b*b)/(2*c) # cosine rule
+
+  def valid(self,m,val):
+    for x in xrange(len(val.dec)):
+      if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
+        return False
+    return True
+
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(30):
+      for _ in xrange(400):
+        dec = []
+        for constraint in constraints:
+          #lo,hi = self.one(model,constraint )
+          #print constraint
+          lo,hi = constraint[1][0],constraint[1][1]
+          temp = any(lo,hi)
+          assert(temp >= lo and temp <= hi),"ranges are messed up"
+          dec.append(temp)
+        points.append(self.generateSlot(model,dec,-1,-1))
+      #print "After Generation: ",len(points)
+      points = self.fastmap(model,points)
+      points += return_points(model,100)
+      #print "After FastMap: ",len(points)
+      points = self.tgenerate(model,points)
+    #print ">>>>>>>Final: ",len(points)
+    #raise Exception("asdasdasffd")
+    #print "\n\n",points
+    #assert(len(points) == 940),"all the points were not generated"
+    return points
+
+
+  def evaluate(self,points=[],depth=4):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      #print chess_board
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      #print dictionary.keys()
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+    def indexof(lsts,number,index = lambda x: x[1]):
+      for i,lst in enumerate(sorted(lsts,key = index)):   
+        if number == index(lst): return i
+      return -1 
+    def uscore(lsts,starti,endi):
+      summ = 0
+      for i in xrange(starti,endi+1):
+        summ += lsts[i][-1]
+      return summ/(endi-starti+1)
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+          #if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+    points = return_points(model,60)
+    for point in points:
+      point.score = score(model,point)[-1]
+    
+    points = [point.dec+[point.score] for point in points]
+    constraints = []
+    for i in xrange(len(points[0])-1):
+      constraint = []
+      cohen=0.3
+      h = 1e6
+      #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+      #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+      for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+        starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+        endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+        #print "Starti: ",starti, "Endi: ",endi
+        mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+        #print "-----------------Mean Score: ",mean_score
+        if mean_score < h:
+          const1 = d[1][0][i]
+          const2 = d[1][-1][i]
+          h = mean_score
+          #print "+++++++++++++++High Mean Score: ",h
+      #constraint.append()
+
+      
+      constraints.append([i]+[(const1,const2)])  
+    # print constraints
+    # raise Exception(":asd")    
+    points = self.generate2(model,constraints)
+    #print "Number of points: ",len(points)
+    print model.no_eval
+    dictionary = generate_dictionary(points)
+    # for key in dictionary.keys():
+    #   try:
+    #     print "Key: ",key, "Number: ",len(dictionary[key])
+    #   except:
+    #     print "Empty"
+
+
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9): 
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          result,dictionary = self.generateNew(self.model,i,j,dictionary)
+          if result == False: 
+            matrix[i-1][j-1] = 100
+            print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    if len(graph.keys()) != 0:
+	    maxi = max(graph.keys())
+	    #print graph.keys()
+	    #print "Number of points: ",len(graph[maxi])
+	    for x in graph[maxi]:
+	       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+	       #if(len(dictionary[x]) < 15: [self.n_i(model,dictionary,x) for _ in xrange(20)]
+	       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+	       for y in dictionary[x]:
+	         temp2 = score(model,y)[-1]
+	         if temp2 < high:
+	           high = temp2
+	           bsoln = y
+	    #print count     
+    return bsoln.dec,high,model
+
+
+class DE2(SearchersBasic):
+  def __init__(self,modelName,displayS,bmin,bmax):
+    self.model=modelName
+    self.displayStyle=displayS
+    self.model.minVal = bmin
+    self.model.maxVal = bmax
+
+  def threeOthers(self,frontier,one):
+    #print "threeOthers"
+    seen = [one]
+    def other():
+      #print "other"
+      for i in xrange(len(frontier)):
+        count = 10
+        while True:
+          if count == 0: return frontier[k]
+          else: count -= 1
+          k = random.randint(0,len(frontier)-1)
+          if frontier[k] not in seen:
+            seen.append(frontier[k])
+            break
+          #print "+",seen,frontier[k]
+        return frontier[k]
+    this = other()
+    that = other()
+    then = other()
+    return this,that,then
+  
+  def trim(self,x,i)  : # trim to legal range
+    m=self.model
+    return max(m.minR[i], min(x, m.maxR[i]))      
+
+  def extrapolate(self,frontier,one,f,cf):
+    #print "Extrapolate"
+    two,three,four = self.threeOthers(frontier,one)
+    #print two,three,four
+    solution=[]
+    for d in xrange(self.model.n):
+      x,y,z=two[d],three[d],four[d]
+      if(random.random() < cf):
+        solution.append(self.trim(x + f*(y-z),d))
+      else:
+        solution.append(one[d]) 
+    return solution
+
+  def update(self,m,f,cf,frontier,total=0.0,n=0):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+    def better(old,new):
+      assert(len(old)==len(new)),"MOEAD| Length mismatch"
+      for i in xrange(len(old)-1): #Since the score is return as [values of all objectives and energy at the end]
+        if old[i] > new[i]: pass
+        else: return False
+      return True
+    #print "update %d"%len(frontier)
+    changed = False
+    model=self.model
+    newF = []
+    total,n=0,0
+    #print frontier 
+    for x in frontier:
+      #print "x: ",x,len(frontier)
+      #print "eval: ",model.evaluate(x)
+      s = model.evaluate(x)[:-1]
+      new = self.extrapolate(frontier,x,f,cf)
+      #print new
+      tnew = [] 
+      for i,j in enumerate(new):
+        tnew.append(trim(m,j,i))
+
+
+      newe=model.evaluate(tnew)[:-1]
+      if better(s,newe) == True and s[-1] > newe[-1]:
+        newF.append(tnew)
+        changed = True
+      else:
+        newF.append(x)
+    return newF,changed
+
+  def sdiv(self,lst, tiny=3,cohen=0.3,
+             num1=lambda x:x[0], num2=lambda x:x[1]):
+      "Divide lst of (num1,num2) using variance of num2."
+      #----------------------------------------------
+      class Counts(): # Add/delete counts of numbers.
+        def __init__(i,inits=[]):
+          i.zero()
+          for number in inits: i + number 
+        def zero(i): i.n = i.mu = i.m2 = 0.0
+        def sd(i)  : 
+          if i.n < 2: return i.mu
+          else:       
+            return (max(0,i.m2)*1.0/(i.n - 1))**0.5
+        def __add__(i,x):
+          i.n  += 1
+          delta = x - i.mu
+          i.mu += delta/(1.0*i.n)
+          i.m2 += delta*(x - i.mu)
+        def __sub__(i,x):
+          if i.n < 2: return i.zero()
+          i.n  -= 1
+          delta = x - i.mu
+          i.mu -= delta/(1.0*i.n)
+          i.m2 -= delta*(x - i.mu)    
+      #----------------------------------------------
+      def divide(this,small): #Find best divide of 'this'
+        lhs,rhs = Counts(), Counts(num2(x) for x in this)
+        n0, least, cut = 1.0*rhs.n, rhs.sd(), None
+        for j,x  in enumerate(this): 
+          if lhs.n > tiny and rhs.n > tiny: 
+            maybe= lhs.n/n0*lhs.sd()+ rhs.n/n0*rhs.sd()
+            if maybe < least :  
+              if abs(lhs.mu - rhs.mu) >= small: # where's the paper for this method?
+                cut,least = j,maybe
+          rhs - num2(x)
+          lhs + num2(x)    
+        return cut,least
+      #----------------------------------------------
+      def recurse(this, small,cuts):
+        #print this,small
+        cut,sd = divide(this,small)
+        if cut: 
+          recurse(this[:cut], small, cuts)
+          recurse(this[cut:], small, cuts)
+        else:   
+          cuts += [(sd,this)]
+        return cuts
+      #---| main |-----------------------------------
+      # for x in lst:
+      #   print num2(x)
+      small = Counts(num2(x) for x in lst).sd()*cohen # why we use a cohen??? how to choose cohen
+      if lst: 
+        return recurse(sorted(lst,key=num1),small,[])
+
+  def indexof(self,lsts,number,index = lambda x: x[1]):
+    for i,lst in enumerate(sorted(lsts,key = index)):
+      if number == index(lst): return i
+    return -1 
+
+  def uscore(self,lsts,starti,endi):
+    summ = 0
+    for i in xrange(starti,endi+1):
+      summ += lsts[i][-1]
+    return summ/(endi-starti+1)
+
+  def constraint_check(self,model):
+    print int(myoptions['DE2']['initial'])
+    points = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
+               for _ in xrange(int(myoptions['DE2']['initial']))]
+    scores = []
+    for point in points: scores.append(model.evaluate(point)[-1])
+    points = [point +[scores[i]] for i,point in enumerate(points)]
+    constraints = []
+
+    for i in xrange(len(points[0])-1):
+      constraint = []
+      cohen=0.3
+      h = 1e6
+      #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+      #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+      for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+        starti = self.indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+        endi =  self.indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+        #print "Starti: ",starti, "Endi: ",endi
+        mean_score = self.uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+        #print "-----------------Mean Score: ",mean_score
+        if mean_score < h:
+          const1 = d[1][0][i]
+          const2 = d[1][-1][i]
+          h = mean_score
+      constraints.append([i]+[(const1,const2)]) 
+
+    return constraints
+
+
+
+  def evaluate(self,repeat=100,np=100,f=0.75,cf=0.3,epsilon=0.01,lives=4):
+    #print "evaluate"
+    model=self.model
+    minR = model.minR
+    maxR = model.maxR
+
+    constraints = self.constraint_check(model)
+    for i,constraint in enumerate(constraints):
+      model.minR[i] = constraint[1][0]
+      model.maxR[i] = constraint[1][1]
+
+    #model.baseline(minR,maxR)
+    frontier = [[model.minR[i]+random.random()*(model.maxR[i]-model.minR[i]) for i in xrange(model.n)]
+               for _ in xrange(np)]
+    #print frontier
+    changed = False
+    for i in xrange(repeat):
+      if lives == 0: break
+      frontier,changed = self.update(model,f,cf,frontier)
+
+      self.model.evalBetter()
+      if changed == False: 
+        lives -= 1
+        print "lost it"
+    minR=9e10
+    for x in frontier:
+      #print x
+      energy = self.model.evaluate(x)[-1]
+      if(minR>energy):
+        minR = energy
+        solution=x 
+    print solution,minR
+    return solution,minR,self.model
+
+
+
+class Seive2_I2(Seive7):
+  def fastmap(self,model,data):
+    "Divide data into two using distance to two distant items."
+    #print ">>>>>>>>>>>>>>>>>>.FastMap"
+    #print "Length of data: ",len(data)
+    one  = any(data)             # 1) pick anything
+    west = furthest(model,one,data)  # 2) west is as far as you can go from anything
+    east = furthest(model,west,data) # 3) east is as far as you can go from west
+    c    = dist(model,west,east)
+    # now find everyone's distance
+    xsum, lst = 0.0,[]
+    ws = score(model,west)[-1]
+    es = score(model,east)[-1]
+    #print "West: ",ws
+    #print "East: ",es
+    for one in data:
+      a = dist(model,one,west)
+      b = dist(model,one,east)
+      x = (a*a + c*c - b*b)/(2*c) # cosine rule
+      xsum += x
+      lst  += [(x,one)]
+    # now cut data according to the mean distance
+    if ws > es:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+      #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,east,west) for point in easts]
+    else:
+      cut, wests, easts = xsum/len(data), [], []
+      for x,one in lst:
+        where = wests if x < cut else easts 
+        where += [one]
+        #its assumed east is heaven
+      return [self.gale_mutate(model,point,c,west,east) for point in easts]
+
+
+  def gale_mutate(self,model,point,c,east,west,multiplier = 3):
+    #tooFar = multiplier * abs(c)
+    #print "C: ",c
+    tooFar = multiplier * abs(c)
+    import copy
+    new = copy.deepcopy(point)
+    for i in xrange(len(point.dec)):
+      d = east.dec[i] - west.dec[i]
+      if not d == 0:
+        d = -1 if d < 0 else 1
+        #d = east.dec[i] = west.dec[i]
+        x = new.dec[i] * (1 + abs(c) * d)
+        new.dec[i] = max(min(hi(model,i),x),lo(model,i))
+        # if x != new.dec[i] : print "blah",new.dec[i]-x
+        # else: print "boom"
+    newDistance = self.project(model,west,east,c,new) -\
+                  self.project(model,west,east,c,west)
+    
+    if abs(newDistance) < tooFar  and self.valid(model,new):
+      return new
+    else:
+      # print "Distance: ",abs(newDistance), "toofar: ",abs(tooFar)
+      # print "Blown away"
+      return point
+
+  def tgenerate(self,m,pop,gen=0):
+    it = int(myoptions['Seive7_2']['tgen'])
+    for _ in xrange(it):
+      temp = random.random()
+      o = any(pop)
+      t = any(pop)
+      th = any(pop)
+      if temp <= 0.5:  cand = polate(m,o.dec,t.dec,th.dec,0.1,0.5)
+      else: cand = polate(m,o.dec,t.dec,th.dec,0.9,2.0)
+      one = self.generateSlot(m,cand,-1,-1)
+      #print one.dec
+      pop += [one]
+    return pop
+
+  def polate(m,lx,ly,lz,fmin,fmax):
+    def lo(m,index)      : return m.minR[index]
+    def hi(m,index)      : return m.maxR[index]
+    def trim(m,x,i)  : # trim to legal range
+      temp = min(hi(m,i),max(lo(m,i),x))
+      assert( lo(m,i) <= temp and hi(m,i) >= temp),"error"
+      return temp
+    def indexConvert(index):
+      return int(index/100),index%10
+
+    assert(len(lx)==len(ly)==len(lz))
+    cr=0.3
+    genPoint=[]
+    for i in xrange(len(lx)):
+      x,y,z = lx[i],ly[i],lz[i]
+      rand = random.random()
+
+      if rand < cr:
+        probEx = fmin + (fmax-fmin)*random.random()
+        new = trim(m,x + probEx*(y-z),i)
+      else:
+        new = y #Just assign a value for that decision
+      genPoint.append(new)
+    return genPoint
+  def project(self,model,west, east, c, x):
+    "Project x onto line east to west"
+    if c == 0: return 0
+    a = dist(model,x,west)
+    b = dist(model,x,east)
+    return (a*a + c*c - b*b)/(2*c) # cosine rule
+
+  def valid(self,m,val):
+    for x in xrange(len(val.dec)):
+      if not m.minR[x] <= val.dec[x] <= m.maxR[x]: 
+        return False
+    return True
+
+  def generate2(self,model,constraints):
+    def any(l,h):
+      #print ">>>>>>>> : ",lo,hi  
+      return (l + random.random()*(h-l))
+    points = []
+    for _ in xrange(20):
+      for _ in xrange(200):
+        dec = []
+        for constraint in constraints:
+          #lo,hi = self.one(model,constraint )
+          #print constraint
+          lo,hi = constraint[1][0],constraint[1][1]
+          temp = any(lo,hi)
+          assert(temp >= lo and temp <= hi),"ranges are messed up"
+          dec.append(temp)
+        points.append(self.generateSlot(model,dec,-1,-1))
+      #print "After Generation: ",len(points)
+      points = self.fastmap(model,points)
+      #print "After FastMap: ",len(points)
+      points = self.tgenerate(model,points)
+    #print ">>>>>>>Final: ",len(points)
+    #raise Exception("asdasdasffd")
+    #print "\n\n",points
+    #assert(len(points) == 940),"all the points were not generated"
+    return points
+
+
+  def evaluate(self,points=[],depth=4):
+    def generate_dictionary(points=[]):  
+      dictionary = {}
+      chess_board = whereMain(self.model,points) #checked: working well
+      #print chess_board
+      for i in range(1,9):
+        for j in range(1,9):
+          temp = [x for x in chess_board if x.xblock==i and x.yblock==j]
+          if(len(temp)!=0):
+            index=temp[0].xblock*100+temp[0].yblock
+            dictionary[index] = temp
+            assert(len(temp)==len(dictionary[index])),"something"
+      #print dictionary.keys()
+      return dictionary
+
+    def thresholdCheck(index,dictionary):
+      try:
+        #print "Threshold Check: ",index
+        if(len(dictionary[index])>self.threshold):return True
+        else:return False
+      except:
+        return False
+    def indexof(lsts,number,index = lambda x: x[1]):
+      for i,lst in enumerate(sorted(lsts,key = index)):   
+        if number == index(lst): return i
+      return -1 
+    def uscore(lsts,starti,endi):
+      summ = 0
+      for i in xrange(starti,endi+1):
+        summ += lsts[i][-1]
+      return summ/(endi-starti+1)
+
+    model = self.model
+    minR = model.minR
+    maxR = model.maxR
+    #if depth == 0: model.baseline(minR,maxR)
+
+          #if depth == 0 and len(points) == 0: 
+        #generate points according to the constraints
+    points = return_points(model,60)
+    for point in points:
+      point.score = score(model,point)[-1]
+    
+    points = [point.dec+[point.score] for point in points]
+    constraints = []
+    for i in xrange(len(points[0])-1):
+      constraint = []
+      cohen=0.3
+      h = 1e6
+      #print self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1])[0][1][i]
+      #print "........................>>",len(self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]))
+      for d in  self.sdiv(points,cohen=cohen,num1=lambda x:x[i],num2=lambda x:x[-1]):
+        starti = indexof([point[:-1] for point in points],d[1][0][i],lambda x:x[i])
+        endi =  indexof([point[:-1] for point in points],d[1][-1][i],lambda x:x[i])
+        #print "Starti: ",starti, "Endi: ",endi
+        mean_score = uscore(sorted(points,key = lambda x:x[i]),starti,endi)
+        #print "-----------------Mean Score: ",mean_score
+        if mean_score < h:
+          const1 = d[1][0][i]
+          const2 = d[1][-1][i]
+          h = mean_score
+          #print "+++++++++++++++High Mean Score: ",h
+      #constraint.append()
+
+      
+      constraints.append([i]+[(const1,const2)])  
+    # print constraints
+    # raise Exception(":asd")    
+    points = self.generate2(model,constraints)
+    #print "Number of points: ",len(points)
+
+    dictionary = generate_dictionary(points)
+    # for key in dictionary.keys():
+    #   try:
+    #     print "Key: ",key, "Number: ",len(dictionary[key])
+    #   except:
+    #     print "Empty"
+
+
+    from collections import defaultdict
+    graph = defaultdict(list)
+    matrix = [[0 for x in range(8)] for x in range(8)]
+    for i in xrange(1,9):
+      for j in xrange(1,9): 
+        # try:
+        # 	print i,j,len(dictionary[i*100+j])
+        # except:
+        # 	print "empty"
+
+        if(thresholdCheck(i*100+j,dictionary)==False):
+          #result,dictionary = self.generateNew(self.model,i,j,dictionary)
+          #if result == False: 
+            matrix[i-1][j-1] = 100
+            print "in middle of desert"
+            continue
+        matrix[i-1][j-1] = score(model,self.one(model,dictionary[i*100+j]))[-1]
+   
+
+        
+       # print matrix[i-1][j-1],
+      #print
+    for i in xrange(1,9):
+      for j in xrange(1,9):
+        sumn=0
+        s = matrix[i-1][j-1]
+        neigh = self.listofneighbours(i,j)
+        sumn = sum([1 for x in neigh if matrix[self.rowno(x)-1][self.colmno(x)-1]>s])
+        if (i*100+j) in dictionary:
+          graph[int(sumn)].append(i*100+j)
+        
+    high = 1e6
+    bsoln = None
+    maxi = max(graph.keys())
+    #print graph.keys()
+    # print "Number of points: ",len(graph[maxi])
+    # print "Points: ",graph[maxi]
+    
+    count = 0
+    for x in graph[maxi]:
+       #print "Seive2:B Number of points in ",maxi," is: ",len(dictionary[x])
+       #if(len(dictionary[x]) < 15: [self.n_i(model,dictionary,x) for _ in xrange(20)]
+       #print "Seive2:A Number of points in ",maxi," is: ",len(dictionary[x])
+       for y in dictionary[x]:
+         temp2 = score(model,y)[-1]
+         count += 1
+         if temp2 < high:
+           print x
+           high = temp2
+           bsoln = y
+    #print count   
+    raise Exception("STOP")  
+    return bsoln.dec,high,model
+
+

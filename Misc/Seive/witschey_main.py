@@ -1978,9 +1978,9 @@ def random_forest(repeat,exp,models,lst):
   ''')
 
 class RandomForest(ModelBasic):
-  def __init__(self,minR=-4,maxR=4,n=3,objf=1):
-    self.minR=[2,100, 1]
-    self.maxR=[32,1000, 3]
+  def __init__(self,minR=-4,maxR=4,n=4,objf=1):
+    self.minR=[2,2,100, 1]
+    self.maxR=[32,32,1000, 3]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -2001,14 +2001,14 @@ class RandomForest(ModelBasic):
     repeats=1
     exp='locOrNot'
     models=['nasa93']
-    assert(len(listpoint) == 3),"Wrong!"
+    assert(len(listpoint) == 4),"Wrong!"
     print listpoint
-    msl = int(listpoint[0])
-    y = int(listpoint[1])
-    z = int(round(listpoint[2]))
+    msl = int(listpoint[1])
+    y = int(listpoint[2])
+    z = int(round(listpoint[3]))
 
 
-    mss = int(msl/2)
+    mss = int(listpoint[0])
     
     lst = [
                     ('forest(mss={},msl={},ne={},mf={})'.format(mss,msl,y,convert[z]),

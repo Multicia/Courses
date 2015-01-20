@@ -600,7 +600,13 @@ def whereMain(model,points=[],depth=3):
   #print "Length of points: ",len(points)
   return points
 
-
+def return_points(model,num_points):
+  pop = []
+  if num_points > 0:
+    for _ in xrange(num_points):
+      one = candidate(model)
+      pop += [one]
+  return pop 
 
 def whereMain_mod(model,points=[],depth=3):
   def one(lst): 

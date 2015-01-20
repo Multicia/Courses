@@ -1,0 +1,48 @@
+Model Name: RandomForest
+Date: 19/01/2015
+Seive2_Initial . [25.80020251284989, 26.658621269591805, 536.5311651378508, 1.5232429658893158]
+
+ +===============================================
+[('forest(mss=25,msl=26,ne=536,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.53888673574  IQR:  -3.43008775074
+- ====================================
+[2.01355144655213, 21.884556886513028, 523.2288313580004, 2.5194612701957864]
+
+ +===============================================
+[('forest(mss=2,msl=21,ne=523,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.38978516951  IQR:  -5.32545919121
+- ====================================
+[13.194811162215247, 25.104195078139707, 345.42827710477366, 2.6038309663252073]
+
+ +===============================================
+[('forest(mss=13,msl=25,ne=345,mf=log2)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.62474681094  IQR:  -3.62775740388
+- ====================================
+[23.89474497866048, 14.420193234959102, 584.4746975997492, 2.364103482577357]
+
+ +===============================================
+[('forest(mss=23,msl=14,ne=584,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.07451147496  IQR:  -3.6959558381
+- ====================================
+[7.789546272922622, 18.60845496494853, 824.6116448640759, 1.531042108877004]
+
+ +===============================================
+[('forest(mss=7,msl=18,ne=824,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.34547740893  IQR:  -4.86008880795
+- ====================================
+[26.100959288339396, 22.570696463013228, 859.8540923165484, 1.6711640356516286]
+
+ +===============================================
+[('forest(mss=26,msl=22,ne=859,mf=sqrt)', Score{:all [] :estimator_func <function forest_inner at 0x7f35c3743d70> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0

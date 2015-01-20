@@ -54,7 +54,7 @@ def multipleRun():
      bmax = 5.6677
      #print "Baseline Finished: ",bmin,bmax
      
-     for searcher in [Seive3]:#,Seive3,Seive2_V50_2,DE,Seive2]:#,Seive3,Seive2,DE]:#_I1,Seive3]:#Seive2_V50,Seive3,Seive2,Seive4]:#,Seive3,Seive2,Seive4]:#,DE]:#6,Seive25,Seive24,Seive2,DE,Seive4]:#,MOEAD,DE]:
+     for searcher in [Seive2_Initial]:
        n = 0.0
        listTimeTaken = []
        listScores = []
@@ -100,7 +100,7 @@ def multipleRun():
      #print timeCollector
      print "=========================================================="
      callrdivdemo(eraCollector)
-     callrdivdemo(evalCollector)
+     callrdivdemo(evalCollector,"%5.0f")
      #callrdivdemo(timeCollector)
    print "Time for Experiment: ",time.time() - tstart
 

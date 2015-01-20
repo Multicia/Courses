@@ -477,8 +477,8 @@ In practice, you would **start** here to build hooks from WHERE into your model
 """
 #def decisions() : return [0,1,2,3,4]
 #def objectives(): return [0,1,2,3]
-def lo(m,x)      : return 0#m.minR[x]
-def hi(m,x)      : return  1#m.maxR[x]
+def lo(m,x)      : return m.minR[x]
+def hi(m,x)      : return  m.maxR[x]
 #def w(m,o)       : return 
 def score(m, individual): #model
   if individual.changed == False: 
