@@ -1980,7 +1980,7 @@ def random_forest(repeat,exp,models,lst):
 class RandomForest(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=4,objf=1):
     self.minR=[2,2,100, 1]
-    self.maxR=[32,32,1000, 3]
+    self.maxR=[32,32,1000, 22]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -1993,11 +1993,11 @@ class RandomForest(ModelBasic):
 
 
   def f1(self,listpoint,num=0):
-    convert = {
-               1 : 'auto',
-               2 : 'sqrt',
-               3 : 'log2'
-              }
+    # convert = {
+    #            1 : 'auto',
+    #            2 : 'sqrt',
+    #            3 : 'log2'
+    #           }
     repeats=1
     exp='locOrNot'
     models=['nasa93']
@@ -2011,9 +2011,9 @@ class RandomForest(ModelBasic):
     mss = int(listpoint[0])
     
     lst = [
-                    ('forest(mss={},msl={},ne={},mf={})'.format(mss,msl,y,convert[z]),
+                    ('forest(mss={},msl={},ne={},mf={})'.format(mss,msl,y,z),
                      Score(estimator_func=get_forest(min_samples_split=mss, min_samples_leaf=msl, 
-                      n_estimators=y, max_features=convert[z])))
+                      n_estimators=y, max_features=z)))
                      
                   ]
     print "\n +==============================================="

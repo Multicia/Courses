@@ -1,0 +1,24 @@
+Model Name: RandomForest
+Date: 21/01/2015
+DE . [25.80020251284989, 26.658621269591805, 536.5311651378508, 6.494051141837817]
+
+ +===============================================
+[('forest(mss=25,msl=26,ne=536,mf=6)', Score{:all [] :estimator_func <function forest_inner at 0x7f7c8b58bcf8> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  1.4215529877  IQR:  -2.8703730568
+- ====================================
+[2, 4.581190395315015, 536.5311651378508, 11.180677910460233]
+
+ +===============================================
+[('forest(mss=2,msl=4,ne=536,mf=11)', Score{:all [] :estimator_func <function forest_inner at 0x7f7c8b58bcf8> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0
+Median:  0.488562645868  IQR:  -0.797459434458
+- ====================================
+[2.01355144655213, 21.884556886513028, 523.2288313580004, 16.954343337055754]
+
+ +===============================================
+[('forest(mss=2,msl=21,ne=523,mf=17)', Score{:all [] :estimator_func <function forest_inner at 0x7f7c8b58bcf8> :raw [] :residuals [] :use False})]
+% locOrNot
+ 0

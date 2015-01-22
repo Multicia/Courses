@@ -54,7 +54,7 @@ def multipleRun():
      bmax = 5.6677
      #print "Baseline Finished: ",bmin,bmax
      
-     for searcher in [Seive2_Initial]:
+     for searcher in [DE]:
        n = 0.0
        listTimeTaken = []
        listScores = []
