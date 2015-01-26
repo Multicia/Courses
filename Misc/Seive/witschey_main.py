@@ -221,6 +221,57 @@ def has(x,lst):
  except ValueError:
     return None
 
+def cosmic(opt=options(),tunings=tunings()):
+  vl=1;l=2;n=3;h=4;vh=5;xh=6;_=0
+  return Thing(
+  	kloc=9,
+  	effort=10,
+  	names = [    'Data_Quality','IS','OT','DT','DP','LT','PPL','FS','RS','FPS','Effort'],
+  	projects=[
+  	  [1,1,1,1,1,1,1,52,3,1,1188],
+      [2,1,1,1,2,1,2,237,4,2,600],
+      [2,2,2,1,3,2,3,1570,6,3,15233],
+      [2,2,3,1,2,2,4,441,5,1,47493],
+      [2,3,4,2,2,2,4,74,3,3,1597],
+      [1,4,5,1,0,1,1,110,4,1,9234],
+      [1,5,6,1,3,1,5,733,5,1,2950],
+      [1,6,7,1,3,1,1,205,4,3,11165],
+      [1,1,1,2,2,2,6,60,3,3,22444],
+      [1,7,8,1,2,1,1,98,3,3,19306],
+      [1,8,9,3,2,1,5,912,5,1,6590],
+      [2,2,2,1,3,1,1,643,5,3,4224],
+      [1,2,2,1,3,1,1,210,4,4,145],
+      [2,2,2,1,3,1,1,61,3,2,669],
+      [2,3,4,2,1,1,7,5,1,5,2410],
+      [1,3,4,2,1,1,7,6,1,1,3563],
+      [1,5,6,2,2,1,1,2003,6,1,536],
+      [1,9,10,1,2,1,2,23,2,1,4847],
+      [2,10,11,1,2,2,4,75,3,3,245],
+      [1,11,12,2,2,1,1,746,5,3,3922],
+      [2,11,13,2,1,1,7,90,3,1,724],
+      [2,12,14,3,2,1,5,483,5,3,947],
+      [1,12,15,1,2,1,1,177,4,3,451],
+      [2,12,16,1,2,1,1,118,4,3,3638],
+      [2,3,4,2,1,1,7,34,3,3,148],
+      [1,6,17,1,2,1,5,1099,6,6,3167],
+      [1,9,18,1,4,1,1,86,3,7,1184],
+      [2,9,19,1,2,1,5,1958,6,8,2459],
+      [1,11,13,2,2,1,1,14,2,1,12556],
+      [1,13,20,2,3,1,9,51,3,1,1613],
+      [2,12,21,3,2,1,1,791,5,3,3558],
+      [2,4,22,2,3,2,8,5,1,2,784],
+      [1,4,22,2,3,2,8,9,1,9,134],
+      [1,4,22,2,3,2,8,3,1,1,3238],
+      [1,4,22,2,3,2,8,2,1,1,3193],
+      [1,4,22,2,3,2,8,2,1,10,40],
+      [1,6,23,1,2,1,1,187,4,1,3069],
+      [2,1,1,3,3,2,10,118,4,1,1488],
+      [1,1,1,1,2,1,1,435,5,1,3401],
+      [1,1,1,1,3,2,10,175,4,1,3306],
+      [1,7,24,1,2,1,11,99,3,8,252],
+      [2,9,25,2,2,1,5,82,3,3,840]
+  	]
+  	)
 def china(opt=options(),tunings=tunings()):
   vl=1;l=2;n=3;h=4;vh=5;xh=6;_=0
   return Thing(
@@ -1496,8 +1547,10 @@ def forest(train,test,most, **kwargs):
   # raise Exception("I know")
   global successful_fits
   from sklearn.ensemble import RandomForestRegressor
+  #print "blah"
   indep = map(lambda x: x[:most+1], train)
   dep   = map(lambda x: x[most+1],  train)
+  #print "boom"
   try:
     del kwargs['splitter']
   except KeyError:
@@ -1591,17 +1644,18 @@ def loo(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,
   for i,project in enumerate(d.projects):
     import sys
     sys.stderr.write(str(i)); sys.stderr.flush()
+    #print ">>>>>>>>>>>",len(project),d.effort
     want = project[d.effort]
     them = d.projects[:i] + d.projects[i+1:]
     for s in score_list:
       import time
-      # print '% start:', time.time()
+      #print '% start:', time.time()
       # print '%', s
       try:
         #print "+++++++++++++++++++++++++ ",want,model,
         s.run(want=want, model=model, them=them, project=project, opt=opt,
               train=them, test=project, most=d.kloc, random_state=seed)
-        # print '% end:', time.time()
+        #print '% end:', time.time()
       except AttributeError:
         raise Exception("Something wrong")
         pass
@@ -2495,7 +2549,7 @@ def random_forest(repeat,exp,models,lst):
 class RandomForest(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=4,objf=1):
     self.minR=[2,2,100, 1]
-    self.maxR=[32,32,1000, 16]
+    self.maxR=[32,32,1000, 9]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -2515,7 +2569,7 @@ class RandomForest(ModelBasic):
     #           }
     repeats=1
     exp='locOrNot'
-    models=['china']
+    models=['cosmic']
     assert(len(listpoint) == 4),"Wrong!"
     print listpoint
     msl = int(listpoint[1])
