@@ -1095,7 +1095,7 @@ class Score(Thing):
       self.seen(self.estimator_func(**kw), want)
     except Exception, err:
       import traceback
-      #print traceback.format_exc()
+      raise Exception("asdsa")
 
 
   def finalize(i) : 
@@ -1506,11 +1506,14 @@ def forest(train,test,most, **kwargs):
     del kwargs['opt']
   except KeyError:
     pass
-  # print kwargs
-  #raise Exception("blah")
-  rf = RandomForestRegressor(n_jobs=-1, **kwargs).fit(indep,dep)
+  #print kwargs
+  try:
+    rf = RandomForestRegressor(n_jobs=-1, **kwargs).fit(indep,dep)
+  except:
+    import traceback
+    traceback.print_exc()
   # successful_fits += 1
-  # print '%', 'fit', str(successful_fits)
+  #print '%xxxxxxxxxxxxxxxxxxxxxx', 'fit', str(successful_fits)
   temp = rf.predict(test[:most+1])[0]
   #print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",temp
   return temp
@@ -2492,7 +2495,7 @@ def random_forest(repeat,exp,models,lst):
 class RandomForest(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=4,objf=1):
     self.minR=[2,2,100, 1]
-    self.maxR=[32,32,1000, 22]
+    self.maxR=[32,32,1000, 16]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -2505,8 +2508,8 @@ class RandomForest(ModelBasic):
 
 
   def f1(self,listpoint,num=0):
-    # convert = {
-    #            1 : 'auto',
+    # convert = {de
+    #            1 : 'auto',f chindea
     #            2 : 'sqrt',
     #            3 : 'log2'
     #           }
@@ -2528,9 +2531,15 @@ class RandomForest(ModelBasic):
                       n_estimators=y, max_features=z)))
                      
                   ]
+
+
     print "\n +==============================================="
     print lst
     retlst = test1(lst,repeats=1,models=map(eval,models),what=exp)
+    print retlst
+    print len(retlst)
+    print int(len(retlst)/4 * 3)
+    print int(len(retlst)/4)
     print "\nMedian: ", median(retlst)," IQR: ", (retlst[int(len(retlst)/4 * 3)] - retlst[int(len(retlst)/4)])
  
     print "- ===================================="

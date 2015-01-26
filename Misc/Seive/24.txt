@@ -1,0 +1,18 @@
+Model Name: RandomForest
+Date: 25/01/2015
+Seive2_Initial . [25.80020251284989, 26.658621269591805, 536.5311651378508, 6.494051141837817]
+
+ +===============================================
+[('forest(mss=25,msl=26,ne=536,mf=6)', Score{:all [] :estimator_func <function forest_inner at 0x7f394b5fede8> :raw [] :residuals [] :use False})]
+>>>>>>>>>>>>>>>>>>> <function china at 0x7f394b69a938>
+% locOrNot
+ 0
+Median:  0.197339671222  IQR:  -0.404120740119
+- ====================================
+[2.01355144655213, 21.884556886513028, 523.2288313580004, 16.954343337055754]
+
+ +===============================================
+[('forest(mss=2,msl=21,ne=523,mf=17)', Score{:all [] :estimator_func <function forest_inner at 0x7f394b5fede8> :raw [] :residuals [] :use False})]
+>>>>>>>>>>>>>>>>>>> <function china at 0x7f394b69a938>
+% locOrNot
+ 0
