@@ -2599,7 +2599,7 @@ def random_forest(repeat,exp,models,lst):
 class RandomForest(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=4,objf=1):
     self.minR=[2,2,100, 1]
-    self.maxR=[32,32,1000, 9]
+    self.maxR=[32,32,100000, 10]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
