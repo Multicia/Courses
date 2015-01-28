@@ -1,9 +1,0 @@
-Model Name: RandomForest
-Date: 26/01/2015
-DE . [25.80020251284989, 26.658621269591805, 536.5311651378508, 3.0929718635572634]
-
- +===============================================
-[('forest(mss=25,msl=26,ne=536,mf=3)', Score{:all [] :estimator_func <function forest_inner at 0x7f1c18778398> :raw [] :residuals [] :use False})]
->>>>>>>>>>>>>>>>>>> <function isbsg10 at 0x7f1c19c29de8>
-% locOrNot
- 0

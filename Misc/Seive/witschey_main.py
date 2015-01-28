@@ -270,6 +270,30 @@ def isbsg10(opt=options(),tunings=tunings()):
       ]
     )
 
+def kemerer(opt=options(),tunings=tunings()):
+  vl=1;l=2;n=3;h=4;vh=5;xh=6;_=0
+  return Thing(
+    kloc = 5,
+    effort = 6,
+    names = ['Language','Hardware','Duration','KSLOC','AdjFP','RAWFP','Effort'],
+    projects = [
+    [1,1,17,253.6,1217.1,1010,287],
+        [1,2,7,40.5,507.3,457,82.5],
+        [1,3,15,450,2306.8,2284,1107.31],
+        [1,1,18,214.4,788.5,881,86.9],
+        [1,2,13,449.9,1337.6,1583,336.3],
+        [1,4,5,50,421.3,411,84],
+        [2,4,5,43,99.9,97,23.2],
+        [1,2,11,200,993,998,130.3],
+        [1,1,14,289,1592.9,1554,116],
+        [1,1,5,39,240,250,72],
+        [1,1,13,254.2,1611,1603,258.7],
+        [1,5,31,128.6,789,724,230.7],
+        [1,6,20,161.4,690.9,705,157],
+        [1,1,26,164.8,1347.5,1375,246.9],
+        [3,1,14,60.2,1044.3,976,69.9]
+    ]
+  )
 
 def cosmic(opt=options(),tunings=tunings()):
   vl=1;l=2;n=3;h=4;vh=5;xh=6;_=0
@@ -2599,7 +2623,7 @@ def random_forest(repeat,exp,models,lst):
 class RandomForest(ModelBasic):
   def __init__(self,minR=-4,maxR=4,n=4,objf=1):
     self.minR=[2,2,100, 1]
-    self.maxR=[32,32,100000, 10]
+    self.maxR=[32,32,3000, 5]
     self.n=n
     self.minVal=10000000
     self.maxVal=-1e6
@@ -2619,7 +2643,7 @@ class RandomForest(ModelBasic):
     #           }
     repeats=1
     exp='locOrNot'
-    models=['isbsg10']
+    models=['kemerer']
     assert(len(listpoint) == 4),"Wrong!"
     print listpoint
     msl = int(listpoint[1])
