@@ -11,6 +11,11 @@ from options import *
 from utilities import *
 import time
 from sk import *
+import sys
+sys.path.insert(0, 'defectprediction')
+from main import *
+
+
 sys.dont_write_bytecode = True
 #Dr.M
 rand=  random.random # generate nums 0..1
@@ -42,17 +47,18 @@ def multipleRun():
    from collections import defaultdict
    r = 1
    tstart = time.time()
-   for klass in [RandomForest]:#,DTLZ5,DTLZ6,DTLZ7]:
+   for klass in [WhereDefectPrediction]:#,DTLZ5,DTLZ6,DTLZ7]:
      print "Model Name: %s"%klass.__name__
      eraCollector=defaultdict(list)
      timeCollector=defaultdict(list)
      evalCollector=defaultdict(list)
-     tempC = klass()
      print ("Date: %s"%time.strftime("%d/%m/%Y"))
      #bmin,bmax = tempC.baseline(tempC.minR, tempC.maxR) 
      bmin = -3.2801
      bmax = 5.6677
-     #print "Baseline Finished: ",bmin,bmax
+     print "Baseline Finished: ",bmin,bmax
+     train = ["./defectprediction/data/ant/ant-1.3.csv"]
+     predict = "./defectprediction/data/ant/ant-1.4.csv"
      
      for searcher in [Seive2_Initial]:
        n = 0.0
@@ -64,7 +70,7 @@ def multipleRun():
        historylo=[9e10 for count in xrange(myModelobjf[klass.__name__])]
        print searcher.__name__,
        for _ in range(r):
-         test = searcher(klass(),"display2",bmin,bmax)
+         test = searcher(klass(train,predict),"display2",bmin,bmax)
          print ".", 
         
          t1 = time.time()
