@@ -1,0 +1,3 @@
+PCA-SVD: https://cisco.webex.com/mw3000/mywebex/nbrshared.do?siteurl=ciscosales&action=playback&recordID=90767157&serviceRecordID=90768077&recordKey=4832534b0000000291b89317a0f1b27825d10e74423510b2052f05ca0e68b1bb951508b9b835a9a0
+
+Twitter: http://www.infoq.com/presentations/nosql-cons
